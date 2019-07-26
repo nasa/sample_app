@@ -59,7 +59,7 @@ static CFE_EVS_BinFilter_t  SAMPLE_EventFilters[] =
 void SAMPLE_AppMain( void )
 {
     int32  status;
-    uint32 RunStatus = CFE_ES_APP_RUN;
+    uint32 RunStatus = CFE_ES_RunStatus_APP_RUN;
 
     CFE_ES_PerfLogEntry(SAMPLE_APP_PERF_ID);
 
@@ -68,7 +68,7 @@ void SAMPLE_AppMain( void )
     /*
     ** SAMPLE Runloop
     */
-    while (CFE_ES_RunLoop(&RunStatus) == TRUE)
+    while (CFE_ES_RunLoop(&RunStatus) == true)
     {
         CFE_ES_PerfLogExit(SAMPLE_APP_PERF_ID);
 
@@ -105,7 +105,7 @@ void SAMPLE_AppInit(void)
     */ 
     CFE_EVS_Register(SAMPLE_EventFilters,
                      sizeof(SAMPLE_EventFilters)/sizeof(CFE_EVS_BinFilter_t),
-                     CFE_EVS_BINARY_FILTER);
+                     CFE_EVS_EventFilter_BINARY);
 
     /*
     ** Create the Software Bus command pipe and subscribe to housekeeping
@@ -119,9 +119,9 @@ void SAMPLE_AppInit(void)
 
     CFE_SB_InitMsg(&SAMPLE_HkTelemetryPkt,
                    SAMPLE_APP_HK_TLM_MID,
-                   SAMPLE_APP_HK_TLM_LNGTH, TRUE);
+                   SAMPLE_APP_HK_TLM_LNGTH, true);
 
-    CFE_EVS_SendEvent (SAMPLE_STARTUP_INF_EID, CFE_EVS_INFORMATION,
+    CFE_EVS_SendEvent (SAMPLE_STARTUP_INF_EID, CFE_EVS_EventType_INFORMATION,
                "SAMPLE App Initialized. Version %d.%d.%d.%d",
                 SAMPLE_APP_MAJOR_VERSION,
                 SAMPLE_APP_MINOR_VERSION, 
@@ -156,7 +156,7 @@ void SAMPLE_ProcessCommandPacket(void)
 
         default:
             SAMPLE_HkTelemetryPkt.sample_command_error_count++;
-            CFE_EVS_SendEvent(SAMPLE_COMMAND_ERR_EID,CFE_EVS_ERROR,
+            CFE_EVS_SendEvent(SAMPLE_COMMAND_ERR_EID,CFE_EVS_EventType_ERROR,
 			"SAMPLE: invalid command packet,MID = 0x%x", MsgId);
             break;
     }
@@ -182,7 +182,8 @@ void SAMPLE_ProcessGroundCommand(void)
     {
         case SAMPLE_APP_NOOP_CC:
             SAMPLE_HkTelemetryPkt.sample_command_count++;
-            CFE_EVS_SendEvent(SAMPLE_COMMANDNOP_INF_EID,CFE_EVS_INFORMATION,
+            CFE_EVS_SendEvent(SAMPLE_COMMANDNOP_INF_EID,
+                        CFE_EVS_EventType_INFORMATION,
 			"SAMPLE: NOOP command");
             break;
 
@@ -229,7 +230,7 @@ void SAMPLE_ResetCounters(void)
     SAMPLE_HkTelemetryPkt.sample_command_count       = 0;
     SAMPLE_HkTelemetryPkt.sample_command_error_count = 0;
 
-    CFE_EVS_SendEvent(SAMPLE_COMMANDRST_INF_EID, CFE_EVS_INFORMATION,
+    CFE_EVS_SendEvent(SAMPLE_COMMANDRST_INF_EID, CFE_EVS_EventType_INFORMATION,
 		"SAMPLE: RESET command");
     return;
 
@@ -240,9 +241,9 @@ void SAMPLE_ResetCounters(void)
 /* SAMPLE_VerifyCmdLength() -- Verify command packet length                   */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-boolean SAMPLE_VerifyCmdLength(CFE_SB_MsgPtr_t msg, uint16 ExpectedLength)
+bool SAMPLE_VerifyCmdLength(CFE_SB_MsgPtr_t msg, uint16 ExpectedLength)
 {     
-    boolean result = TRUE;
+    bool result = true;
 
     uint16 ActualLength = CFE_SB_GetTotalMsgLength(msg);
 
@@ -254,10 +255,10 @@ boolean SAMPLE_VerifyCmdLength(CFE_SB_MsgPtr_t msg, uint16 ExpectedLength)
         CFE_SB_MsgId_t MessageID   = CFE_SB_GetMsgId(msg);
         uint16         CommandCode = CFE_SB_GetCmdCode(msg);
 
-        CFE_EVS_SendEvent(SAMPLE_LEN_ERR_EID, CFE_EVS_ERROR,
+        CFE_EVS_SendEvent(SAMPLE_LEN_ERR_EID, CFE_EVS_EventType_ERROR,
            "Invalid msg length: ID = 0x%X,  CC = %d, Len = %d, Expected = %d",
               MessageID, CommandCode, ActualLength, ExpectedLength);
-        result = FALSE;
+        result = false;
         SAMPLE_HkTelemetryPkt.sample_command_error_count++;
     }
 

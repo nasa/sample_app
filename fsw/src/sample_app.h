@@ -64,6 +64,6 @@ void SAMPLE_ProcessGroundCommand(void);
 void SAMPLE_ReportHousekeeping(void);
 void SAMPLE_ResetCounters(void);
 
-boolean SAMPLE_VerifyCmdLength(CFE_SB_MsgPtr_t msg, uint16 ExpectedLength);
+bool SAMPLE_VerifyCmdLength(CFE_SB_MsgPtr_t msg, uint16 ExpectedLength);
 
 #endif /* _sample_app_h_ */
