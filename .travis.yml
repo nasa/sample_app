@@ -33,6 +33,11 @@ script:
   - git submodule update
   - rm -r apps/sample_app
   - cp -r ../sample_app apps/sample_app
+  - cp cfe/cmake/Makefile.sample Makefile
+  - cp -r cfe/cmake/sample_defs sample_defs
+  - cppcheck --force .
+  - make prep
+  - make
   - cd apps/sample_app
   - cppcheck --force .
   - cmake .
