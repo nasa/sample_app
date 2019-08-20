@@ -42,4 +42,4 @@ script:
   - cppcheck --force .
   - cmake .
   - make
-  - ls sample_app.a
+  - ls libsample_app.a
