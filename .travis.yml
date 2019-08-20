@@ -25,7 +25,7 @@ script:
   # Run your build commands next
 #  - cppcheck --force .
   - pwd
-  - cd ../..
+  - cd ..
   - git clone https://github.com/travis-r-wheatley/cFS.git
   - cd cFS
   - git checkout task_3015
