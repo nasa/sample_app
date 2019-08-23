@@ -18,8 +18,7 @@
 **      See the License for the specific language governing permissions and
 **      limitations under the License.
 **
-** File:
-**   $Id: sample_app_msgids.h  $
+** File: sample_app_msgids.h
 **
 ** Purpose: 
 **  Define Sample App  Message IDs

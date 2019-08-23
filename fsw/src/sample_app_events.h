@@ -18,8 +18,7 @@
 **      See the License for the specific language governing permissions and
 **      limitations under the License.
 **
-** File:
-**    sample_app_events.h 
+** File: sample_app_events.h 
 **
 ** Purpose: 
 **  Define SAMPLE App Events IDs
