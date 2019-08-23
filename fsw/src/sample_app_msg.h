@@ -18,8 +18,7 @@
 **      See the License for the specific language governing permissions and
 **      limitations under the License.
 **
-** File:
-**   sample_app_msg.h 
+** File: sample_app_msg.h 
 **
 ** Purpose: 
 **  Define SAMPLE App  Messages and info
