@@ -25,7 +25,7 @@ script:
   # Run your build commands next
   - source buildvars.sh
   - cd ..
-  - git clone $CFS_REPO 
+  - git clone $CFS_GITREPO 
   - cd cFS
   - git checkout $CFS_BRANCH 
   - git submodule init
