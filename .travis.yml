@@ -23,19 +23,17 @@ script:
   # Check versions of gcc, g++ and cmake
   - gcc -v && g++ -v && cmake --version
   # Run your build commands next
-#  - cppcheck --force .
-  - pwd
+  - source buildvars.sh
   - cd ..
-  - git clone https://github.com/travis-r-wheatley/cFS.git
+  - git clone $CFS_REPO 
   - cd cFS
-  - git checkout task_3015
+  - git checkout $CFS_BRANCH 
   - git submodule init
   - git submodule update
   - rm -r apps/sample_app
   - cp -r ../sample_app apps/sample_app
   - cp cfe/cmake/Makefile.sample Makefile
   - cp -r cfe/cmake/sample_defs sample_defs
-  - cppcheck --force .
   - make prep
   - make
   - cd apps/sample_app
