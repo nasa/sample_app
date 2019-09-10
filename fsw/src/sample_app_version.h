@@ -18,8 +18,7 @@
 **      See the License for the specific language governing permissions and
 **      limitations under the License.
 **
-** File:
-**   $Id: sample_app_version.h  $
+** File: sample_app_version.h
 **
 ** Purpose: 
 **  The Sample Application header file containing version number
