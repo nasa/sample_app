@@ -22,3 +22,4 @@ For best results, submit issues:questions or issues:help wanted requests at http
 
 Official cFS page: http://cfs.gsfc.nasa.gov
 
+Auto buld status: [![Build Status](https://travis-ci.com/travis-r-wheatley/sample_app.svg?branch=master)](https://travis-ci.com/travis-r-wheatley/sample_app)
