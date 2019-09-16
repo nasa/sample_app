@@ -8,9 +8,11 @@ sample_app is an example for how to build and link an application in cFS.
 
 ## Release Notes
 
-sample_app version 1.0.0a is released as part of cFE 6.6.0a under the Apache 2.0 license, see [LICENSE](LICENSE-18128-Apache-2_0.pdf).
-
-Note the old GSFC Build toolset is deprecated (fsw/for_build/Makefile) in favor of cmake (CMakeLists.txt)
+- 1.1.0
+  - Minor updates (see #11)
+  - Not backwards compatible with OSAL 4.2.1
+- **1.0.0a OFFICIAL RELEASE**:
+  - Released as part of cFE 6.6.0a under the Apache 2.0 license, see [LICENSE](LICENSE-18128-Apache-2_0.pdf).
 
 ## Known issues
 
