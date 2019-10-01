@@ -18,9 +18,9 @@
 **      See the License for the specific language governing permissions and
 **      limitations under the License.
 **
-** File: sample_app_msg.h 
+** File: sample_app_msg.h
 **
-** Purpose: 
+** Purpose:
 **  Define SAMPLE App  Messages and info
 **
 ** Notes:
@@ -35,8 +35,10 @@
 */
 #define SAMPLE_APP_NOOP_CC                 0
 #define SAMPLE_APP_RESET_COUNTERS_CC       1
+#define SAMPLE_APP_PROCESS_CC              2
 
 /*************************************************************************/
+
 /*
 ** Type definition (generic "no arguments" command)
 */
@@ -46,20 +48,39 @@ typedef struct
 
 } SAMPLE_NoArgsCmd_t;
 
+/*
+** The following commands all share the "NoArgs" format
+**
+** They are each given their own type name matching the command name, which_open_mode
+** allows them to change independently in the future without changing the prototype
+** of the handler function
+*/
+typedef SAMPLE_NoArgsCmd_t      SAMPLE_Noop_t;
+typedef SAMPLE_NoArgsCmd_t      SAMPLE_ResetCounters_t;
+typedef SAMPLE_NoArgsCmd_t      SAMPLE_Process_t;
+
 /*************************************************************************/
 /*
 ** Type definition (SAMPLE App housekeeping)
 */
-typedef struct 
+typedef struct
 {
     uint8              TlmHeader[CFE_SB_TLM_HDR_SIZE];
     uint8              sample_command_error_count;
     uint8              sample_command_count;
     uint8              spare[2];
 
-}   OS_PACK sample_hk_tlm_t  ;
+} OS_PACK sample_hk_tlm_t;
 
-#define SAMPLE_APP_HK_TLM_LNGTH   sizeof ( sample_hk_tlm_t )
+/*
+** Table structure
+*/
+typedef struct
+{
+    uint16     Int1;
+    uint16     Int2;
+
+} SampleTable_t;
 
 #endif /* _sample_app_msg_h_ */
 
