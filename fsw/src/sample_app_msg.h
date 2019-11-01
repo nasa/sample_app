@@ -72,16 +72,6 @@ typedef struct
 
 } OS_PACK sample_hk_tlm_t;
 
-/*
-** Table structure
-*/
-typedef struct
-{
-    uint16     Int1;
-    uint16     Int2;
-
-} SampleTable_t;
-
 #endif /* _sample_app_msg_h_ */
 
 /************************/

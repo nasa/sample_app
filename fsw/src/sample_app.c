@@ -31,6 +31,7 @@
 #include "sample_app_events.h"
 #include "sample_app_version.h"
 #include "sample_app.h"
+#include "sample_table.h"
 
 #include <string.h>
 
