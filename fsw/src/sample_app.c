@@ -33,6 +33,9 @@
 #include "sample_app.h"
 #include "sample_table.h"
 
+/* The sample_lib module provides the SAMPLE_Function() prototype */
+#include <sample_lib.h>
+
 #include <string.h>
 
 /*
@@ -439,6 +442,9 @@ void  SAMPLE_ProcessCC( const SAMPLE_Process_t *Msg )
                           TblPtr->Int2);
 
     SAMPLE_GetCrc(TableName);
+
+    /* Invoke a function provided by SAMPLE_LIB */
+    SAMPLE_Function();
 
     return;
 
