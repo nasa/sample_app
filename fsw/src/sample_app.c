@@ -352,8 +352,8 @@ void SAMPLE_ReportHousekeeping( const CCSDS_CommandPacket_t *Msg )
     /*
     ** Get command execution counters...
     */
-    Sample_AppData.SAMPLE_HkTelemetryPkt.sample_command_error_count = Sample_AppData.CmdCounter;
-    Sample_AppData.SAMPLE_HkTelemetryPkt.sample_command_count = Sample_AppData.ErrCounter;
+    Sample_AppData.SAMPLE_HkTelemetryPkt.sample_command_error_count = Sample_AppData.ErrCounter;
+    Sample_AppData.SAMPLE_HkTelemetryPkt.sample_command_count = Sample_AppData.CmdCounter;
 
     /*
     ** Send housekeeping telemetry packet...
