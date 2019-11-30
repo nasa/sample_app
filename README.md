@@ -8,6 +8,8 @@ sample_app is an example for how to build and link an application in cFS.
 
 ## Version Notes
 
+- 1.1.2
+  - Minor updates (see https://github.com/nasa/sample_app/pull/20)
 - 1.1.1
   - Minor updates (see https://github.com/nasa/sample_app/pull/15)
 - 1.1.0
