@@ -430,12 +430,21 @@ void SAMPLE_ResetCounters( const SAMPLE_ResetCounters_t *Msg )
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
 void  SAMPLE_ProcessCC( const SAMPLE_Process_t *Msg )
 {
+    int32 status;
     SampleTable_t *TblPtr;
     const char *TableName = "SAMPLE_APP.SampleTable";
 
     /* Sample Use of Table */
-    CFE_TBL_GetAddress((void *)&TblPtr,
+
+    status = CFE_TBL_GetAddress((void *)&TblPtr,
                         Sample_AppData.TblHandles[0]);
+
+    if (status != CFE_SUCCESS)
+    {
+        CFE_ES_WriteToSysLog("Sample App: Fail to get table address: 0x%08lx",
+                (unsigned long)status);
+        return;
+    }
 
     CFE_ES_WriteToSysLog("Sample App: Table Value 1: %d  Value 2: %d",
                           TblPtr->Int1,
