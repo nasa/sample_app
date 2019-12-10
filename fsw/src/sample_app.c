@@ -163,8 +163,8 @@ int32 SAMPLE_AppInit( void )
                               CFE_EVS_BINARY_FILTER);
     if (status != CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Error Registering Events, RC = 0x%08X\n",
-                             status);
+        CFE_ES_WriteToSysLog("Sample App: Error Registering Events, RC = 0x%08lX\n",
+                             (unsigned long)status);
         return ( status );
     }
 
@@ -184,8 +184,8 @@ int32 SAMPLE_AppInit( void )
                                Sample_AppData.PipeName);
     if (status != CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Error creating pipe, RC = 0x%08X\n",
-                             status);
+        CFE_ES_WriteToSysLog("Sample App: Error creating pipe, RC = 0x%08lX\n",
+                             (unsigned long)status);
         return ( status );
     }
 
@@ -196,8 +196,8 @@ int32 SAMPLE_AppInit( void )
                               Sample_AppData.SAMPLE_CommandPipe);
     if (status != CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Error Subscribing to HK request, RC = 0x%08X\n", 
-                             status);
+        CFE_ES_WriteToSysLog("Sample App: Error Subscribing to HK request, RC = 0x%08lX\n",
+                             (unsigned long)status);
         return ( status );
     }
 
@@ -208,8 +208,8 @@ int32 SAMPLE_AppInit( void )
                               Sample_AppData.SAMPLE_CommandPipe);
     if (status != CFE_SUCCESS )
     {
-        CFE_ES_WriteToSysLog("Sample App: Error Subscribing to Command, RC = 0x%08X\n",
-                             status);
+        CFE_ES_WriteToSysLog("Sample App: Error Subscribing to Command, RC = 0x%08lX\n",
+                             (unsigned long)status);
 
         return ( status );
     }
@@ -225,7 +225,7 @@ int32 SAMPLE_AppInit( void )
     if ( status != CFE_SUCCESS )
     {
         CFE_ES_WriteToSysLog("Sample App: Error Registering \
-                              Table, RC = 0x%08X\n", status);
+                              Table, RC = 0x%08lX\n", (unsigned long)status);
 
         return ( status );
     }
@@ -524,7 +524,7 @@ void SAMPLE_GetCrc( const char *TableName )
     else
     {
         Crc = TblInfoPtr.Crc;
-        CFE_ES_WriteToSysLog("Sample App: CRC: 0x%08X\n\n", Crc);
+        CFE_ES_WriteToSysLog("Sample App: CRC: 0x%08lX\n\n", (unsigned long)Crc);
     }
 
     return;
