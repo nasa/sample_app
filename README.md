@@ -12,11 +12,12 @@ sample_app is an example for how to build and link an application in cFS.
   - Minor updates (see https://github.com/nasa/sample_app/pull/20)
 - 1.1.1
   - Minor updates (see https://github.com/nasa/sample_app/pull/15)
-- 1.1.0
+- **1.1.0 OFFICIAL RELEASE**:
   - Minor updates (see https://github.com/nasa/sample_app/pull/11)
   - Not backwards compatible with OSAL 4.2.1
+  - Released as part of cFE 6.7.0, Apache 2.0
 - **1.0.0a OFFICIAL RELEASE**:
-  - Released as part of cFE 6.6.0a under the Apache 2.0 license, see [LICENSE](LICENSE-18128-Apache-2_0.pdf).
+  - Released as part of cFE 6.6.0a, Apache 2.0
 
 ## Known issues
 
