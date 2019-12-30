@@ -33,6 +33,9 @@
 #include "sample_app.h"
 #include "sample_table.h"
 
+/* The sample_lib module provides the SAMPLE_Function() prototype */
+#include <sample_lib.h>
+
 #include <string.h>
 
 /*
@@ -163,8 +166,8 @@ int32 SAMPLE_AppInit( void )
                               CFE_EVS_BINARY_FILTER);
     if (status != CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Error Registering Events, RC = 0x%08X\n",
-                             status);
+        CFE_ES_WriteToSysLog("Sample App: Error Registering Events, RC = 0x%08lX\n",
+                             (unsigned long)status);
         return ( status );
     }
 
@@ -184,8 +187,8 @@ int32 SAMPLE_AppInit( void )
                                Sample_AppData.PipeName);
     if (status != CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Error creating pipe, RC = 0x%08X\n",
-                             status);
+        CFE_ES_WriteToSysLog("Sample App: Error creating pipe, RC = 0x%08lX\n",
+                             (unsigned long)status);
         return ( status );
     }
 
@@ -196,8 +199,8 @@ int32 SAMPLE_AppInit( void )
                               Sample_AppData.SAMPLE_CommandPipe);
     if (status != CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Error Subscribing to HK request, RC = 0x%08X\n", 
-                             status);
+        CFE_ES_WriteToSysLog("Sample App: Error Subscribing to HK request, RC = 0x%08lX\n",
+                             (unsigned long)status);
         return ( status );
     }
 
@@ -208,8 +211,8 @@ int32 SAMPLE_AppInit( void )
                               Sample_AppData.SAMPLE_CommandPipe);
     if (status != CFE_SUCCESS )
     {
-        CFE_ES_WriteToSysLog("Sample App: Error Subscribing to Command, RC = 0x%08X\n",
-                             status);
+        CFE_ES_WriteToSysLog("Sample App: Error Subscribing to Command, RC = 0x%08lX\n",
+                             (unsigned long)status);
 
         return ( status );
     }
@@ -225,7 +228,7 @@ int32 SAMPLE_AppInit( void )
     if ( status != CFE_SUCCESS )
     {
         CFE_ES_WriteToSysLog("Sample App: Error Registering \
-                              Table, RC = 0x%08X\n", status);
+                              Table, RC = 0x%08lX\n", (unsigned long)status);
 
         return ( status );
     }
@@ -353,8 +356,8 @@ void SAMPLE_ReportHousekeeping( const CCSDS_CommandPacket_t *Msg )
     /*
     ** Get command execution counters...
     */
-    Sample_AppData.SAMPLE_HkTelemetryPkt.sample_command_error_count = Sample_AppData.CmdCounter;
-    Sample_AppData.SAMPLE_HkTelemetryPkt.sample_command_count = Sample_AppData.ErrCounter;
+    Sample_AppData.SAMPLE_HkTelemetryPkt.sample_command_error_count = Sample_AppData.ErrCounter;
+    Sample_AppData.SAMPLE_HkTelemetryPkt.sample_command_count = Sample_AppData.CmdCounter;
 
     /*
     ** Send housekeeping telemetry packet...
@@ -427,18 +430,30 @@ void SAMPLE_ResetCounters( const SAMPLE_ResetCounters_t *Msg )
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
 void  SAMPLE_ProcessCC( const SAMPLE_Process_t *Msg )
 {
+    int32 status;
     SampleTable_t *TblPtr;
     const char *TableName = "SAMPLE_APP.SampleTable";
 
     /* Sample Use of Table */
-    CFE_TBL_GetAddress((void *)&TblPtr,
+
+    status = CFE_TBL_GetAddress((void *)&TblPtr,
                         Sample_AppData.TblHandles[0]);
+
+    if (status != CFE_SUCCESS)
+    {
+        CFE_ES_WriteToSysLog("Sample App: Fail to get table address: 0x%08lx",
+                (unsigned long)status);
+        return;
+    }
 
     CFE_ES_WriteToSysLog("Sample App: Table Value 1: %d  Value 2: %d",
                           TblPtr->Int1,
                           TblPtr->Int2);
 
     SAMPLE_GetCrc(TableName);
+
+    /* Invoke a function provided by SAMPLE_LIB */
+    SAMPLE_Function();
 
     return;
 
@@ -524,7 +539,7 @@ void SAMPLE_GetCrc( const char *TableName )
     else
     {
         Crc = TblInfoPtr.Crc;
-        CFE_ES_WriteToSysLog("Sample App: CRC: 0x%08X\n\n", Crc);
+        CFE_ES_WriteToSysLog("Sample App: CRC: 0x%08lX\n\n", (unsigned long)Crc);
     }
 
     return;
