@@ -275,7 +275,7 @@ void Test_SAMPLE_ProcessCommandPacket(void)
     SAMPLE_ProcessCommandPacket(&TestMsg.Base);
 
     /* invalid message id */
-    TestMsgId = 0;
+    TestMsgId = CFE_SB_INVALID_MSG_ID;
     UT_SetDataBuffer(UT_KEY(CFE_SB_GetMsgId), &TestMsgId,
             sizeof(TestMsgId), false);
     SAMPLE_ProcessCommandPacket(&TestMsg.Base);
