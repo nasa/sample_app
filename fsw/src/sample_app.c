@@ -174,7 +174,7 @@ int32 SAMPLE_AppInit( void )
     /*
     ** Initialize housekeeping packet (clear user data area).
     */
-    CFE_SB_InitMsg(&SAMPLE_AppData.HkBuf,
+    CFE_SB_InitMsg(&SAMPLE_AppData.HkBuf.MsgHdr,
                    SAMPLE_APP_HK_TLM_MID,
                    sizeof(SAMPLE_AppData.HkBuf),
                    true);
@@ -356,14 +356,14 @@ int32 SAMPLE_ReportHousekeeping( const CCSDS_CommandPacket_t *Msg )
     /*
     ** Get command execution counters...
     */
-    SAMPLE_AppData.HkBuf.Payload.CommandErrorCounter = SAMPLE_AppData.ErrCounter;
-    SAMPLE_AppData.HkBuf.Payload.CommandCounter = SAMPLE_AppData.CmdCounter;
+    SAMPLE_AppData.HkBuf.HkTlm.Payload.CommandErrorCounter = SAMPLE_AppData.ErrCounter;
+    SAMPLE_AppData.HkBuf.HkTlm.Payload.CommandCounter = SAMPLE_AppData.CmdCounter;
 
     /*
     ** Send housekeeping telemetry packet...
     */
-    CFE_SB_TimeStampMsg(&SAMPLE_AppData.HkBuf);
-    CFE_SB_SendMsg(&SAMPLE_AppData.HkBuf);
+    CFE_SB_TimeStampMsg(&SAMPLE_AppData.HkBuf.MsgHdr);
+    CFE_SB_SendMsg(&SAMPLE_AppData.HkBuf.MsgHdr);
 
     /*
     ** Manage any pending table loads, validations, etc.
