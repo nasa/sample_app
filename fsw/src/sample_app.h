@@ -45,7 +45,7 @@
 /***********************************************************************/
 #define SAMPLE_PIPE_DEPTH                     32 /* Depth of the Command Pipe for Application */
 
-#define NUMBER_OF_TABLES                      1  /* Number of Table(s) */
+#define SAMPLE_NUMBER_OF_TABLES               1  /* Number of Table(s) */
 
 /* Define filenames of default data images for tables */
 #define SAMPLE_TABLE_FILE                     "/cf/sample_table.tbl"
@@ -70,7 +70,7 @@ typedef struct
     /*
     ** Housekeeping telemetry packet...
     */
-    sample_hk_tlm_t    SAMPLE_HkTelemetryPkt;
+    SAMPLE_HkTlm_t        HkBuf;
 
     /*
     ** Run Status variable used in the main processing loop
@@ -80,8 +80,8 @@ typedef struct
     /*
     ** Operational data (not reported in housekeeping)...
     */
-    CFE_SB_PipeId_t    SAMPLE_CommandPipe;
-    CFE_SB_MsgPtr_t    SAMPLEMsgPtr;
+    CFE_SB_PipeId_t    CommandPipe;
+    CFE_SB_MsgPtr_t    MsgPtr;
 
     /*
     ** Initialization data (not reported in housekeeping)...
@@ -89,10 +89,10 @@ typedef struct
     char     PipeName[16];
     uint16   PipeDepth;
 
-    CFE_EVS_BinFilter_t  SAMPLE_EventFilters[SAMPLE_EVENT_COUNTS];
-    CFE_TBL_Handle_t     TblHandles[NUMBER_OF_TABLES];
+    CFE_EVS_BinFilter_t  EventFilters[SAMPLE_EVENT_COUNTS];
+    CFE_TBL_Handle_t     TblHandles[SAMPLE_NUMBER_OF_TABLES];
 
-} Sample_AppData_t;
+} SAMPLE_AppData_t;
 
 /****************************************************************************/
 /*
@@ -105,10 +105,10 @@ void  SAMPLE_AppMain(void);
 int32 SAMPLE_AppInit(void);
 void  SAMPLE_ProcessCommandPacket(CFE_SB_MsgPtr_t Msg);
 void  SAMPLE_ProcessGroundCommand(CFE_SB_MsgPtr_t Msg);
-void  SAMPLE_ReportHousekeeping(const CCSDS_CommandPacket_t *Msg);
-void  SAMPLE_ResetCounters(const SAMPLE_ResetCounters_t *Msg);
-void  SAMPLE_ProcessCC(const SAMPLE_Process_t *Msg);
-void  SAMPLE_NoopCmd(const SAMPLE_Noop_t *Msg);
+int32 SAMPLE_ReportHousekeeping(const CCSDS_CommandPacket_t *Msg);
+int32 SAMPLE_ResetCounters(const SAMPLE_ResetCounters_t *Msg);
+int32 SAMPLE_Process(const SAMPLE_Process_t *Msg);
+int32 SAMPLE_Noop(const SAMPLE_Noop_t *Msg);
 void  SAMPLE_GetCrc(const char *TableName);
 
 int32 SAMPLE_TblValidationFunc(void *TblData);

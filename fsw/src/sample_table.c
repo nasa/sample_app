@@ -27,7 +27,7 @@
 ** The following is an example of the declaration statement that defines the desired
 ** contents of the table image.
 */
-SampleTable_t sampleTable = { 1, 2};
+SAMPLE_Table_t sampleTable = { 1, 2};
 
 /*
 ** The macro below identifies:
