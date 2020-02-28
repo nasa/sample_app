@@ -7,7 +7,9 @@ This sample application is a non-flight example application implementation for t
 sample_app is an example for how to build and link an application in cFS.
 
 ## Version Notes
-
+- 1.1.4  
+  - Fix for a clean build with OMIT_DEPRECATED
+  - Minor updates (see https://github.com/nasa/sample_app/pull/44)
 - 1.1.3
   - Minor updates (see https://github.com/nasa/sample_app/pull/34)
 - 1.1.2
@@ -30,4 +32,3 @@ As a sample application, extensive testing is not performed prior to release and
 For best results, submit issues:questions or issues:help wanted requests at https://github.com/nasa/cFS.
 
 Official cFS page: http://cfs.gsfc.nasa.gov
-
