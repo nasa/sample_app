@@ -64,18 +64,18 @@ void SAMPLE_AppMain( void )
     /*
     ** Perform application specific initialization
     ** If the Initialization fails, set the RunStatus to
-    ** CFE_ES_APP_ERROR and the App will not enter the RunLoop
+    ** CFE_ES_RunStatus_APP_ERROR and the App will not enter the RunLoop
     */
     status = SAMPLE_AppInit();
     if (status != CFE_SUCCESS)
     {
-        Sample_AppData.RunStatus = CFE_ES_APP_ERROR;
+        Sample_AppData.RunStatus = CFE_ES_RunStatus_APP_ERROR;
     }
 
     /*
     ** SAMPLE Runloop
     */
-    while (CFE_ES_RunLoop(&Sample_AppData.RunStatus) == TRUE)
+    while (CFE_ES_RunLoop(&Sample_AppData.RunStatus) == true)
     {
         /*
         ** Performance Log Exit Stamp
@@ -99,10 +99,10 @@ void SAMPLE_AppMain( void )
         else
         {
             CFE_EVS_SendEvent(SAMPLE_PIPE_ERR_EID,
-                              CFE_EVS_ERROR,
+                              CFE_EVS_EventType_ERROR,
                               "SAMPLE APP: SB Pipe Read Error, App Will Exit");
 
-            Sample_AppData.RunStatus = CFE_ES_APP_ERROR;
+            Sample_AppData.RunStatus = CFE_ES_RunStatus_APP_ERROR;
         }
 
     }
@@ -125,7 +125,7 @@ int32 SAMPLE_AppInit( void )
 {
     int32    status;
 
-    Sample_AppData.RunStatus = CFE_ES_APP_RUN;
+    Sample_AppData.RunStatus = CFE_ES_RunStatus_APP_RUN;
 
     /*
     ** Initialize app command execution counters
@@ -163,7 +163,7 @@ int32 SAMPLE_AppInit( void )
     */
     status = CFE_EVS_Register(Sample_AppData.SAMPLE_EventFilters,
                               SAMPLE_EVENT_COUNTS,
-                              CFE_EVS_BINARY_FILTER);
+                              CFE_EVS_EventFilter_BINARY);
     if (status != CFE_SUCCESS)
     {
         CFE_ES_WriteToSysLog("Sample App: Error Registering Events, RC = 0x%08lX\n",
@@ -240,7 +240,7 @@ int32 SAMPLE_AppInit( void )
     }
 
     CFE_EVS_SendEvent (SAMPLE_STARTUP_INF_EID,
-                       CFE_EVS_INFORMATION,
+                       CFE_EVS_EventType_INFORMATION,
                        "SAMPLE App Initialized. Version %d.%d.%d.%d",
                        SAMPLE_APP_MAJOR_VERSION,
                        SAMPLE_APP_MINOR_VERSION,
@@ -277,7 +277,7 @@ void SAMPLE_ProcessCommandPacket( CFE_SB_MsgPtr_t Msg )
 
         default:
             CFE_EVS_SendEvent(SAMPLE_INVALID_MSGID_ERR_EID,
-                              CFE_EVS_ERROR,
+                              CFE_EVS_EventType_ERROR,
          	              "SAMPLE: invalid command packet,MID = 0x%x",
                               MsgId);
             break;
@@ -330,7 +330,7 @@ void SAMPLE_ProcessGroundCommand( CFE_SB_MsgPtr_t Msg )
         /* default case already found during FC vs length test */
         default:
             CFE_EVS_SendEvent(SAMPLE_COMMAND_ERR_EID,
-                              CFE_EVS_ERROR,
+                              CFE_EVS_EventType_ERROR,
                               "Invalid ground command code: CC = %d",
                               CommandCode);
             break;
@@ -388,7 +388,7 @@ void SAMPLE_NoopCmd( const SAMPLE_Noop_t *Msg )
     Sample_AppData.CmdCounter++;
 
     CFE_EVS_SendEvent(SAMPLE_COMMANDNOP_INF_EID,
-                      CFE_EVS_INFORMATION,
+                      CFE_EVS_EventType_INFORMATION,
                       "SAMPLE: NOOP command  Version %d.%d.%d.%d",
                       SAMPLE_APP_MAJOR_VERSION,
                       SAMPLE_APP_MINOR_VERSION,
@@ -414,7 +414,7 @@ void SAMPLE_ResetCounters( const SAMPLE_ResetCounters_t *Msg )
     Sample_AppData.ErrCounter = 0;
 
     CFE_EVS_SendEvent(SAMPLE_COMMANDRST_INF_EID,
-                      CFE_EVS_INFORMATION,
+                      CFE_EVS_EventType_INFORMATION,
                       "SAMPLE: RESET command");
 
     return;
@@ -479,7 +479,7 @@ bool SAMPLE_VerifyCmdLength( CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength )
         uint16         CommandCode = CFE_SB_GetCmdCode(Msg);
 
         CFE_EVS_SendEvent(SAMPLE_LEN_ERR_EID,
-                          CFE_EVS_ERROR,
+                          CFE_EVS_EventType_ERROR,
                           "Invalid Msg length: ID = 0x%X,  CC = %d, Len = %d, Expected = %d",
                           MessageID,
                           CommandCode,
