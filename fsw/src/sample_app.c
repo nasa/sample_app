@@ -452,6 +452,14 @@ void  SAMPLE_ProcessCC( const SAMPLE_Process_t *Msg )
 
     SAMPLE_GetCrc(TableName);
 
+    status = CFE_TBL_ReleaseAddress(Sample_AppData.TblHandles[0]);
+    if (status != CFE_SUCCESS)
+    {
+        CFE_ES_WriteToSysLog("Sample App: Fail to release table address: 0x%08lx",
+                            (unsigned long)status);
+        return;
+    }
+
     /* Invoke a function provided by SAMPLE_LIB */
     SAMPLE_Function();
 
