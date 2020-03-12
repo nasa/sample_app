@@ -7,6 +7,9 @@ This sample application is a non-flight example application implementation for t
 sample_app is an example for how to build and link an application in cFS.
 
 ## Version Notes
+- 1.1.5  
+  - Fix to build on RASPBIAN OS
+  - Minor updates (see https://github.com/nasa/sample_app/pull/47)
 - 1.1.4  
   - Fix for a clean build with OMIT_DEPRECATED
   - Minor updates (see https://github.com/nasa/sample_app/pull/44)
