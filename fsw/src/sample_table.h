@@ -38,7 +38,7 @@ typedef struct
     uint16     Int1;
     uint16     Int2;
 
-} SampleTable_t;
+} SAMPLE_Table_t;
 
 #endif /* _sample_table_h_ */
 

@@ -63,14 +63,20 @@ typedef SAMPLE_NoArgsCmd_t      SAMPLE_Process_t;
 /*
 ** Type definition (SAMPLE App housekeeping)
 */
+
+typedef struct
+{
+    uint8              CommandErrorCounter;
+    uint8              CommandCounter;
+    uint8              spare[2];
+} SAMPLE_HkTlm_Payload_t;
+
 typedef struct
 {
     uint8              TlmHeader[CFE_SB_TLM_HDR_SIZE];
-    uint8              sample_command_error_count;
-    uint8              sample_command_count;
-    uint8              spare[2];
+    SAMPLE_HkTlm_Payload_t  Payload;
 
-} OS_PACK sample_hk_tlm_t;
+} OS_PACK SAMPLE_HkTlm_t;
 
 #endif /* _sample_app_msg_h_ */
 
