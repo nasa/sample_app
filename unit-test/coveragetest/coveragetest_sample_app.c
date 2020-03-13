@@ -335,6 +335,9 @@ void Test_SAMPLE_ProcessGroundCommand(void)
     SAMPLE_ProcessGroundCommand(&TestMsg.Base);
 
     /* test dispatch of PROCESS */
+    /* note this will end up calling SAMPLE_Process(), and as such it needs to
+     * avoid dereferencing a table which does not exist. */
+    UT_SetForceFail(UT_KEY(CFE_TBL_GetAddress), CFE_TBL_ERR_UNREGISTERED);
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetCmdCode), 1, SAMPLE_APP_PROCESS_CC);
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetTotalMsgLength), 1, sizeof(TestMsg.Process));
 
@@ -453,9 +456,16 @@ void Test_SAMPLE_ProcessCC(void)
      * void  SAMPLE_ProcessCC( const SAMPLE_Process_t *Msg )
      */
     SAMPLE_Process_t TestMsg;
+    SAMPLE_Table_t TestTblData;
+    void *TblPtr = &TestTblData;
 
+    memset(&TestTblData, 0, sizeof(TestTblData));
     memset(&TestMsg, 0, sizeof(TestMsg));
 
+    /* Provide some table data for the SAMPLE_Process() function to use */
+    TestTblData.Int1 = 40;
+    TestTblData.Int2 = 50;
+    UT_SetDataBuffer(UT_KEY(CFE_TBL_GetAddress), &TblPtr, sizeof(TblPtr), false);
     UT_TEST_FUNCTION_RC(SAMPLE_Process(&TestMsg), CFE_SUCCESS);
 
     /*
