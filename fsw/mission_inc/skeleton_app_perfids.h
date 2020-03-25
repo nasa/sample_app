@@ -18,26 +18,21 @@
 **      See the License for the specific language governing permissions and
 **      limitations under the License.
 **
-** File: sample_app_version.h
+** File: skeleton_app_perfids.h
 **
-** Purpose:
-**  The Sample Application header file containing version number
+** Purpose: 
+**  Define Skeleton App Performance IDs
 **
 ** Notes:
 **
-**
 *************************************************************************/
-#ifndef _sample_app_version_h_
-#define _sample_app_version_h_
+#ifndef _skeleton_app_perfids_h_
+#define _skeleton_app_perfids_h_
 
 
-#define SAMPLE_APP_MAJOR_VERSION              1
-#define SAMPLE_APP_MINOR_VERSION              1
-#define SAMPLE_APP_REVISION                   5
-#define SAMPLE_APP_MISSION_REV                0
+#define SKELETON_APP_PERF_ID              91 
 
-
-#endif /* _sample_app_version_h_ */
+#endif /* _skeleton_app_perfids_h_ */
 
 /************************/
 /*  End of File Comment */

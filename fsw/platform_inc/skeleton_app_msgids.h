@@ -18,21 +18,23 @@
 **      See the License for the specific language governing permissions and
 **      limitations under the License.
 **
-** File: sample_app_perfids.h
+** File: skeleton_app_msgids.h
 **
 ** Purpose: 
-**  Define Sample App Performance IDs
+**  Define Skeleton App  Message IDs
 **
 ** Notes:
 **
+**
 *************************************************************************/
-#ifndef _sample_app_perfids_h_
-#define _sample_app_perfids_h_
+#ifndef _skeleton_app_msgids_h_
+#define _skeleton_app_msgids_h_
 
+#define SKELETON_APP_CMD_MID            0x1882
+#define SKELETON_APP_SEND_HK_MID        0x1883
+#define SKELETON_APP_HK_TLM_MID		0x0883
 
-#define SAMPLE_APP_PERF_ID              91 
-
-#endif /* _sample_app_perfids_h_ */
+#endif /* _skeleton_app_msgids_h_ */
 
 /************************/
 /*  End of File Comment */

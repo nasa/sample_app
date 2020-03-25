@@ -18,23 +18,30 @@
 **      See the License for the specific language governing permissions and
 **      limitations under the License.
 **
-** File: sample_app_msgids.h
+** File: skeleton_app_events.h
 **
-** Purpose: 
-**  Define Sample App  Message IDs
+** Purpose:
+**  Define skeleton app Events IDs
 **
 ** Notes:
 **
-**
 *************************************************************************/
-#ifndef _sample_app_msgids_h_
-#define _sample_app_msgids_h_
+#ifndef _skeleton_app_events_h_
+#define _skeleton_app_events_h_
 
-#define SAMPLE_APP_CMD_MID            	0x1882
-#define SAMPLE_APP_SEND_HK_MID        	0x1883
-#define SAMPLE_APP_HK_TLM_MID		0x0883
 
-#endif /* _sample_app_msgids_h_ */
+#define SKELETON_RESERVED_EID                   0
+#define SKELETON_STARTUP_INF_EID                1
+#define SKELETON_COMMAND_ERR_EID                2
+#define SKELETON_COMMANDNOP_INF_EID             3
+#define SKELETON_COMMANDRST_INF_EID             4
+#define SKELETON_INVALID_MSGID_ERR_EID          5
+#define SKELETON_LEN_ERR_EID                    6
+#define SKELETON_PIPE_ERR_EID                   7
+
+#define SKELETON_EVENT_COUNTS                   7
+
+#endif /* _skeleton_app_events_h_ */
 
 /************************/
 /*  End of File Comment */

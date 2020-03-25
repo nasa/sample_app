@@ -18,24 +18,24 @@
 **      See the License for the specific language governing permissions and
 **      limitations under the License.
 **
-** File: sample_app_msg.h
+** File: skeleton_app_msg.h
 **
 ** Purpose:
-**  Define SAMPLE App  Messages and info
+**  Define SKELETON App  Messages and info
 **
 ** Notes:
 **
 **
 *******************************************************************************/
-#ifndef _sample_app_msg_h_
-#define _sample_app_msg_h_
+#ifndef _skeleton_app_msg_h_
+#define _skeleton_app_msg_h_
 
 /*
-** SAMPLE App command codes
+** SKELETON App command codes
 */
-#define SAMPLE_APP_NOOP_CC                 0
-#define SAMPLE_APP_RESET_COUNTERS_CC       1
-#define SAMPLE_APP_PROCESS_CC              2
+#define SKELETON_APP_NOOP_CC                 0
+#define SKELETON_APP_RESET_COUNTERS_CC       1
+#define SKELETON_APP_PROCESS_CC              2
 
 /*************************************************************************/
 
@@ -46,7 +46,7 @@ typedef struct
 {
    uint8    CmdHeader[CFE_SB_CMD_HDR_SIZE];
 
-} SAMPLE_NoArgsCmd_t;
+} SKELETON_NoArgsCmd_t;
 
 /*
 ** The following commands all share the "NoArgs" format
@@ -55,13 +55,13 @@ typedef struct
 ** allows them to change independently in the future without changing the prototype
 ** of the handler function
 */
-typedef SAMPLE_NoArgsCmd_t      SAMPLE_Noop_t;
-typedef SAMPLE_NoArgsCmd_t      SAMPLE_ResetCounters_t;
-typedef SAMPLE_NoArgsCmd_t      SAMPLE_Process_t;
+typedef SKELETON_NoArgsCmd_t      SKELETON_Noop_t;
+typedef SKELETON_NoArgsCmd_t      SKELETON_ResetCounters_t;
+typedef SKELETON_NoArgsCmd_t      SKELETON_Process_t;
 
 /*************************************************************************/
 /*
-** Type definition (SAMPLE App housekeeping)
+** Type definition (SKELETON App housekeeping)
 */
 
 typedef struct
@@ -69,16 +69,16 @@ typedef struct
     uint8              CommandErrorCounter;
     uint8              CommandCounter;
     uint8              spare[2];
-} SAMPLE_HkTlm_Payload_t;
+} SKELETON_HkTlm_Payload_t;
 
 typedef struct
 {
     uint8              TlmHeader[CFE_SB_TLM_HDR_SIZE];
-    SAMPLE_HkTlm_Payload_t  Payload;
+    SKELETON_HkTlm_Payload_t  Payload;
 
-} OS_PACK SAMPLE_HkTlm_t;
+} OS_PACK SKELETON_HkTlm_t;
 
-#endif /* _sample_app_msg_h_ */
+#endif /* _skeleton_app_msg_h_ */
 
 /************************/
 /*  End of File Comment */

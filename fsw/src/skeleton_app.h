@@ -18,16 +18,16 @@
 **      See the License for the specific language governing permissions and
 **      limitations under the License.
 **
-** File: sample_app.h
+** File: skeleton_app.h
 **
 ** Purpose:
-**   This file is main hdr file for the SAMPLE application.
+**   This file is main hdr file for the SKELETON application.
 **
 **
 *******************************************************************************/
 
-#ifndef _sample_app_h_
-#define _sample_app_h_
+#ifndef _skeleton_app_h_
+#define _skeleton_app_h_
 
 /*
 ** Required header files.
@@ -38,21 +38,13 @@
 #include "cfe_sb.h"
 #include "cfe_es.h"
 
-#include "sample_app_perfids.h"
-#include "sample_app_msgids.h"
-#include "sample_app_msg.h"
+#include "skeleton_app_perfids.h"
+#include "skeleton_app_msgids.h"
+#include "skeleton_app_msg.h"
 
 /***********************************************************************/
-#define SAMPLE_PIPE_DEPTH                     32 /* Depth of the Command Pipe for Application */
+#define SKELETON_PIPE_DEPTH                     32 /* Depth of the Command Pipe for Application */
 
-#define SAMPLE_NUMBER_OF_TABLES               1  /* Number of Table(s) */
-
-/* Define filenames of default data images for tables */
-#define SAMPLE_TABLE_FILE                     "/cf/sample_table.tbl"
-
-#define SAMPLE_TABLE_OUT_OF_RANGE_ERR_CODE    -1
-
-#define SAMPLE_TBL_ELEMENT_1_MAX              10
 /************************************************************************
 ** Type Definitions
 *************************************************************************/
@@ -64,8 +56,8 @@
 typedef union
 {
     CFE_SB_Msg_t        MsgHdr;
-    SAMPLE_HkTlm_t      HkTlm;
-} SAMPLE_HkBuffer_t;
+    SKELETON_HkTlm_t      HkTlm;
+} SKELETON_HkBuffer_t;
 
 /*
 ** Global Data
@@ -81,7 +73,7 @@ typedef struct
     /*
     ** Housekeeping telemetry packet...
     */
-    SAMPLE_HkBuffer_t     HkBuf;
+    SKELETON_HkBuffer_t     HkBuf;
 
     /*
     ** Run Status variable used in the main processing loop
@@ -99,31 +91,24 @@ typedef struct
     */
     char     PipeName[16];
     uint16   PipeDepth;
-
-    CFE_EVS_BinFilter_t  EventFilters[SAMPLE_EVENT_COUNTS];
-    CFE_TBL_Handle_t     TblHandles[SAMPLE_NUMBER_OF_TABLES];
-
-} SAMPLE_AppData_t;
+} SKELETON_AppData_t;
 
 /****************************************************************************/
 /*
 ** Local function prototypes.
 **
-** Note: Except for the entry point (SAMPLE_AppMain), these
+** Note: Except for the entry point (SKELETON_AppMain), these
 **       functions are not called from any other source module.
 */
-void  SAMPLE_AppMain(void);
-int32 SAMPLE_AppInit(void);
-void  SAMPLE_ProcessCommandPacket(CFE_SB_MsgPtr_t Msg);
-void  SAMPLE_ProcessGroundCommand(CFE_SB_MsgPtr_t Msg);
-int32 SAMPLE_ReportHousekeeping(const CCSDS_CommandPacket_t *Msg);
-int32 SAMPLE_ResetCounters(const SAMPLE_ResetCounters_t *Msg);
-int32 SAMPLE_Process(const SAMPLE_Process_t *Msg);
-int32 SAMPLE_Noop(const SAMPLE_Noop_t *Msg);
-void  SAMPLE_GetCrc(const char *TableName);
+void  SKELETON_AppMain(void);
+int32 SKELETON_AppInit(void);
+void  SKELETON_ProcessCommandPacket(CFE_SB_MsgPtr_t Msg);
+void  SKELETON_ProcessGroundCommand(CFE_SB_MsgPtr_t Msg);
+int32 SKELETON_ReportHousekeeping(const CCSDS_CommandPacket_t *Msg);
+int32 SKELETON_ResetCounters(const SKELETON_ResetCounters_t *Msg);
+int32 SKELETON_Process(const SKELETON_Process_t *Msg);
+int32 SKELETON_Noop(const SKELETON_Noop_t *Msg);
+void  SKELETON_GetCrc(const char *TableName);
+bool  SKELETON_VerifyCmdLength(CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength);
 
-int32 SAMPLE_TblValidationFunc(void *TblData);
-
-bool  SAMPLE_VerifyCmdLength(CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength);
-
-#endif /* _sample_app_h_ */
+#endif /* _skeleton_app_h_ */
