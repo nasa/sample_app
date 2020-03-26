@@ -143,14 +143,14 @@ void Test_SAMPLE_AppMain(void)
 
     /*
      * This can validate that the internal "RunStatus" was
-     * set to CFE_ES_APP_ERROR, by querying the struct directly.
+     * set to CFE_ES_RunStatus_APP_ERROR, by querying the struct directly.
      *
      * It is always advisable to include the _actual_ values
      * when asserting on conditions, so if/when it fails, the
      * log will show what the incorrect value was.
      */
-    UtAssert_True(SAMPLE_AppData.RunStatus == CFE_ES_APP_ERROR,
-            "SAMPLE_AppData.RunStatus (%d) == CFE_ES_APP_ERROR",
+    UtAssert_True(SAMPLE_AppData.RunStatus == CFE_ES_RunStatus_APP_ERROR,
+            "SAMPLE_AppData.RunStatus (%d) == CFE_ES_RunStatus_APP_ERROR",
             SAMPLE_AppData.RunStatus);
 
 
