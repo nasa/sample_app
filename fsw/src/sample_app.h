@@ -117,13 +117,5 @@ int32 SAMPLE_AppInit(void);
 void  SAMPLE_ProcessCommandPacket(CFE_SB_MsgPtr_t Msg);
 void  SAMPLE_ProcessGroundCommand(CFE_SB_MsgPtr_t Msg);
 int32 SAMPLE_ReportHousekeeping(const CCSDS_CommandPacket_t *Msg);
-int32 SAMPLE_ResetCounters(const SAMPLE_ResetCounters_t *Msg);
-int32 SAMPLE_Process(const SAMPLE_Process_t *Msg);
-int32 SAMPLE_Noop(const SAMPLE_Noop_t *Msg);
-void  SAMPLE_GetCrc(const char *TableName);
-
-int32 SAMPLE_TblValidationFunc(void *TblData);
-
-bool  SAMPLE_VerifyCmdLength(CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength);
 
 #endif /* _sample_app_h_ */
