@@ -41,6 +41,8 @@
 #include "sample_app_perfids.h"
 #include "sample_app_msgids.h"
 #include "sample_app_msg.h"
+#include "sample_app_cmds.h"
+#include "sample_app_utils.h"
 
 /***********************************************************************/
 #define SAMPLE_PIPE_DEPTH                     32 /* Depth of the Command Pipe for Application */
@@ -104,6 +106,8 @@ typedef struct
     CFE_TBL_Handle_t     TblHandles[SAMPLE_NUMBER_OF_TABLES];
 
 } SAMPLE_AppData_t;
+
+extern SAMPLE_AppData_t SAMPLE_AppData;
 
 /****************************************************************************/
 /*
