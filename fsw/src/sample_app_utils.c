@@ -115,12 +115,17 @@ void SAMPLE_GetCrc( const char *TableName )
     status = CFE_TBL_GetInfo(&TblInfoPtr, TableName);
     if (status != CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Error Getting Table Info");
+        CFE_EVS_SendEvent(SAMPLE_APP_TBL_GETINF_ERR_EID,
+                          CFE_EVS_EventType_ERROR,
+                          "Sample App: Error Getting Table Info");
     }
     else
     {
         Crc = TblInfoPtr.Crc;
-        CFE_ES_WriteToSysLog("Sample App: CRC: 0x%08lX\n\n", (unsigned long)Crc);
+        CFE_EVS_SendEvent(SAMPLE_APP_TBL_CRC_INF_EID,
+                          CFE_EVS_EventType_INFORMATION,
+                          "Sample App: CRC: 0x%08lX\n\n", 
+                          (unsigned long)Crc);
     }
 
     return;

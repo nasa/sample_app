@@ -114,24 +114,30 @@ void SAMPLE_Process( const SAMPLE_Process_t *Msg )
 
         if (status != CFE_SUCCESS)
         {
-            CFE_ES_WriteToSysLog("Sample App: Fail to get table address: 0x%08lx",
-                                 (unsigned long)status);
+            CFE_EVS_SendEvent(SAMPLE_APP_TBL_ADDR_ERR_EID,
+                              CFE_EVS_EventType_ERROR,
+                              "Sample App: Fail to get table address: 0x%08lx",
+                              (unsigned long) status);
             
             SAMPLE_AppData.ErrCounter++;
             return;
         }
 
-        CFE_ES_WriteToSysLog("Sample App: Table Value 1: %d  Value 2: %d",
-                              TblPtr->Int1,
-                              TblPtr->Int2);
+        CFE_EVS_SendEvent(SAMPLE_APP_TBL_INF_EID,
+                          CFE_EVS_EventType_INFORMATION,
+                          "Sample App: Table Value 1: %d  Value 2: %d",
+                          TblPtr->Int1,
+                          TblPtr->Int2);
 
         SAMPLE_GetCrc(TableName);
 
         status = CFE_TBL_ReleaseAddress(SAMPLE_AppData.TblHandles[0]);
         if (status != CFE_SUCCESS)
-        {
-            CFE_ES_WriteToSysLog("Sample App: Fail to release table address: 0x%08lx",
-                                 (unsigned long)status);
+        {   
+            CFE_EVS_SendEvent(SAMPLE_APP_TBL_REL_ERR_EID,
+                              CFE_EVS_EventType_ERROR,
+                              "Sample App: Fail to release table address: 0x%08lx",
+                              (unsigned long)status);
             
             SAMPLE_AppData.ErrCounter++;
             return;

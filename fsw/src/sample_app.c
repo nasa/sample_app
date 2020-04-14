@@ -108,6 +108,13 @@ void SAMPLE_AppMain( void )
 
     }
 
+
+    CFE_EVS_SendEvent(SAMPLE_APP_EXIT_ERR_EID,
+                      CFE_EVS_EventType_ERROR,
+                      "SAMPLE_APP Terminating");
+
+    CFE_ES_WriteToSysLog("SAMPLE_APP Terminating.");
+
     /*
     ** Performance Log Exit Stamp
     */
@@ -188,8 +195,10 @@ int32 SAMPLE_AppInit( void )
                                SAMPLE_AppData.PipeName);
     if (status != CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Error creating pipe, RC = 0x%08lX\n",
-                             (unsigned long)status);
+        CFE_EVS_SendEvent(SAMPLE_APP_PIPE_CREATE_ERR_EID,
+                          CFE_EVS_EventType_ERROR,
+                          "Sample App: Error creating pipe, RC = 0x%08lX\n",
+                          (unsigned long)status);
         return ( status );
     }
 
@@ -200,8 +209,10 @@ int32 SAMPLE_AppInit( void )
                               SAMPLE_AppData.CommandPipe);
     if (status != CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Error Subscribing to HK request, RC = 0x%08lX\n",
-                             (unsigned long)status);
+        CFE_EVS_SendEvent(SAMPLE_APP_SUB_HK_ERR_EID,
+                          CFE_EVS_EventType_ERROR,
+                          "Sample App: Error Subscribing to HK request, RC = 0x%08lX\n",
+                          (unsigned long)status);
         return ( status );
     }
 
@@ -212,8 +223,10 @@ int32 SAMPLE_AppInit( void )
                               SAMPLE_AppData.CommandPipe);
     if (status != CFE_SUCCESS )
     {
-        CFE_ES_WriteToSysLog("Sample App: Error Subscribing to Command, RC = 0x%08lX\n",
-                             (unsigned long)status);
+        CFE_EVS_SendEvent(SAMPLE_APP_SUB_CMD_ERR_EID,
+                          CFE_EVS_EventType_ERROR,
+                          "Sample App: Error Subscribing to Command, RC = 0x%08lX\n",
+                          (unsigned long)status);
 
         return ( status );
     }
@@ -228,8 +241,10 @@ int32 SAMPLE_AppInit( void )
                               SAMPLE_TblValidationFunc);
     if ( status != CFE_SUCCESS )
     {
-        CFE_ES_WriteToSysLog("Sample App: Error Registering \
-                              Table, RC = 0x%08lX\n", (unsigned long)status);
+        CFE_EVS_SendEvent(SAMPLE_APP_TBL_REG_ERR_EID,
+                          CFE_EVS_EventType_ERROR,
+                          "Sample App: Error Registering Table, RC = 0x%08lX\n", 
+                          (unsigned long)status);
 
         return ( status );
     }
