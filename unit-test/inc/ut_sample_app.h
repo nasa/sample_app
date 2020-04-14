@@ -41,6 +41,8 @@
  */
 #include <sample_app_events.h>
 #include <sample_app.h>
+#include <sample_app_cmds.h>
+#include <sample_app_utils.h>
 
 /*
  * Allow UT access to the global "SAMPLE_AppData" object.

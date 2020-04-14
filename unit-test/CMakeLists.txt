@@ -32,7 +32,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
 # Generate a dedicated "testrunner" executable that executes the tests for each FSW code unit
 # Although sample_app has only one source file, this is done in a loop such that 
 # the general pattern should work for several files as well.
-foreach(SRCFILE sample_app.c)
+foreach(SRCFILE sample_app.c sample_app_cmds.c sample_app_utils.c)
     get_filename_component(UNITNAME "${SRCFILE}" NAME_WE)
     
     set(TESTNAME                "${UT_NAME}-${UNITNAME}")
