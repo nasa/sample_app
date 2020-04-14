@@ -38,8 +38,18 @@
 #define SAMPLE_INVALID_MSGID_ERR_EID          5
 #define SAMPLE_LEN_ERR_EID                    6
 #define SAMPLE_PIPE_ERR_EID                   7
+#define SAMPLE_APP_EXIT_ERR_EID               8
+#define SAMPLE_APP_PIPE_CREATE_ERR_EID        9
+#define SAMPLE_APP_SUB_HK_ERR_EID            10
+#define SAMPLE_APP_SUB_CMD_ERR_EID           11
+#define SAMPLE_APP_TBL_REG_ERR_EID           12
+#define SAMPLE_APP_TBL_ADDR_ERR_EID          13
+#define SAMPLE_APP_TBL_INF_EID               14
+#define SAMPLE_APP_TBL_REL_ERR_EID           15
+#define SAMPLE_APP_TBL_GETINF_ERR_EID        16
+#define SAMPLE_APP_TBL_CRC_INF_EID           17
 
-#define SAMPLE_EVENT_COUNTS                   7
+#define SAMPLE_EVENT_COUNTS                  17
 
 #endif /* _sample_app_events_h_ */
 
