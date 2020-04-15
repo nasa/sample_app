@@ -77,7 +77,7 @@ void SAMPLE_Noop( const SAMPLE_Noop_t *Msg )
 void SAMPLE_ResetCounters( const SAMPLE_ResetCounters_t *Msg )
 {
 
-    if (SAMPLE_VerifyCmdLength(Msg, sizeof(SAMPLE_Noop_t)))
+    if (SAMPLE_VerifyCmdLength(Msg, sizeof(SAMPLE_ResetCounters_t)))
     {
         SAMPLE_AppData.CmdCounter = 0;
         SAMPLE_AppData.ErrCounter = 0;
