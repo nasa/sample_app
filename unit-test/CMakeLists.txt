@@ -29,44 +29,34 @@ include_directories(${osal_MISSION_DIR}/ut_assert/inc)
 include_directories(${PROJECT_SOURCE_DIR}/fsw/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
 
-# Generate a dedicated "testrunner" executable that executes the tests for each FSW code unit
-# Although sample_app has only one source file, this is done in a loop such that 
-# the general pattern should work for several files as well.
-foreach(SRCFILE sample_app.c sample_app_cmds.c sample_app_utils.c)
-    get_filename_component(UNITNAME "${SRCFILE}" NAME_WE)
-    
-    set(TESTNAME                "${UT_NAME}-${UNITNAME}")
-    set(UNIT_SOURCE_FILE        "${CFE_SAMPLE_APP_SOURCE_DIR}/fsw/src/${UNITNAME}.c")
-    set(TESTCASE_SOURCE_FILE    "coveragetest/coveragetest_${UNITNAME}.c")
-    
-    # Compile the source unit under test as a OBJECT
-    add_library(ut_${TESTNAME}_object OBJECT
-        ${UNIT_SOURCE_FILE}
-    )    
-    
-    # Apply the UT_COVERAGE_COMPILE_FLAGS to the units under test
-    # This should enable coverage analysis on platforms that support this
-    target_compile_options(ut_${TESTNAME}_object PRIVATE ${UT_COVERAGE_COMPILE_FLAGS})
+set(TESTNAME "sample_app")
+add_library(ut_${TESTNAME}_object OBJECT
+       ${CFE_SAMPLE_APP_SOURCE_DIR}/fsw/src/sample_app.c
+       ${CFE_SAMPLE_APP_SOURCE_DIR}/fsw/src/sample_app_cmds.c
+       ${CFE_SAMPLE_APP_SOURCE_DIR}/fsw/src/sample_app_utils.c)
+
+# Apply the UT_COVERAGE_COMPILE_FLAGS to the units under test
+# This should enable coverage analysis on platforms that support this
+target_compile_options(ut_${TESTNAME}_object PRIVATE
+                     ${UT_COVERAGE_COMPILE_FLAGS})
         
-    # Compile a test runner application, which contains the
-    # actual coverage test code (test cases) and the unit under test
-    add_executable(${TESTNAME}-testrunner
-        ${TESTCASE_SOURCE_FILE}
-        $<TARGET_OBJECTS:ut_${TESTNAME}_object>
-    )
+# Compile a test runner application, which contains the
+# actual coverage test code (test cases) and the unit under test
+add_executable(${TESTNAME}-testrunner
+     coveragetest/coveragetest_sample_app.c
+     $<TARGET_OBJECTS:ut_${TESTNAME}_object>)
     
-    # This also needs to be linked with UT_COVERAGE_LINK_FLAGS (for coverage)
-    # This is also linked with any other stub libraries needed,
-    # as well as the UT assert framework    
-    target_link_libraries(${TESTNAME}-testrunner
+# This also needs to be linked with UT_COVERAGE_LINK_FLAGS (for coverage)
+# This is also linked with any other stub libraries needed,
+# as well as the UT assert framework    
+target_link_libraries(${TESTNAME}-testrunner
         ${UT_COVERAGE_LINK_FLAGS}
         ut_sample_lib_stubs
         ut_cfe-core_stubs
         ut_assert
     )
     
-    # Add it to the set of tests to run as part of "make test"
-    add_test(${TESTNAME} ${TESTNAME}-testrunner)
-    
-endforeach()
+# Add it to the set of tests to run as part of "make test"
+add_test(${TESTNAME} ${TESTNAME}-testrunner)
+
 
