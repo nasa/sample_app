@@ -44,10 +44,9 @@ foreach(SRCFILE sample_app.c)
         ${UNIT_SOURCE_FILE}
     )    
     
-    # Apply the UT_C_FLAGS to the units under test
+    # Apply the UT_COVERAGE_COMPILE_FLAGS to the units under test
     # This should enable coverage analysis on platforms that support this
-    set_target_properties(ut_${TESTNAME}_object PROPERTIES
-        COMPILE_FLAGS "${UT_C_FLAGS}")
+    target_compile_options(ut_${TESTNAME}_object PRIVATE ${UT_COVERAGE_COMPILE_FLAGS})
         
     # Compile a test runner application, which contains the
     # actual coverage test code (test cases) and the unit under test
@@ -56,13 +55,11 @@ foreach(SRCFILE sample_app.c)
         $<TARGET_OBJECTS:ut_${TESTNAME}_object>
     )
     
-    # This also needs to be linked with UT_C_FLAGS (for coverage)
-    set_target_properties(${TESTNAME}-testrunner PROPERTIES 
-        LINK_FLAGS "${UT_C_FLAGS}")
-    
+    # This also needs to be linked with UT_COVERAGE_LINK_FLAGS (for coverage)
     # This is also linked with any other stub libraries needed,
     # as well as the UT assert framework    
     target_link_libraries(${TESTNAME}-testrunner
+        ${UT_COVERAGE_LINK_FLAGS}
         ut_sample_lib_stubs
         ut_cfe-core_stubs
         ut_assert
