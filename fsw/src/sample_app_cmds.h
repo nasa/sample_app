@@ -33,10 +33,10 @@
 #include "sample_app.h"
 
 
-void SAMPLE_Noop(const SAMPLE_Noop_t *Msg);
+int32 SAMPLE_Noop(const SAMPLE_Noop_t *Msg);
 
-void SAMPLE_ResetCounters(const SAMPLE_ResetCounters_t *Msg);
+int32 SAMPLE_ResetCounters(const SAMPLE_ResetCounters_t *Msg);
 
-void SAMPLE_Process(const SAMPLE_Process_t *Msg);
+int32 SAMPLE_Process(const SAMPLE_Process_t *Msg);
 
 #endif /* _sample_app_cmds_h_ */

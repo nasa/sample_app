@@ -46,7 +46,7 @@
 /* SAMPLE_Noop -- SAMPLE NOOP commands                                        */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-void SAMPLE_Noop( const SAMPLE_Noop_t *Msg )
+int32 SAMPLE_Noop( const SAMPLE_Noop_t *Msg )
 {
 
     SAMPLE_AppData.CmdCounter++;
@@ -72,7 +72,7 @@ void SAMPLE_Noop( const SAMPLE_Noop_t *Msg )
 /*         part of the task telemetry.                                        */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
-void SAMPLE_ResetCounters( const SAMPLE_ResetCounters_t *Msg )
+int32 SAMPLE_ResetCounters( const SAMPLE_ResetCounters_t *Msg )
 {
 
     SAMPLE_AppData.CmdCounter = 0;
@@ -93,7 +93,7 @@ void SAMPLE_ResetCounters( const SAMPLE_ResetCounters_t *Msg )
 /*         This function Process Ground Station Command                       */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
-void SAMPLE_Process( const SAMPLE_Process_t *Msg )
+int32 SAMPLE_Process( const SAMPLE_Process_t *Msg )
 {
     int32 status;
     SAMPLE_Table_t *TblPtr;
@@ -113,7 +113,7 @@ void SAMPLE_Process( const SAMPLE_Process_t *Msg )
                           (unsigned long) status);
             
         SAMPLE_AppData.ErrCounter++;
-        return;
+        return status;
     }
 
     CFE_EVS_SendEvent(SAMPLE_APP_TBL_INF_EID,
@@ -133,13 +133,15 @@ void SAMPLE_Process( const SAMPLE_Process_t *Msg )
                           (unsigned long)status);
             
         SAMPLE_AppData.ErrCounter++;
-        return;
+        return status;
     }
 
     /* Invoke a function provided by SAMPLE_LIB */
     SAMPLE_Function();
  
     SAMPLE_AppData.CmdCounter++;
+
+    return CFE_SUCCESS;
 
 } /* End of SAMPLE_ProcessCC */
 
