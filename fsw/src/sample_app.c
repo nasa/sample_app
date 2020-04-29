@@ -311,7 +311,6 @@ void SAMPLE_ProcessCommandPacket( CFE_SB_MsgPtr_t Msg )
 void SAMPLE_ProcessGroundCommand( CFE_SB_MsgPtr_t Msg )
 {
     uint16 CommandCode;
-
     CommandCode = CFE_SB_GetCmdCode(Msg);
 
     /*
@@ -321,21 +320,21 @@ void SAMPLE_ProcessGroundCommand( CFE_SB_MsgPtr_t Msg )
     {
         case SAMPLE_APP_NOOP_CC:
             if(SAMPLE_VerifyCmdLength(Msg, sizeof(SAMPLE_Noop_t)))
-            {
+            { 
                 SAMPLE_Noop((SAMPLE_Noop_t *)Msg);
             }
             break;
 
         case SAMPLE_APP_RESET_COUNTERS_CC:
             if(SAMPLE_VerifyCmdLength(Msg, sizeof(SAMPLE_ResetCounters_t))) 
-            {
+            { 
                 SAMPLE_ResetCounters((SAMPLE_ResetCounters_t *)Msg);
             }
             break;
 
         case SAMPLE_APP_PROCESS_CC:
             if(SAMPLE_VerifyCmdLength(Msg, sizeof(SAMPLE_Process_t))) 
-            {
+            { 
                 SAMPLE_Process((SAMPLE_Process_t *)Msg);
             }
             break;
