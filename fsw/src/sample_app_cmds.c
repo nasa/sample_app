@@ -49,18 +49,16 @@
 void SAMPLE_Noop( const SAMPLE_Noop_t *Msg )
 {
 
-    if (SAMPLE_VerifyCmdLength(Msg, sizeof(SAMPLE_Noop_t)))
-    {
-        SAMPLE_AppData.CmdCounter++;
+    SAMPLE_AppData.CmdCounter++;
 
-        CFE_EVS_SendEvent(SAMPLE_COMMANDNOP_INF_EID,
-                          CFE_EVS_EventType_INFORMATION,
-                          "SAMPLE: NOOP command  Version %d.%d.%d.%d",
-                          SAMPLE_APP_MAJOR_VERSION,
-                          SAMPLE_APP_MINOR_VERSION,
-                          SAMPLE_APP_REVISION,
-                          SAMPLE_APP_MISSION_REV);
-    }
+    CFE_EVS_SendEvent(SAMPLE_COMMANDNOP_INF_EID,
+                      CFE_EVS_EventType_INFORMATION,
+                      "SAMPLE: NOOP command  Version %d.%d.%d.%d",
+                      SAMPLE_APP_MAJOR_VERSION,
+                      SAMPLE_APP_MINOR_VERSION,
+                      SAMPLE_APP_REVISION,
+                      SAMPLE_APP_MISSION_REV);
+    
 
     return CFE_SUCCESS;
 
@@ -77,15 +75,12 @@ void SAMPLE_Noop( const SAMPLE_Noop_t *Msg )
 void SAMPLE_ResetCounters( const SAMPLE_ResetCounters_t *Msg )
 {
 
-    if (SAMPLE_VerifyCmdLength(Msg, sizeof(SAMPLE_ResetCounters_t)))
-    {
-        SAMPLE_AppData.CmdCounter = 0;
-        SAMPLE_AppData.ErrCounter = 0;
+    SAMPLE_AppData.CmdCounter = 0;
+    SAMPLE_AppData.ErrCounter = 0;
 
-        CFE_EVS_SendEvent(SAMPLE_COMMANDRST_INF_EID,
-                          CFE_EVS_EventType_INFORMATION,
-                          "SAMPLE: RESET command");
-    }
+    CFE_EVS_SendEvent(SAMPLE_COMMANDRST_INF_EID,
+                      CFE_EVS_EventType_INFORMATION,
+                      "SAMPLE: RESET command");
 
     return CFE_SUCCESS;
 
@@ -105,49 +100,46 @@ void SAMPLE_Process( const SAMPLE_Process_t *Msg )
     const char *TableName = "SAMPLE_APP.SampleTable";
 
     
-    if (SAMPLE_VerifyCmdLength(Msg, sizeof(SAMPLE_Noop_t)))
+    /* Sample Use of Table */
+
+    status = CFE_TBL_GetAddress((void *)&TblPtr,
+                                SAMPLE_AppData.TblHandles[0]);
+
+    if (status != CFE_SUCCESS)
     {
-        /* Sample Use of Table */
-
-        status = CFE_TBL_GetAddress((void *)&TblPtr,
-                                    SAMPLE_AppData.TblHandles[0]);
-
-        if (status != CFE_SUCCESS)
-        {
-            CFE_EVS_SendEvent(SAMPLE_APP_TBL_ADDR_ERR_EID,
-                              CFE_EVS_EventType_ERROR,
-                              "Sample App: Fail to get table address: 0x%08lx",
-                              (unsigned long) status);
+        CFE_EVS_SendEvent(SAMPLE_APP_TBL_ADDR_ERR_EID,
+                          CFE_EVS_EventType_ERROR,
+                          "Sample App: Fail to get table address: 0x%08lx",
+                          (unsigned long) status);
             
-            SAMPLE_AppData.ErrCounter++;
-            return;
-        }
-
-        CFE_EVS_SendEvent(SAMPLE_APP_TBL_INF_EID,
-                          CFE_EVS_EventType_INFORMATION,
-                          "Sample App: Table Value 1: %d  Value 2: %d",
-                          TblPtr->Int1,
-                          TblPtr->Int2);
-
-        SAMPLE_GetCrc(TableName);
-
-        status = CFE_TBL_ReleaseAddress(SAMPLE_AppData.TblHandles[0]);
-        if (status != CFE_SUCCESS)
-        {   
-            CFE_EVS_SendEvent(SAMPLE_APP_TBL_REL_ERR_EID,
-                              CFE_EVS_EventType_ERROR,
-                              "Sample App: Fail to release table address: 0x%08lx",
-                              (unsigned long)status);
-            
-            SAMPLE_AppData.ErrCounter++;
-            return;
-        }
-
-        /* Invoke a function provided by SAMPLE_LIB */
-        SAMPLE_Function();
-        
-        SAMPLE_AppData.CmdCounter++;
+        SAMPLE_AppData.ErrCounter++;
+        return;
     }
+
+    CFE_EVS_SendEvent(SAMPLE_APP_TBL_INF_EID,
+                      CFE_EVS_EventType_INFORMATION,
+                      "Sample App: Table Value 1: %d  Value 2: %d",
+                      TblPtr->Int1,
+                      TblPtr->Int2);
+
+    SAMPLE_GetCrc(TableName);
+
+    status = CFE_TBL_ReleaseAddress(SAMPLE_AppData.TblHandles[0]);
+    if (status != CFE_SUCCESS)
+    {   
+        CFE_EVS_SendEvent(SAMPLE_APP_TBL_REL_ERR_EID,
+                          CFE_EVS_EventType_ERROR,
+                          "Sample App: Fail to release table address: 0x%08lx",
+                          (unsigned long)status);
+            
+        SAMPLE_AppData.ErrCounter++;
+        return;
+    }
+
+    /* Invoke a function provided by SAMPLE_LIB */
+    SAMPLE_Function();
+ 
+    SAMPLE_AppData.CmdCounter++;
 
 } /* End of SAMPLE_ProcessCC */
 
