@@ -6,30 +6,45 @@ This sample application is a non-flight example application implementation for t
 
 sample_app is an example for how to build and link an application in cFS.
 
-## Version Notes
-- 1.1.7
-  - Fix bug where table is not released after being used
-  - Minor updates (see https://github.com/nasa/sample_app/pull/48)
-- 1.1.6
-  - Minor updates (see https://github.com/nasa/sample_app/pull/49)
-- 1.1.5  
-  - Fix to build on RASPBIAN OS
-  - Minor updates (see https://github.com/nasa/sample_app/pull/47)
-- 1.1.4  
-  - Fix for a clean build with OMIT_DEPRECATED
-  - Minor updates (see https://github.com/nasa/sample_app/pull/44)
-- 1.1.3
-  - Minor updates (see https://github.com/nasa/sample_app/pull/34)
-- 1.1.2
-  - Minor updates (see https://github.com/nasa/sample_app/pull/20)
-- 1.1.1
-  - Minor updates (see https://github.com/nasa/sample_app/pull/15)
-- **1.1.0 OFFICIAL RELEASE**:
-  - Minor updates (see https://github.com/nasa/sample_app/pull/11)
-  - Not backwards compatible with OSAL 4.2.1
-  - Released as part of cFE 6.7.0, Apache 2.0
-- **1.0.0a OFFICIAL RELEASE**:
-  - Released as part of cFE 6.6.0a, Apache 2.0
+## Version History
+
+#### Development Build: 1.1.8
+- Coverage data from make lcov includes the sample_app code
+- See https://github.com/nasa/sample_app/pull/62
+
+#### Development Build: 1.1.7
+- Fix bug where table is not released after being used
+- Minor updates (see https://github.com/nasa/sample_app/pull/52)
+
+#### Development Build: 1.1.6
+- Minor updates (see https://github.com/nasa/sample_app/pull/49)
+
+#### Development Build: 1.1.5
+- Fix to build on RASPBIAN OS
+- Minor updates (see https://github.com/nasa/sample_app/pull/47)
+
+#### Development Build: 1.1.4
+- Fix for a clean build with OMIT_DEPRECATED
+- Minor updates (see https://github.com/nasa/sample_app/pull/44)
+
+#### Development Build: 1.1.3
+- Minor updates (see https://github.com/nasa/sample_app/pull/34)
+
+#### Development Build: 1.1.2
+- Minor updates (see https://github.com/nasa/sample_app/pull/20)
+
+#### Development Build: 1.1.1
+- Minor updates (see https://github.com/nasa/sample_app/pull/15)
+
+### ***OFFICIAL RELEASE: 1.1.0***
+
+- Minor updates (see https://github.com/nasa/sample_app/pull/11)
+- Not backwards compatible with OSAL 4.2.1
+- Released as part of cFE 6.7.0, Apache 2.0
+
+### ***OFFICIAL RELEASE: 1.0.0a***
+
+- Released as part of cFE 6.6.0a, Apache 2.0
 
 ## Known issues
 
