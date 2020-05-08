@@ -150,8 +150,8 @@ void Test_SAMPLE_AppMain(void)
      * log will show what the incorrect value was.
      */
     UtAssert_True(SAMPLE_AppData.RunStatus == CFE_ES_RunStatus_APP_ERROR,
-            "SAMPLE_AppData.RunStatus (%d) == CFE_ES_RunStatus_APP_ERROR",
-            SAMPLE_AppData.RunStatus);
+            "SAMPLE_AppData.RunStatus (%lu) == CFE_ES_RunStatus_APP_ERROR",
+            (unsigned long)SAMPLE_AppData.RunStatus);
 
 
     /*
