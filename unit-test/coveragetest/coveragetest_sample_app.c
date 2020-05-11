@@ -148,8 +148,8 @@ void Test_SAMPLE_AppMain(void)
      * log will show what the incorrect value was.
      */
     UtAssert_True(SAMPLE_AppData.RunStatus == CFE_ES_RunStatus_APP_ERROR,
-            "SAMPLE_AppData.RunStatus (%d) == CFE_ES_RunStatus_APP_ERROR",
-            SAMPLE_AppData.RunStatus);
+            "SAMPLE_AppData.RunStatus (%lu) == CFE_ES_RunStatus_APP_ERROR",
+            (unsigned long)SAMPLE_AppData.RunStatus);
 
 
     /*
@@ -292,7 +292,7 @@ void Test_SAMPLE_ProcessCommandPacket(void)
     SAMPLE_ProcessCommandPacket(&TestMsg.Base);
 
     /* invalid message id */
-    TestMsgId = 0;
+    TestMsgId = CFE_SB_INVALID_MSG_ID;
     UT_SetDataBuffer(UT_KEY(CFE_SB_GetMsgId), &TestMsgId,
             sizeof(TestMsgId), false);
     SAMPLE_ProcessCommandPacket(&TestMsg.Base);
@@ -390,6 +390,18 @@ void Test_SAMPLE_ReportHousekeeping(void)
      */
     SAMPLE_AppData.CmdCounter = 22;
     SAMPLE_AppData.ErrCounter = 11;
+
+    /*
+     * CFE_SB_InitMsg() needs to be done to set the emulated MsgId and Length.
+     *
+     * The FSW code only does this once during init and relies on it
+     * remaining during the SAMPLE_ReportHousekeeping().  This does
+     * not happen during UT so it must be initialized again here.
+     */
+    CFE_SB_InitMsg(&SAMPLE_AppData.HkBuf.MsgHdr,
+                   SAMPLE_APP_HK_TLM_MID,
+                   sizeof(SAMPLE_AppData.HkBuf),
+                   true);
 
     /*
      * Set up to "capture" the telemetry message

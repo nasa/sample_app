@@ -294,8 +294,8 @@ void SAMPLE_ProcessCommandPacket( CFE_SB_MsgPtr_t Msg )
         default:
             CFE_EVS_SendEvent(SAMPLE_INVALID_MSGID_ERR_EID,
                               CFE_EVS_EventType_ERROR,
-            	              "SAMPLE: invalid command packet,MID = 0x%x",
-                              MsgId);
+         	                    "SAMPLE: invalid command packet,MID = 0x%x",
+                              (unsigned int)CFE_SB_MsgIdToValue(MsgId));
             break;
     }
 
@@ -388,5 +388,6 @@ int32 SAMPLE_ReportHousekeeping( const CCSDS_CommandPacket_t *Msg )
     return CFE_SUCCESS;
 
 } /* End of SAMPLE_ReportHousekeeping() */
+
 
 
