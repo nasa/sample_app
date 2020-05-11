@@ -376,6 +376,18 @@ void Test_SAMPLE_ReportHousekeeping(void)
     SAMPLE_AppData.ErrCounter = 11;
 
     /*
+     * CFE_SB_InitMsg() needs to be done to set the emulated MsgId and Length.
+     *
+     * The FSW code only does this once during init and relies on it
+     * remaining during the SAMPLE_ReportHousekeeping().  This does
+     * not happen during UT so it must be initialized again here.
+     */
+    CFE_SB_InitMsg(&SAMPLE_AppData.HkBuf.MsgHdr,
+                   SAMPLE_APP_HK_TLM_MID,
+                   sizeof(SAMPLE_AppData.HkBuf),
+                   true);
+
+    /*
      * Set up to "capture" the telemetry message
      */
     UT_SetDataBuffer(UT_KEY(CFE_SB_SendMsg), &HkTelemetryMsg,
