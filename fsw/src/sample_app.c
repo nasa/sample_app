@@ -278,7 +278,7 @@ void SAMPLE_ProcessCommandPacket( CFE_SB_MsgPtr_t Msg )
             CFE_EVS_SendEvent(SAMPLE_INVALID_MSGID_ERR_EID,
                               CFE_EVS_EventType_ERROR,
          	              "SAMPLE: invalid command packet,MID = 0x%x",
-                              MsgId);
+                              (unsigned int)CFE_SB_MsgIdToValue(MsgId));
             break;
     }
 
@@ -488,7 +488,7 @@ bool SAMPLE_VerifyCmdLength( CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength )
         CFE_EVS_SendEvent(SAMPLE_LEN_ERR_EID,
                           CFE_EVS_EventType_ERROR,
                           "Invalid Msg length: ID = 0x%X,  CC = %d, Len = %d, Expected = %d",
-                          MessageID,
+                          (unsigned int)CFE_SB_MsgIdToValue(MessageID),
                           CommandCode,
                           ActualLength,
                           ExpectedLength);
