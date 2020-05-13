@@ -33,7 +33,7 @@
 
 #define SAMPLE_APP_MAJOR_VERSION              1
 #define SAMPLE_APP_MINOR_VERSION              1
-#define SAMPLE_APP_REVISION                   8
+#define SAMPLE_APP_REVISION                   9
 #define SAMPLE_APP_MISSION_REV                0
 
 
