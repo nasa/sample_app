@@ -271,7 +271,7 @@ void SAMPLE_ProcessCommandPacket( CFE_SB_MsgPtr_t Msg )
             break;
 
         case SAMPLE_APP_SEND_HK_MID:
-            SAMPLE_ReportHousekeeping((CCSDS_CommandPacket_t *)Msg);
+            SAMPLE_ReportHousekeeping((CFE_SB_CmdHdr_t *)Msg);
             break;
 
         default:
@@ -348,7 +348,7 @@ void SAMPLE_ProcessGroundCommand( CFE_SB_MsgPtr_t Msg )
 /*         telemetry, packetize it and send it to the housekeeping task via   */
 /*         the software bus                                                   */
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
-int32 SAMPLE_ReportHousekeeping( const CCSDS_CommandPacket_t *Msg )
+int32 SAMPLE_ReportHousekeeping( const CFE_SB_CmdHdr_t *Msg )
 {
     int i;
 
