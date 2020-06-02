@@ -278,7 +278,7 @@ void Test_SAMPLE_ProcessCommandPacket(void)
     union
     {
         CFE_SB_Msg_t Base;
-        CCSDS_CommandPacket_t Cmd;
+        CFE_SB_CmdHdr_t Cmd;
         SAMPLE_Noop_t Noop;
         SAMPLE_ResetCounters_t Reset;
         SAMPLE_Process_t Process;
@@ -331,7 +331,7 @@ void Test_SAMPLE_ProcessGroundCommand(void)
     union
     {
         CFE_SB_Msg_t Base;
-        CCSDS_CommandPacket_t Cmd;
+        CFE_SB_CmdHdr_t Cmd;
         SAMPLE_Noop_t Noop;
         SAMPLE_ResetCounters_t Reset;
         SAMPLE_Process_t Process;
@@ -390,9 +390,9 @@ void Test_SAMPLE_ReportHousekeeping(void)
 {
     /*
      * Test Case For:
-     * void SAMPLE_ReportHousekeeping( const CCSDS_CommandPacket_t *Msg )
+     * void SAMPLE_ReportHousekeeping( const CFE_SB_CmdHdr_t *Msg )
      */
-    CCSDS_CommandPacket_t   CmdMsg;
+    CFE_SB_CmdHdr_t   CmdMsg;
     SAMPLE_HkTlm_t          HkTelemetryMsg;
 
     memset(&CmdMsg, 0, sizeof(CmdMsg));
