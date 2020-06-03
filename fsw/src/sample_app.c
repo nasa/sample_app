@@ -31,7 +31,7 @@
 #include "sample_app_events.h"
 #include "sample_app_version.h"
 #include "sample_app.h"
-#include "sample_table.h"
+#include "sample_app_table.h"
 
 /* The sample_lib module provides the SAMPLE_Function() prototype */
 #include <string.h>
@@ -220,14 +220,13 @@ int32 SAMPLE_AppInit( void )
     ** Register Table(s)
     */
     status = CFE_TBL_Register(&SAMPLE_AppData.TblHandles[0],
-                              "SampleTable",
-                              sizeof(SAMPLE_Table_t),
+                              "SampleAppTable",
+                              sizeof(SAMPLE_APP_Table_t),
                               CFE_TBL_OPT_DEFAULT,
                               SAMPLE_TblValidationFunc);
     if ( status != CFE_SUCCESS )
     {
-        CFE_ES_WriteToSysLog("Sample App: Error Registering \
-                              Table, RC = 0x%08lX\n", (unsigned long)status);
+        CFE_ES_WriteToSysLog("Sample App: Error Registering Table, RC = 0x%08lX\n", (unsigned long)status);
 
         return ( status );
     }
@@ -235,7 +234,7 @@ int32 SAMPLE_AppInit( void )
     {
         status = CFE_TBL_Load(SAMPLE_AppData.TblHandles[0],
                               CFE_TBL_SRC_FILE,
-                              SAMPLE_TABLE_FILE);
+                              SAMPLE_APP_TABLE_FILE);
     }
 
     CFE_EVS_SendEvent (SAMPLE_STARTUP_INF_EID,
@@ -430,8 +429,8 @@ int32 SAMPLE_ResetCounters( const SAMPLE_ResetCounters_t *Msg )
 int32  SAMPLE_Process( const SAMPLE_Process_t *Msg )
 {
     int32 status;
-    SAMPLE_Table_t *TblPtr;
-    const char *TableName = "SAMPLE_APP.SampleTable";
+    SAMPLE_APP_Table_t *TblPtr;
+    const char *TableName = "SAMPLE_APP.SampleAppTable";
 
     /* Sample Use of Table */
 
@@ -511,20 +510,20 @@ bool SAMPLE_VerifyCmdLength( CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength )
 int32 SAMPLE_TblValidationFunc( void *TblData )
 {
     int32 ReturnCode = CFE_SUCCESS;
-    SAMPLE_Table_t *TblDataPtr = (SAMPLE_Table_t *)TblData;
+    SAMPLE_APP_Table_t *TblDataPtr = (SAMPLE_APP_Table_t *)TblData;
 
     /*
     ** Sample Table Validation
     */
-    if (TblDataPtr->Int1 > SAMPLE_TBL_ELEMENT_1_MAX)
+    if (TblDataPtr->Int1 > SAMPLE_APP_TBL_ELEMENT_1_MAX)
     {
         /* First element is out of range, return an appropriate error code */
-        ReturnCode = SAMPLE_TABLE_OUT_OF_RANGE_ERR_CODE;
+        ReturnCode = SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE;
     }
 
     return ReturnCode;
 
-} /* End of Sample_TblValidationFunc*/
+} /* End of SAMPLE_TBLValidationFunc() */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */

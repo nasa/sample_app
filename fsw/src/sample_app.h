@@ -48,11 +48,11 @@
 #define SAMPLE_NUMBER_OF_TABLES               1  /* Number of Table(s) */
 
 /* Define filenames of default data images for tables */
-#define SAMPLE_TABLE_FILE                     "/cf/sample_table.tbl"
+#define SAMPLE_APP_TABLE_FILE                 "/cf/sample_app_tbl.tbl"
 
-#define SAMPLE_TABLE_OUT_OF_RANGE_ERR_CODE    -1
+#define SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE  -1
 
-#define SAMPLE_TBL_ELEMENT_1_MAX              10
+#define SAMPLE_APP_TBL_ELEMENT_1_MAX              10
 /************************************************************************
 ** Type Definitions
 *************************************************************************/
