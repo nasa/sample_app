@@ -12,7 +12,7 @@ include_directories(${sample_lib_MISSION_DIR}/fsw/public_inc)
 add_cfe_app(sample_app fsw/src/sample_app.c)
 
 # Add table
-add_cfe_tables(sampleTable fsw/src/sample_table.c)
+add_cfe_tables(sampleAppTable fsw/tables/sample_app_tbl.c)
 
 # If UT is enabled, then add the tests from the subdirectory
 # Note that this is an app, and therefore does not provide
@@ -21,4 +21,3 @@ add_cfe_tables(sampleTable fsw/src/sample_table.c)
 if (ENABLE_UNIT_TESTS)
   add_subdirectory(unit-test)
 endif (ENABLE_UNIT_TESTS)
-
