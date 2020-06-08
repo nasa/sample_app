@@ -59,7 +59,7 @@ static int32 UT_CheckEvent_Hook(void *UserObj, int32 StubRetcode,
         uint32 CallCount, const UT_StubContext_t *Context, va_list va)
 {
     UT_CheckEvent_t *State = UserObj;
-    char TestText[CFE_EVS_MAX_MESSAGE_LENGTH];
+    char TestText[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     uint16 EventId;
     const char *Spec;
 
