@@ -455,7 +455,7 @@ void Test_SAMPLE_NoopCmd(void)
     memset(&TestMsg, 0, sizeof(TestMsg));
 
     /* test dispatch of NOOP */
-    UT_CheckEvent_Setup(&EventTest, SAMPLE_COMMANDNOP_INF_EID, "SAMPLE: NOOP command  Version 1.1.9.0");
+    UT_CheckEvent_Setup(&EventTest, SAMPLE_COMMANDNOP_INF_EID, NULL);
 
     UT_TEST_FUNCTION_RC(SAMPLE_Noop(&TestMsg), CFE_SUCCESS);
 
