@@ -8,6 +8,10 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+- Test cases now compare an expected event string with a string derived from the spec string and arguments that were output by the unit under test.
+- Replace references to `ccsds.h` types with the `cfe_sb.h`-provided type. 
+- See <https://github.com/nasa/sample_app/pull/71>
+
 ### Development Build: 1.1.9
 
 - Applies the CFE_SB_MsgIdToValue() and CFE_SB_ValueToMsgId() routines where compatibility with an integer MsgId is necessary - syslog prints, events, compile-time MID #define values.
