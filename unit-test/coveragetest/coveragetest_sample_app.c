@@ -497,7 +497,7 @@ void Test_SAMPLE_ProcessCC(void)
      * void  SAMPLE_ProcessCC( const SAMPLE_Process_t *Msg )
      */
     SAMPLE_Process_t TestMsg;
-    SAMPLE_Table_t TestTblData;
+    SAMPLE_APP_Table_t TestTblData;
     void *TblPtr = &TestTblData;
 
     memset(&TestTblData, 0, sizeof(TestTblData));
@@ -578,17 +578,17 @@ void Test_SAMPLE_TblValidationFunc(void)
      * Test Case For:
      * int32 SAMPLE_TblValidationFunc( void *TblData )
      */
-    SAMPLE_Table_t TestTblData;
+    SAMPLE_APP_Table_t TestTblData;
 
     memset(&TestTblData, 0, sizeof(TestTblData));
 
     /* nominal case (0) should succeed */
     UT_TEST_FUNCTION_RC(SAMPLE_TblValidationFunc(&TestTblData), CFE_SUCCESS);
 
-    /* error case should return SAMPLE_TABLE_OUT_OF_RANGE_ERR_CODE */
-    TestTblData.Int1 = 1 + SAMPLE_TBL_ELEMENT_1_MAX;
+    /* error case should return SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE */
+    TestTblData.Int1 = 1 + SAMPLE_APP_TBL_ELEMENT_1_MAX;
     UT_TEST_FUNCTION_RC(SAMPLE_TblValidationFunc(&TestTblData),
-            SAMPLE_TABLE_OUT_OF_RANGE_ERR_CODE);
+            SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE);
 }
 
 
