@@ -40,7 +40,7 @@
 #include <cfe.h>
 #include <sample_app_events.h>
 #include <sample_app.h>
-#include <sample_table.h>
+#include <sample_app_table.h>
 
 /*
  * Macro to call a function and check its int32 return code
