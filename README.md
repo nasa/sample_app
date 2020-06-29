@@ -61,7 +61,7 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 - Minor updates (see <https://github.com/nasa/sample_app/pull/15>)
 
-### _**OFFICIAL RELEASE: 1.1.0**_
+### _**OFFICIAL RELEASE: 1.1.0 - Aquila**_
 
 - Minor updates (see <https://github.com/nasa/sample_app/pull/11>)
 - Not backwards compatible with OSAL 4.2.1
