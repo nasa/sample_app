@@ -239,11 +239,8 @@ int32 SAMPLE_AppInit( void )
 
     CFE_EVS_SendEvent (SAMPLE_STARTUP_INF_EID,
                        CFE_EVS_EventType_INFORMATION,
-                       "SAMPLE App Initialized. Version %d.%d.%d.%d",
-                       SAMPLE_APP_MAJOR_VERSION,
-                       SAMPLE_APP_MINOR_VERSION,
-                       SAMPLE_APP_REVISION,
-                       SAMPLE_APP_MISSION_REV);
+                       "SAMPLE App Initialized.%s",
+                       SAMPLE_APP_VERSION_STRING);
 
     return ( CFE_SUCCESS );
 
@@ -387,11 +384,7 @@ int32 SAMPLE_Noop( const SAMPLE_Noop_t *Msg )
 
     CFE_EVS_SendEvent(SAMPLE_COMMANDNOP_INF_EID,
                       CFE_EVS_EventType_INFORMATION,
-                      "SAMPLE: NOOP command  Version %d.%d.%d.%d",
-                      SAMPLE_APP_MAJOR_VERSION,
-                      SAMPLE_APP_MINOR_VERSION,
-                      SAMPLE_APP_REVISION,
-                      SAMPLE_APP_MISSION_REV);
+                      "SAMPLE: NOOP command %s", SAMPLE_APP_VERSION);
 
     return CFE_SUCCESS;
 
