@@ -8,6 +8,12 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+### Development Build: 1.1.0+dev65
+
+- Add build number and baseline to version report
+- Install unit test as part of cmake recipe. Sample app test runner now shows up in expected install directory
+- See <https://github.com/nasa/sample_app/pull/86>
+
 ### Development Build: 1.1.11
 
 - Move the table to fsw/tables and renames "sample_table" to "sample_app_table
