@@ -392,48 +392,29 @@ void Test_SAMPLE_ReportHousekeeping(void)
      * Test Case For:
      * void SAMPLE_ReportHousekeeping( const CFE_SB_CmdHdr_t *Msg )
      */
-    CFE_SB_CmdHdr_t   CmdMsg;
-    SAMPLE_HkTlm_t          HkTelemetryMsg;
+    CFE_SB_Msg_t    *MsgSend;
+    CFE_SB_Msg_t    *MsgTimestamp;
+    CFE_SB_MsgId_t  MsgId = CFE_SB_ValueToMsgId(SAMPLE_APP_SEND_HK_MID); 
 
-    memset(&CmdMsg, 0, sizeof(CmdMsg));
-    memset(&HkTelemetryMsg, 0, sizeof(HkTelemetryMsg));
+    /* Set message id to return so SAMPLE_Housekeeping will be called */
+    UT_SetDataBuffer(UT_KEY(CFE_SB_GetMsgId), &MsgId, sizeof(MsgId), false);
 
-    /*
-     * Force CmdCounter and ErrCounter to known values
-     */
-    SAMPLE_AppData.CmdCounter = 22;
-    SAMPLE_AppData.ErrCounter = 11;
+    /* Set up to capture send message address */
+    UT_SetDataBuffer(UT_KEY(CFE_SB_SendMsg), &MsgSend, sizeof(MsgSend), false);
 
-    /*
-     * CFE_SB_InitMsg() needs to be done to set the emulated MsgId and Length.
-     *
-     * The FSW code only does this once during init and relies on it
-     * remaining during the SAMPLE_ReportHousekeeping().  This does
-     * not happen during UT so it must be initialized again here.
-     */
-    CFE_SB_InitMsg(&SAMPLE_AppData.HkBuf.MsgHdr,
-                   SAMPLE_APP_HK_TLM_MID,
-                   sizeof(SAMPLE_AppData.HkBuf),
-                   true);
+    /* Set up to capture timestamp message address */
+    UT_SetDataBuffer(UT_KEY(CFE_SB_TimeStampMsg), &MsgTimestamp, sizeof(MsgTimestamp), false);
 
-    /*
-     * Set up to "capture" the telemetry message
-     */
-    UT_SetDataBuffer(UT_KEY(CFE_SB_SendMsg), &HkTelemetryMsg,
-            sizeof(HkTelemetryMsg), false);
+    /* Call unit under test, NULL pointer confirms command access is through APIs */
+    SAMPLE_ProcessCommandPacket((CFE_SB_Msg_t *)NULL);
 
-    SAMPLE_ReportHousekeeping(&CmdMsg);
+    /* Confirm message sent*/
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_SendMsg)) == 1, "CFE_SB_SendMsg() called once");
+    UtAssert_True(MsgSend == &SAMPLE_AppData.HkBuf.MsgHdr, "CFE_SB_SendMsg() address matches expected");
 
-    /*
-     * check that the known values got into the telemetry correctly
-     */
-    UtAssert_True(HkTelemetryMsg.Payload.CommandCounter == 22,
-            "HkTelemetryMsg.Payload.CommandCounter (%u) == 22",
-            (unsigned int)HkTelemetryMsg.Payload.CommandCounter);
-
-    UtAssert_True(HkTelemetryMsg.Payload.CommandErrorCounter == 11,
-            "HkTelemetryMsg.Payload.CommandErrorCounter (%u) == 11",
-            (unsigned int)HkTelemetryMsg.Payload.CommandErrorCounter);
+    /* Confirm timestamp msg address */
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_TimeStampMsg)) == 1, "CFE_SB_TimeStampMsg() called once");
+    UtAssert_True(MsgTimestamp == &SAMPLE_AppData.HkBuf.MsgHdr, "CFE_SB_TimeStampMsg() adress matches expected");
 
     /*
      * Confirm that the CFE_TBL_Manage() call was done
