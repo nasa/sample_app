@@ -43,16 +43,16 @@
 #include "sample_app_msg.h"
 
 /***********************************************************************/
-#define SAMPLE_PIPE_DEPTH                     32 /* Depth of the Command Pipe for Application */
+#define SAMPLE_PIPE_DEPTH 32 /* Depth of the Command Pipe for Application */
 
-#define SAMPLE_NUMBER_OF_TABLES               1  /* Number of Table(s) */
+#define SAMPLE_NUMBER_OF_TABLES 1 /* Number of Table(s) */
 
 /* Define filenames of default data images for tables */
-#define SAMPLE_APP_TABLE_FILE                 "/cf/sample_app_tbl.tbl"
+#define SAMPLE_APP_TABLE_FILE "/cf/sample_app_tbl.tbl"
 
-#define SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE  -1
+#define SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE -1
 
-#define SAMPLE_APP_TBL_ELEMENT_1_MAX              10
+#define SAMPLE_APP_TBL_ELEMENT_1_MAX 10
 /************************************************************************
 ** Type Definitions
 *************************************************************************/
@@ -63,8 +63,8 @@
  */
 typedef union
 {
-    CFE_SB_Msg_t        MsgHdr;
-    SAMPLE_HkTlm_t      HkTlm;
+    CFE_SB_Msg_t   MsgHdr;
+    SAMPLE_HkTlm_t HkTlm;
 } SAMPLE_HkBuffer_t;
 
 /*
@@ -75,13 +75,13 @@ typedef struct
     /*
     ** Command interface counters...
     */
-    uint8                 CmdCounter;
-    uint8                 ErrCounter;
+    uint8 CmdCounter;
+    uint8 ErrCounter;
 
     /*
     ** Housekeeping telemetry packet...
     */
-    SAMPLE_HkBuffer_t     HkBuf;
+    SAMPLE_HkBuffer_t HkBuf;
 
     /*
     ** Run Status variable used in the main processing loop
@@ -91,17 +91,17 @@ typedef struct
     /*
     ** Operational data (not reported in housekeeping)...
     */
-    CFE_SB_PipeId_t    CommandPipe;
-    CFE_SB_MsgPtr_t    MsgPtr;
+    CFE_SB_PipeId_t CommandPipe;
+    CFE_SB_MsgPtr_t MsgPtr;
 
     /*
     ** Initialization data (not reported in housekeeping)...
     */
-    char     PipeName[16];
-    uint16   PipeDepth;
+    char   PipeName[16];
+    uint16 PipeDepth;
 
-    CFE_EVS_BinFilter_t  EventFilters[SAMPLE_EVENT_COUNTS];
-    CFE_TBL_Handle_t     TblHandles[SAMPLE_NUMBER_OF_TABLES];
+    CFE_EVS_BinFilter_t EventFilters[SAMPLE_EVENT_COUNTS];
+    CFE_TBL_Handle_t    TblHandles[SAMPLE_NUMBER_OF_TABLES];
 
 } SAMPLE_AppData_t;
 
@@ -124,6 +124,6 @@ void  SAMPLE_GetCrc(const char *TableName);
 
 int32 SAMPLE_TblValidationFunc(void *TblData);
 
-bool  SAMPLE_VerifyCmdLength(CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength);
+bool SAMPLE_VerifyCmdLength(CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength);
 
 #endif /* _sample_app_h_ */

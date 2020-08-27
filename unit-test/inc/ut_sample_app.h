@@ -48,4 +48,3 @@
 extern SAMPLE_AppData_t SAMPLE_AppData;
 
 #endif /* _UT_SAMPLE_APP_H_ */
-
