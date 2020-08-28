@@ -35,8 +35,8 @@
 */
 typedef struct
 {
-    uint16     Int1;
-    uint16     Int2;
+    uint16 Int1;
+    uint16 Int2;
 
 } SAMPLE_APP_Table_t;
 

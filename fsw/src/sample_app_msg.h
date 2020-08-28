@@ -33,9 +33,9 @@
 /*
 ** SAMPLE App command codes
 */
-#define SAMPLE_APP_NOOP_CC                 0
-#define SAMPLE_APP_RESET_COUNTERS_CC       1
-#define SAMPLE_APP_PROCESS_CC              2
+#define SAMPLE_APP_NOOP_CC           0
+#define SAMPLE_APP_RESET_COUNTERS_CC 1
+#define SAMPLE_APP_PROCESS_CC        2
 
 /*************************************************************************/
 
@@ -44,7 +44,7 @@
 */
 typedef struct
 {
-   uint8    CmdHeader[CFE_SB_CMD_HDR_SIZE];
+    uint8 CmdHeader[CFE_SB_CMD_HDR_SIZE];
 
 } SAMPLE_NoArgsCmd_t;
 
@@ -55,9 +55,9 @@ typedef struct
 ** allows them to change independently in the future without changing the prototype
 ** of the handler function
 */
-typedef SAMPLE_NoArgsCmd_t      SAMPLE_Noop_t;
-typedef SAMPLE_NoArgsCmd_t      SAMPLE_ResetCounters_t;
-typedef SAMPLE_NoArgsCmd_t      SAMPLE_Process_t;
+typedef SAMPLE_NoArgsCmd_t SAMPLE_Noop_t;
+typedef SAMPLE_NoArgsCmd_t SAMPLE_ResetCounters_t;
+typedef SAMPLE_NoArgsCmd_t SAMPLE_Process_t;
 
 /*************************************************************************/
 /*
@@ -66,15 +66,15 @@ typedef SAMPLE_NoArgsCmd_t      SAMPLE_Process_t;
 
 typedef struct
 {
-    uint8              CommandErrorCounter;
-    uint8              CommandCounter;
-    uint8              spare[2];
+    uint8 CommandErrorCounter;
+    uint8 CommandCounter;
+    uint8 spare[2];
 } SAMPLE_HkTlm_Payload_t;
 
 typedef struct
 {
-    uint8              TlmHeader[CFE_SB_TLM_HDR_SIZE];
-    SAMPLE_HkTlm_Payload_t  Payload;
+    uint8                  TlmHeader[CFE_SB_TLM_HDR_SIZE];
+    SAMPLE_HkTlm_Payload_t Payload;
 
 } OS_PACK SAMPLE_HkTlm_t;
 
