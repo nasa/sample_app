@@ -32,9 +32,9 @@
 
 /* Development Build Macro Definitions */
 
-#define SAMPLE_APP_BUILD_NUMBER 65 /*!< Development Build: Number of commits since baseline */
+#define SAMPLE_APP_BUILD_NUMBER 5 /*!< Development Build: Number of commits since baseline */
 #define SAMPLE_APP_BUILD_BASELINE \
-    "v1.1.0" /*!< Development Build: git tag that is the base for the current development */
+    "v1.2.0-rc1" /*!< Development Build: git tag that is the base for the current development */
 
 /* Version Macro Definitions */
 

@@ -8,6 +8,12 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+### Development Build: 1.2.0-rc1+dev5
+
+- Applies standard coding style.
+- Removes test code call of CFE_SB_InitMsg and sets the API/stub buffers directly.
+- See <https://github.com/nasa/sample_app/pull/93>
+
 ### Development Build: 1.1.0+dev65
 
 - Add build number and baseline to version report
