@@ -46,9 +46,9 @@ SAMPLE_AppData_t SAMPLE_AppData;
 /* SAMPLE_AppMain() -- Application entry point and main process loop          */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  * *  * * * * **/
-void SAMPLE_AppMain( void )
+void SAMPLE_AppMain(void)
 {
-    int32  status;
+    int32 status;
 
     /*
     ** Register the app with Executive services
@@ -82,9 +82,7 @@ void SAMPLE_AppMain( void )
         CFE_ES_PerfLogExit(SAMPLE_APP_PERF_ID);
 
         /* Pend on receipt of command packet */
-        status = CFE_SB_RcvMsg(&SAMPLE_AppData.MsgPtr,
-                               SAMPLE_AppData.CommandPipe,
-                               CFE_SB_PEND_FOREVER);
+        status = CFE_SB_RcvMsg(&SAMPLE_AppData.MsgPtr, SAMPLE_AppData.CommandPipe, CFE_SB_PEND_FOREVER);
 
         /*
         ** Performance Log Entry Stamp
@@ -97,13 +95,11 @@ void SAMPLE_AppMain( void )
         }
         else
         {
-            CFE_EVS_SendEvent(SAMPLE_PIPE_ERR_EID,
-                              CFE_EVS_EventType_ERROR,
+            CFE_EVS_SendEvent(SAMPLE_PIPE_ERR_EID, CFE_EVS_EventType_ERROR,
                               "SAMPLE APP: SB Pipe Read Error, App Will Exit");
 
             SAMPLE_AppData.RunStatus = CFE_ES_RunStatus_APP_ERROR;
         }
-
     }
 
     /*
@@ -120,9 +116,9 @@ void SAMPLE_AppMain( void )
 /* SAMPLE_AppInit() --  initialization                                        */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-int32 SAMPLE_AppInit( void )
+int32 SAMPLE_AppInit(void)
 {
-    int32    status;
+    int32 status;
 
     SAMPLE_AppData.RunStatus = CFE_ES_RunStatus_APP_RUN;
 
@@ -160,89 +156,69 @@ int32 SAMPLE_AppInit( void )
     /*
     ** Register the events
     */
-    status = CFE_EVS_Register(SAMPLE_AppData.EventFilters,
-                              SAMPLE_EVENT_COUNTS,
-                              CFE_EVS_EventFilter_BINARY);
+    status = CFE_EVS_Register(SAMPLE_AppData.EventFilters, SAMPLE_EVENT_COUNTS, CFE_EVS_EventFilter_BINARY);
     if (status != CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Error Registering Events, RC = 0x%08lX\n",
-                             (unsigned long)status);
-        return ( status );
+        CFE_ES_WriteToSysLog("Sample App: Error Registering Events, RC = 0x%08lX\n", (unsigned long)status);
+        return (status);
     }
 
     /*
     ** Initialize housekeeping packet (clear user data area).
     */
-    CFE_SB_InitMsg(&SAMPLE_AppData.HkBuf.MsgHdr,
-                   SAMPLE_APP_HK_TLM_MID,
-                   sizeof(SAMPLE_AppData.HkBuf),
-                   true);
+    CFE_SB_InitMsg(&SAMPLE_AppData.HkBuf.MsgHdr, SAMPLE_APP_HK_TLM_MID, sizeof(SAMPLE_AppData.HkBuf), true);
 
     /*
     ** Create Software Bus message pipe.
     */
-    status = CFE_SB_CreatePipe(&SAMPLE_AppData.CommandPipe,
-                               SAMPLE_AppData.PipeDepth,
-                               SAMPLE_AppData.PipeName);
+    status = CFE_SB_CreatePipe(&SAMPLE_AppData.CommandPipe, SAMPLE_AppData.PipeDepth, SAMPLE_AppData.PipeName);
     if (status != CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Error creating pipe, RC = 0x%08lX\n",
-                             (unsigned long)status);
-        return ( status );
+        CFE_ES_WriteToSysLog("Sample App: Error creating pipe, RC = 0x%08lX\n", (unsigned long)status);
+        return (status);
     }
 
     /*
     ** Subscribe to Housekeeping request commands
     */
-    status = CFE_SB_Subscribe(SAMPLE_APP_SEND_HK_MID,
-                              SAMPLE_AppData.CommandPipe);
+    status = CFE_SB_Subscribe(SAMPLE_APP_SEND_HK_MID, SAMPLE_AppData.CommandPipe);
     if (status != CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Error Subscribing to HK request, RC = 0x%08lX\n",
-                             (unsigned long)status);
-        return ( status );
+        CFE_ES_WriteToSysLog("Sample App: Error Subscribing to HK request, RC = 0x%08lX\n", (unsigned long)status);
+        return (status);
     }
 
     /*
     ** Subscribe to ground command packets
     */
-    status = CFE_SB_Subscribe(SAMPLE_APP_CMD_MID,
-                              SAMPLE_AppData.CommandPipe);
-    if (status != CFE_SUCCESS )
+    status = CFE_SB_Subscribe(SAMPLE_APP_CMD_MID, SAMPLE_AppData.CommandPipe);
+    if (status != CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Error Subscribing to Command, RC = 0x%08lX\n",
-                             (unsigned long)status);
+        CFE_ES_WriteToSysLog("Sample App: Error Subscribing to Command, RC = 0x%08lX\n", (unsigned long)status);
 
-        return ( status );
+        return (status);
     }
 
     /*
     ** Register Table(s)
     */
-    status = CFE_TBL_Register(&SAMPLE_AppData.TblHandles[0],
-                              "SampleAppTable",
-                              sizeof(SAMPLE_APP_Table_t),
-                              CFE_TBL_OPT_DEFAULT,
-                              SAMPLE_TblValidationFunc);
-    if ( status != CFE_SUCCESS )
+    status = CFE_TBL_Register(&SAMPLE_AppData.TblHandles[0], "SampleAppTable", sizeof(SAMPLE_APP_Table_t),
+                              CFE_TBL_OPT_DEFAULT, SAMPLE_TblValidationFunc);
+    if (status != CFE_SUCCESS)
     {
         CFE_ES_WriteToSysLog("Sample App: Error Registering Table, RC = 0x%08lX\n", (unsigned long)status);
 
-        return ( status );
+        return (status);
     }
     else
     {
-        status = CFE_TBL_Load(SAMPLE_AppData.TblHandles[0],
-                              CFE_TBL_SRC_FILE,
-                              SAMPLE_APP_TABLE_FILE);
+        status = CFE_TBL_Load(SAMPLE_AppData.TblHandles[0], CFE_TBL_SRC_FILE, SAMPLE_APP_TABLE_FILE);
     }
 
-    CFE_EVS_SendEvent (SAMPLE_STARTUP_INF_EID,
-                       CFE_EVS_EventType_INFORMATION,
-                       "SAMPLE App Initialized.%s",
-                       SAMPLE_APP_VERSION_STRING);
+    CFE_EVS_SendEvent(SAMPLE_STARTUP_INF_EID, CFE_EVS_EventType_INFORMATION, "SAMPLE App Initialized.%s",
+                      SAMPLE_APP_VERSION_STRING);
 
-    return ( CFE_SUCCESS );
+    return (CFE_SUCCESS);
 
 } /* End of SAMPLE_AppInit() */
 
@@ -254,9 +230,9 @@ int32 SAMPLE_AppInit( void )
 /*     command pipe.                                                          */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
-void SAMPLE_ProcessCommandPacket( CFE_SB_MsgPtr_t Msg )
+void SAMPLE_ProcessCommandPacket(CFE_SB_MsgPtr_t Msg)
 {
-    CFE_SB_MsgId_t  MsgId;
+    CFE_SB_MsgId_t MsgId;
 
     MsgId = CFE_SB_GetMsgId(Msg);
 
@@ -271,10 +247,8 @@ void SAMPLE_ProcessCommandPacket( CFE_SB_MsgPtr_t Msg )
             break;
 
         default:
-            CFE_EVS_SendEvent(SAMPLE_INVALID_MSGID_ERR_EID,
-                              CFE_EVS_EventType_ERROR,
-         	              "SAMPLE: invalid command packet,MID = 0x%x",
-                              (unsigned int)CFE_SB_MsgIdToValue(MsgId));
+            CFE_EVS_SendEvent(SAMPLE_INVALID_MSGID_ERR_EID, CFE_EVS_EventType_ERROR,
+                              "SAMPLE: invalid command packet,MID = 0x%x", (unsigned int)CFE_SB_MsgIdToValue(MsgId));
             break;
     }
 
@@ -287,7 +261,7 @@ void SAMPLE_ProcessCommandPacket( CFE_SB_MsgPtr_t Msg )
 /* SAMPLE_ProcessGroundCommand() -- SAMPLE ground commands                    */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-void SAMPLE_ProcessGroundCommand( CFE_SB_MsgPtr_t Msg )
+void SAMPLE_ProcessGroundCommand(CFE_SB_MsgPtr_t Msg)
 {
     uint16 CommandCode;
 
@@ -324,9 +298,7 @@ void SAMPLE_ProcessGroundCommand( CFE_SB_MsgPtr_t Msg )
 
         /* default case already found during FC vs length test */
         default:
-            CFE_EVS_SendEvent(SAMPLE_COMMAND_ERR_EID,
-                              CFE_EVS_EventType_ERROR,
-                              "Invalid ground command code: CC = %d",
+            CFE_EVS_SendEvent(SAMPLE_COMMAND_ERR_EID, CFE_EVS_EventType_ERROR, "Invalid ground command code: CC = %d",
                               CommandCode);
             break;
     }
@@ -344,7 +316,7 @@ void SAMPLE_ProcessGroundCommand( CFE_SB_MsgPtr_t Msg )
 /*         telemetry, packetize it and send it to the housekeeping task via   */
 /*         the software bus                                                   */
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
-int32 SAMPLE_ReportHousekeeping( const CFE_SB_CmdHdr_t *Msg )
+int32 SAMPLE_ReportHousekeeping(const CFE_SB_CmdHdr_t *Msg)
 {
     int i;
 
@@ -352,7 +324,7 @@ int32 SAMPLE_ReportHousekeeping( const CFE_SB_CmdHdr_t *Msg )
     ** Get command execution counters...
     */
     SAMPLE_AppData.HkBuf.HkTlm.Payload.CommandErrorCounter = SAMPLE_AppData.ErrCounter;
-    SAMPLE_AppData.HkBuf.HkTlm.Payload.CommandCounter = SAMPLE_AppData.CmdCounter;
+    SAMPLE_AppData.HkBuf.HkTlm.Payload.CommandCounter      = SAMPLE_AppData.CmdCounter;
 
     /*
     ** Send housekeeping telemetry packet...
@@ -363,7 +335,7 @@ int32 SAMPLE_ReportHousekeeping( const CFE_SB_CmdHdr_t *Msg )
     /*
     ** Manage any pending table loads, validations, etc.
     */
-    for (i=0; i<SAMPLE_NUMBER_OF_TABLES; i++)
+    for (i = 0; i < SAMPLE_NUMBER_OF_TABLES; i++)
     {
         CFE_TBL_Manage(SAMPLE_AppData.TblHandles[i]);
     }
@@ -377,14 +349,13 @@ int32 SAMPLE_ReportHousekeeping( const CFE_SB_CmdHdr_t *Msg )
 /* SAMPLE_Noop -- SAMPLE NOOP commands                                        */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-int32 SAMPLE_Noop( const SAMPLE_Noop_t *Msg )
+int32 SAMPLE_Noop(const SAMPLE_Noop_t *Msg)
 {
 
     SAMPLE_AppData.CmdCounter++;
 
-    CFE_EVS_SendEvent(SAMPLE_COMMANDNOP_INF_EID,
-                      CFE_EVS_EventType_INFORMATION,
-                      "SAMPLE: NOOP command %s", SAMPLE_APP_VERSION);
+    CFE_EVS_SendEvent(SAMPLE_COMMANDNOP_INF_EID, CFE_EVS_EventType_INFORMATION, "SAMPLE: NOOP command %s",
+                      SAMPLE_APP_VERSION);
 
     return CFE_SUCCESS;
 
@@ -398,15 +369,13 @@ int32 SAMPLE_Noop( const SAMPLE_Noop_t *Msg )
 /*         part of the task telemetry.                                        */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
-int32 SAMPLE_ResetCounters( const SAMPLE_ResetCounters_t *Msg )
+int32 SAMPLE_ResetCounters(const SAMPLE_ResetCounters_t *Msg)
 {
 
     SAMPLE_AppData.CmdCounter = 0;
     SAMPLE_AppData.ErrCounter = 0;
 
-    CFE_EVS_SendEvent(SAMPLE_COMMANDRST_INF_EID,
-                      CFE_EVS_EventType_INFORMATION,
-                      "SAMPLE: RESET command");
+    CFE_EVS_SendEvent(SAMPLE_COMMANDRST_INF_EID, CFE_EVS_EventType_INFORMATION, "SAMPLE: RESET command");
 
     return CFE_SUCCESS;
 
@@ -419,35 +388,30 @@ int32 SAMPLE_ResetCounters( const SAMPLE_ResetCounters_t *Msg )
 /*         This function Process Ground Station Command                       */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
-int32  SAMPLE_Process( const SAMPLE_Process_t *Msg )
+int32 SAMPLE_Process(const SAMPLE_Process_t *Msg)
 {
-    int32 status;
+    int32               status;
     SAMPLE_APP_Table_t *TblPtr;
-    const char *TableName = "SAMPLE_APP.SampleAppTable";
+    const char *        TableName = "SAMPLE_APP.SampleAppTable";
 
     /* Sample Use of Table */
 
-    status = CFE_TBL_GetAddress((void *)&TblPtr,
-                        SAMPLE_AppData.TblHandles[0]);
+    status = CFE_TBL_GetAddress((void *)&TblPtr, SAMPLE_AppData.TblHandles[0]);
 
     if (status != CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Fail to get table address: 0x%08lx",
-                (unsigned long)status);
+        CFE_ES_WriteToSysLog("Sample App: Fail to get table address: 0x%08lx", (unsigned long)status);
         return status;
     }
 
-    CFE_ES_WriteToSysLog("Sample App: Table Value 1: %d  Value 2: %d",
-                          TblPtr->Int1,
-                          TblPtr->Int2);
+    CFE_ES_WriteToSysLog("Sample App: Table Value 1: %d  Value 2: %d", TblPtr->Int1, TblPtr->Int2);
 
     SAMPLE_GetCrc(TableName);
 
     status = CFE_TBL_ReleaseAddress(SAMPLE_AppData.TblHandles[0]);
     if (status != CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Fail to release table address: 0x%08lx",
-                            (unsigned long)status);
+        CFE_ES_WriteToSysLog("Sample App: Fail to release table address: 0x%08lx", (unsigned long)status);
         return status;
     }
 
@@ -463,7 +427,7 @@ int32  SAMPLE_Process( const SAMPLE_Process_t *Msg )
 /* SAMPLE_VerifyCmdLength() -- Verify command packet length                   */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-bool SAMPLE_VerifyCmdLength( CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength )
+bool SAMPLE_VerifyCmdLength(CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength)
 {
     bool result = true;
 
@@ -477,20 +441,16 @@ bool SAMPLE_VerifyCmdLength( CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength )
         CFE_SB_MsgId_t MessageID   = CFE_SB_GetMsgId(Msg);
         uint16         CommandCode = CFE_SB_GetCmdCode(Msg);
 
-        CFE_EVS_SendEvent(SAMPLE_LEN_ERR_EID,
-                          CFE_EVS_EventType_ERROR,
+        CFE_EVS_SendEvent(SAMPLE_LEN_ERR_EID, CFE_EVS_EventType_ERROR,
                           "Invalid Msg length: ID = 0x%X,  CC = %d, Len = %d, Expected = %d",
-                          (unsigned int)CFE_SB_MsgIdToValue(MessageID),
-                          CommandCode,
-                          ActualLength,
-                          ExpectedLength);
+                          (unsigned int)CFE_SB_MsgIdToValue(MessageID), CommandCode, ActualLength, ExpectedLength);
 
         result = false;
 
         SAMPLE_AppData.ErrCounter++;
     }
 
-    return( result );
+    return (result);
 
 } /* End of SAMPLE_VerifyCmdLength() */
 
@@ -500,9 +460,9 @@ bool SAMPLE_VerifyCmdLength( CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength )
 /* buffer contents                                                 */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-int32 SAMPLE_TblValidationFunc( void *TblData )
+int32 SAMPLE_TblValidationFunc(void *TblData)
 {
-    int32 ReturnCode = CFE_SUCCESS;
+    int32               ReturnCode = CFE_SUCCESS;
     SAMPLE_APP_Table_t *TblDataPtr = (SAMPLE_APP_Table_t *)TblData;
 
     /*
@@ -524,11 +484,11 @@ int32 SAMPLE_TblValidationFunc( void *TblData )
 /*                                                                 */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SAMPLE_GetCrc( const char *TableName )
+void SAMPLE_GetCrc(const char *TableName)
 {
-    int32           status;
-    uint32          Crc;
-    CFE_TBL_Info_t  TblInfoPtr;
+    int32          status;
+    uint32         Crc;
+    CFE_TBL_Info_t TblInfoPtr;
 
     status = CFE_TBL_GetInfo(&TblInfoPtr, TableName);
     if (status != CFE_SUCCESS)

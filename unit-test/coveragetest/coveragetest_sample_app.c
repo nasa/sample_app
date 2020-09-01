@@ -34,7 +34,6 @@
 ** complex functions.
 */
 
-
 /*
  * Includes
  */
@@ -47,21 +46,21 @@
 
 typedef struct
 {
-    uint16 ExpectedEvent;
-    uint32 MatchCount;
+    uint16      ExpectedEvent;
+    uint32      MatchCount;
     const char *ExpectedText;
 } UT_CheckEvent_t;
 
 /*
  * An example hook function to check for a specific event.
  */
-static int32 UT_CheckEvent_Hook(void *UserObj, int32 StubRetcode,
-        uint32 CallCount, const UT_StubContext_t *Context, va_list va)
+static int32 UT_CheckEvent_Hook(void *UserObj, int32 StubRetcode, uint32 CallCount, const UT_StubContext_t *Context,
+                                va_list va)
 {
     UT_CheckEvent_t *State = UserObj;
-    char TestText[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
-    uint16 EventId;
-    const char *Spec;
+    char             TestText[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
+    uint16           EventId;
+    const char *     Spec;
 
     /*
      * The CFE_EVS_SendEvent stub passes the EventID as the
@@ -89,7 +88,7 @@ static int32 UT_CheckEvent_Hook(void *UserObj, int32 StubRetcode,
                 if (Spec != NULL)
                 {
                     vsnprintf(TestText, sizeof(TestText), Spec, va);
-                    if (strcmp(TestText,State->ExpectedText) == 0)
+                    if (strcmp(TestText, State->ExpectedText) == 0)
                     {
                         ++State->MatchCount;
                     }
@@ -113,11 +112,9 @@ static void UT_CheckEvent_Setup(UT_CheckEvent_t *Evt, uint16 ExpectedEvent, cons
 {
     memset(Evt, 0, sizeof(*Evt));
     Evt->ExpectedEvent = ExpectedEvent;
-    Evt->ExpectedText = ExpectedText;
+    Evt->ExpectedText  = ExpectedText;
     UT_SetVaHookFunction(UT_KEY(CFE_EVS_SendEvent), UT_CheckEvent_Hook, Evt);
 }
-
-
 
 /*
 **********************************************************************************
@@ -147,8 +144,7 @@ void Test_SAMPLE_AppMain(void)
     /*
      * Confirm that CFE_ES_ExitApp() was called at the end of execution
      */
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_ExitApp)) == 1,
-            "CFE_ES_ExitApp() called");
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_ExitApp)) == 1, "CFE_ES_ExitApp() called");
 
     /*
      * Now set up individual cases for each of the error paths.
@@ -159,8 +155,7 @@ void Test_SAMPLE_AppMain(void)
      * The call to CFE_EVS_Register is the first opportunity.
      * Any identifiable (non-success) return code should work.
      */
-    UT_SetDeferredRetcode(UT_KEY(CFE_EVS_Register), 1,
-            CFE_EVS_INVALID_PARAMETER);
+    UT_SetDeferredRetcode(UT_KEY(CFE_EVS_Register), 1, CFE_EVS_INVALID_PARAMETER);
 
     /*
      * Just call the function again.  It does not return
@@ -179,9 +174,8 @@ void Test_SAMPLE_AppMain(void)
      * log will show what the incorrect value was.
      */
     UtAssert_True(SAMPLE_AppData.RunStatus == CFE_ES_RunStatus_APP_ERROR,
-            "SAMPLE_AppData.RunStatus (%lu) == CFE_ES_RunStatus_APP_ERROR",
-            (unsigned long)SAMPLE_AppData.RunStatus);
-
+                  "SAMPLE_AppData.RunStatus (%lu) == CFE_ES_RunStatus_APP_ERROR",
+                  (unsigned long)SAMPLE_AppData.RunStatus);
 
     /*
      * Note that CFE_ES_RunLoop returns a boolean value,
@@ -202,8 +196,7 @@ void Test_SAMPLE_AppMain(void)
     /*
      * Confirm that CFE_SB_RcvMsg() (inside the loop) was called
      */
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_RcvMsg)) == 1,
-            "CFE_SB_RcvMsg() called");
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_RcvMsg)) == 1, "CFE_SB_RcvMsg() called");
 
     /*
      * Now also make the CFE_SB_RcvMsg call fail,
@@ -222,9 +215,7 @@ void Test_SAMPLE_AppMain(void)
     /*
      * Confirm that the event was generated
      */
-    UtAssert_True(EventTest.MatchCount == 1,
-            "SAMPLE_PIPE_ERR_EID generated (%u)",
-            (unsigned int)EventTest.MatchCount);
+    UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_PIPE_ERR_EID generated (%u)", (unsigned int)EventTest.MatchCount);
 }
 
 void Test_SAMPLE_AppInit(void)
@@ -243,29 +234,23 @@ void Test_SAMPLE_AppInit(void)
      * is _not_ reset between these test cases. */
     UT_SetDeferredRetcode(UT_KEY(CFE_EVS_Register), 1, CFE_EVS_INVALID_PARAMETER);
     UT_TEST_FUNCTION_RC(SAMPLE_AppInit(), CFE_EVS_INVALID_PARAMETER);
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 1,
-            "CFE_ES_WriteToSysLog() called");
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 1, "CFE_ES_WriteToSysLog() called");
 
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_CreatePipe), 1, CFE_SB_BAD_ARGUMENT);
     UT_TEST_FUNCTION_RC(SAMPLE_AppInit(), CFE_SB_BAD_ARGUMENT);
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 2,
-            "CFE_ES_WriteToSysLog() called");
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 2, "CFE_ES_WriteToSysLog() called");
 
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_Subscribe), 1, CFE_SB_BAD_ARGUMENT);
     UT_TEST_FUNCTION_RC(SAMPLE_AppInit(), CFE_SB_BAD_ARGUMENT);
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 3,
-            "CFE_ES_WriteToSysLog() called");
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 3, "CFE_ES_WriteToSysLog() called");
 
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_Subscribe), 2, CFE_SB_BAD_ARGUMENT);
     UT_TEST_FUNCTION_RC(SAMPLE_AppInit(), CFE_SB_BAD_ARGUMENT);
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 4,
-            "CFE_ES_WriteToSysLog() called");
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 4, "CFE_ES_WriteToSysLog() called");
 
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_Register), 1, CFE_TBL_ERR_INVALID_OPTIONS);
     UT_TEST_FUNCTION_RC(SAMPLE_AppInit(), CFE_TBL_ERR_INVALID_OPTIONS);
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 5,
-            "CFE_ES_WriteToSysLog() called");
-
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 5, "CFE_ES_WriteToSysLog() called");
 }
 
 void Test_SAMPLE_ProcessCommandPacket(void)
@@ -277,13 +262,13 @@ void Test_SAMPLE_ProcessCommandPacket(void)
     /* a buffer large enough for any command message */
     union
     {
-        CFE_SB_Msg_t Base;
-        CFE_SB_CmdHdr_t Cmd;
-        SAMPLE_Noop_t Noop;
+        CFE_SB_Msg_t           Base;
+        CFE_SB_CmdHdr_t        Cmd;
+        SAMPLE_Noop_t          Noop;
         SAMPLE_ResetCounters_t Reset;
-        SAMPLE_Process_t Process;
+        SAMPLE_Process_t       Process;
     } TestMsg;
-    CFE_SB_MsgId_t TestMsgId;
+    CFE_SB_MsgId_t  TestMsgId;
     UT_CheckEvent_t EventTest;
 
     memset(&TestMsg, 0, sizeof(TestMsg));
@@ -294,31 +279,24 @@ void Test_SAMPLE_ProcessCommandPacket(void)
      * message ID values to return.
      */
     TestMsgId = SAMPLE_APP_CMD_MID;
-    UT_SetDataBuffer(UT_KEY(CFE_SB_GetMsgId), &TestMsgId,
-            sizeof(TestMsgId), false);
+    UT_SetDataBuffer(UT_KEY(CFE_SB_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     SAMPLE_ProcessCommandPacket(&TestMsg.Base);
 
     TestMsgId = SAMPLE_APP_SEND_HK_MID;
-    UT_SetDataBuffer(UT_KEY(CFE_SB_GetMsgId), &TestMsgId,
-            sizeof(TestMsgId), false);
+    UT_SetDataBuffer(UT_KEY(CFE_SB_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     SAMPLE_ProcessCommandPacket(&TestMsg.Base);
 
     /* invalid message id */
     TestMsgId = CFE_SB_INVALID_MSG_ID;
-    UT_SetDataBuffer(UT_KEY(CFE_SB_GetMsgId), &TestMsgId,
-            sizeof(TestMsgId), false);
+    UT_SetDataBuffer(UT_KEY(CFE_SB_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     SAMPLE_ProcessCommandPacket(&TestMsg.Base);
-
 
     /*
      * Confirm that the event was generated only _once_
      */
-    UtAssert_True(EventTest.MatchCount == 1,
-            "SAMPLE_COMMAND_ERR_EID generated (%u)",
-            (unsigned int)EventTest.MatchCount);
+    UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_COMMAND_ERR_EID generated (%u)",
+                  (unsigned int)EventTest.MatchCount);
 }
-
-
 
 void Test_SAMPLE_ProcessGroundCommand(void)
 {
@@ -330,11 +308,11 @@ void Test_SAMPLE_ProcessGroundCommand(void)
     /* a buffer large enough for any command message */
     union
     {
-        CFE_SB_Msg_t Base;
-        CFE_SB_CmdHdr_t Cmd;
-        SAMPLE_Noop_t Noop;
+        CFE_SB_Msg_t           Base;
+        CFE_SB_CmdHdr_t        Cmd;
+        SAMPLE_Noop_t          Noop;
         SAMPLE_ResetCounters_t Reset;
-        SAMPLE_Process_t Process;
+        SAMPLE_Process_t       Process;
     } TestMsg;
     UT_CheckEvent_t EventTest;
 
@@ -380,10 +358,8 @@ void Test_SAMPLE_ProcessGroundCommand(void)
     /*
      * Confirm that the event was generated only _once_
      */
-    UtAssert_True(EventTest.MatchCount == 1,
-            "SAMPLE_COMMAND_ERR_EID generated (%u)",
-            (unsigned int)EventTest.MatchCount);
-
+    UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_COMMAND_ERR_EID generated (%u)",
+                  (unsigned int)EventTest.MatchCount);
 }
 
 void Test_SAMPLE_ReportHousekeeping(void)
@@ -392,55 +368,34 @@ void Test_SAMPLE_ReportHousekeeping(void)
      * Test Case For:
      * void SAMPLE_ReportHousekeeping( const CFE_SB_CmdHdr_t *Msg )
      */
-    CFE_SB_CmdHdr_t   CmdMsg;
-    SAMPLE_HkTlm_t          HkTelemetryMsg;
+    CFE_SB_Msg_t * MsgSend;
+    CFE_SB_Msg_t * MsgTimestamp;
+    CFE_SB_MsgId_t MsgId = CFE_SB_ValueToMsgId(SAMPLE_APP_SEND_HK_MID);
 
-    memset(&CmdMsg, 0, sizeof(CmdMsg));
-    memset(&HkTelemetryMsg, 0, sizeof(HkTelemetryMsg));
+    /* Set message id to return so SAMPLE_Housekeeping will be called */
+    UT_SetDataBuffer(UT_KEY(CFE_SB_GetMsgId), &MsgId, sizeof(MsgId), false);
 
-    /*
-     * Force CmdCounter and ErrCounter to known values
-     */
-    SAMPLE_AppData.CmdCounter = 22;
-    SAMPLE_AppData.ErrCounter = 11;
+    /* Set up to capture send message address */
+    UT_SetDataBuffer(UT_KEY(CFE_SB_SendMsg), &MsgSend, sizeof(MsgSend), false);
 
-    /*
-     * CFE_SB_InitMsg() needs to be done to set the emulated MsgId and Length.
-     *
-     * The FSW code only does this once during init and relies on it
-     * remaining during the SAMPLE_ReportHousekeeping().  This does
-     * not happen during UT so it must be initialized again here.
-     */
-    CFE_SB_InitMsg(&SAMPLE_AppData.HkBuf.MsgHdr,
-                   SAMPLE_APP_HK_TLM_MID,
-                   sizeof(SAMPLE_AppData.HkBuf),
-                   true);
+    /* Set up to capture timestamp message address */
+    UT_SetDataBuffer(UT_KEY(CFE_SB_TimeStampMsg), &MsgTimestamp, sizeof(MsgTimestamp), false);
 
-    /*
-     * Set up to "capture" the telemetry message
-     */
-    UT_SetDataBuffer(UT_KEY(CFE_SB_SendMsg), &HkTelemetryMsg,
-            sizeof(HkTelemetryMsg), false);
+    /* Call unit under test, NULL pointer confirms command access is through APIs */
+    SAMPLE_ProcessCommandPacket((CFE_SB_Msg_t *)NULL);
 
-    SAMPLE_ReportHousekeeping(&CmdMsg);
+    /* Confirm message sent*/
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_SendMsg)) == 1, "CFE_SB_SendMsg() called once");
+    UtAssert_True(MsgSend == &SAMPLE_AppData.HkBuf.MsgHdr, "CFE_SB_SendMsg() address matches expected");
 
-    /*
-     * check that the known values got into the telemetry correctly
-     */
-    UtAssert_True(HkTelemetryMsg.Payload.CommandCounter == 22,
-            "HkTelemetryMsg.Payload.CommandCounter (%u) == 22",
-            (unsigned int)HkTelemetryMsg.Payload.CommandCounter);
-
-    UtAssert_True(HkTelemetryMsg.Payload.CommandErrorCounter == 11,
-            "HkTelemetryMsg.Payload.CommandErrorCounter (%u) == 11",
-            (unsigned int)HkTelemetryMsg.Payload.CommandErrorCounter);
+    /* Confirm timestamp msg address */
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_TimeStampMsg)) == 1, "CFE_SB_TimeStampMsg() called once");
+    UtAssert_True(MsgTimestamp == &SAMPLE_AppData.HkBuf.MsgHdr, "CFE_SB_TimeStampMsg() adress matches expected");
 
     /*
      * Confirm that the CFE_TBL_Manage() call was done
      */
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_TBL_Manage)) == 1,
-            "CFE_TBL_Manage() called");
-
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_TBL_Manage)) == 1, "CFE_TBL_Manage() called");
 }
 
 void Test_SAMPLE_NoopCmd(void)
@@ -449,7 +404,7 @@ void Test_SAMPLE_NoopCmd(void)
      * Test Case For:
      * void SAMPLE_NoopCmd( const SAMPLE_Noop_t *Msg )
      */
-    SAMPLE_Noop_t TestMsg;
+    SAMPLE_Noop_t   TestMsg;
     UT_CheckEvent_t EventTest;
 
     memset(&TestMsg, 0, sizeof(TestMsg));
@@ -462,9 +417,8 @@ void Test_SAMPLE_NoopCmd(void)
     /*
      * Confirm that the event was generated
      */
-    UtAssert_True(EventTest.MatchCount == 1,
-            "SAMPLE_COMMANDNOP_INF_EID generated (%u)",
-            (unsigned int)EventTest.MatchCount);
+    UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_COMMANDNOP_INF_EID generated (%u)",
+                  (unsigned int)EventTest.MatchCount);
 }
 
 void Test_SAMPLE_ResetCounters(void)
@@ -474,7 +428,7 @@ void Test_SAMPLE_ResetCounters(void)
      * void SAMPLE_ResetCounters( const SAMPLE_ResetCounters_t *Msg )
      */
     SAMPLE_ResetCounters_t TestMsg;
-    UT_CheckEvent_t EventTest;
+    UT_CheckEvent_t        EventTest;
 
     memset(&TestMsg, 0, sizeof(TestMsg));
 
@@ -485,9 +439,8 @@ void Test_SAMPLE_ResetCounters(void)
     /*
      * Confirm that the event was generated
      */
-    UtAssert_True(EventTest.MatchCount == 1,
-            "SAMPLE_COMMANDRST_INF_EID generated (%u)",
-            (unsigned int)EventTest.MatchCount);
+    UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_COMMANDRST_INF_EID generated (%u)",
+                  (unsigned int)EventTest.MatchCount);
 }
 
 void Test_SAMPLE_ProcessCC(void)
@@ -496,9 +449,9 @@ void Test_SAMPLE_ProcessCC(void)
      * Test Case For:
      * void  SAMPLE_ProcessCC( const SAMPLE_Process_t *Msg )
      */
-    SAMPLE_Process_t TestMsg;
+    SAMPLE_Process_t   TestMsg;
     SAMPLE_APP_Table_t TestTblData;
-    void *TblPtr = &TestTblData;
+    void *             TblPtr = &TestTblData;
 
     memset(&TestTblData, 0, sizeof(TestTblData));
     memset(&TestMsg, 0, sizeof(TestMsg));
@@ -512,16 +465,13 @@ void Test_SAMPLE_ProcessCC(void)
     /*
      * Confirm that the CFE_TBL_GetAddress() call was done
      */
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_TBL_GetAddress)) == 1,
-            "CFE_TBL_GetAddress() called");
-
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_TBL_GetAddress)) == 1, "CFE_TBL_GetAddress() called");
 
     /*
      * Confirm that the SAMPLE_Function() call was done
      * NOTE: This stub is provided by the sample_lib library
      */
-    UtAssert_True(UT_GetStubCount(UT_KEY(SAMPLE_Function)) == 1,
-            "SAMPLE_Function() called");
+    UtAssert_True(UT_GetStubCount(UT_KEY(SAMPLE_Function)) == 1, "SAMPLE_Function() called");
 
     /*
      * Configure the CFE_TBL_GetAddress function to return an error
@@ -537,7 +487,7 @@ void Test_SAMPLE_VerifyCmdLength(void)
      * Test Case For:
      * bool SAMPLE_VerifyCmdLength( CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength )
      */
-    CFE_SB_Msg_t TestMsg;
+    CFE_SB_Msg_t    TestMsg;
     UT_CheckEvent_t EventTest;
 
     memset(&TestMsg, 0, sizeof(TestMsg));
@@ -546,30 +496,27 @@ void Test_SAMPLE_VerifyCmdLength(void)
      * test a match case
      */
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetTotalMsgLength), 1, sizeof(TestMsg));
-    UT_CheckEvent_Setup(&EventTest, SAMPLE_LEN_ERR_EID, "Invalid Msg length: ID = 0xFFFF,  CC = 0, Len = 18, Expected = 8");
+    UT_CheckEvent_Setup(&EventTest, SAMPLE_LEN_ERR_EID,
+                        "Invalid Msg length: ID = 0xFFFF,  CC = 0, Len = 18, Expected = 8");
 
     SAMPLE_VerifyCmdLength(&TestMsg, sizeof(TestMsg));
 
     /*
      * Confirm that the event was NOT generated
      */
-    UtAssert_True(EventTest.MatchCount == 0,
-            "SAMPLE_LEN_ERR_EID NOT generated (%u)",
-            (unsigned int)EventTest.MatchCount);
+    UtAssert_True(EventTest.MatchCount == 0, "SAMPLE_LEN_ERR_EID NOT generated (%u)",
+                  (unsigned int)EventTest.MatchCount);
 
     /*
      * test a mismatch case
      */
-    UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetTotalMsgLength), 1,
-            10 + sizeof(TestMsg));
+    UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetTotalMsgLength), 1, 10 + sizeof(TestMsg));
     SAMPLE_VerifyCmdLength(&TestMsg, sizeof(TestMsg));
 
     /*
      * Confirm that the event WAS generated
      */
-    UtAssert_True(EventTest.MatchCount == 1,
-            "SAMPLE_LEN_ERR_EID generated (%u)",
-            (unsigned int)EventTest.MatchCount);
+    UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_LEN_ERR_EID generated (%u)", (unsigned int)EventTest.MatchCount);
 }
 
 void Test_SAMPLE_TblValidationFunc(void)
@@ -587,12 +534,8 @@ void Test_SAMPLE_TblValidationFunc(void)
 
     /* error case should return SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE */
     TestTblData.Int1 = 1 + SAMPLE_APP_TBL_ELEMENT_1_MAX;
-    UT_TEST_FUNCTION_RC(SAMPLE_TblValidationFunc(&TestTblData),
-            SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE);
+    UT_TEST_FUNCTION_RC(SAMPLE_TblValidationFunc(&TestTblData), SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE);
 }
-
-
-
 
 void Test_SAMPLE_GetCrc(void)
 {
@@ -612,17 +555,12 @@ void Test_SAMPLE_GetCrc(void)
 
     UT_SetForceFail(UT_KEY(CFE_TBL_GetInfo), CFE_TBL_ERR_INVALID_NAME);
     SAMPLE_GetCrc("UT");
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 1,
-            "CFE_ES_WriteToSysLog() called");
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 1, "CFE_ES_WriteToSysLog() called");
 
     UT_ClearForceFail(UT_KEY(CFE_TBL_GetInfo));
     SAMPLE_GetCrc("UT");
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 2,
-            "CFE_ES_WriteToSysLog() called");
-
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 2, "CFE_ES_WriteToSysLog() called");
 }
-
-
 
 /*
  * Setup function prior to every test
@@ -635,11 +573,7 @@ void Sample_UT_Setup(void)
 /*
  * Teardown function after every test
  */
-void Sample_UT_TearDown(void)
-{
-
-}
-
+void Sample_UT_TearDown(void) {}
 
 /*
  * Register the test cases to execute with the unit test tool
@@ -658,8 +592,3 @@ void UtTest_Setup(void)
     ADD_TEST(SAMPLE_TblValidationFunc);
     ADD_TEST(SAMPLE_GetCrc);
 }
-
-
-
-
-
