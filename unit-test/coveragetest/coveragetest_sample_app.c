@@ -272,7 +272,7 @@ void Test_SAMPLE_ProcessCommandPacket(void)
     UT_CheckEvent_t EventTest;
 
     memset(&TestMsg, 0, sizeof(TestMsg));
-    UT_CheckEvent_Setup(&EventTest, SAMPLE_INVALID_MSGID_ERR_EID, "SAMPLE: invalid command packet,MID = 0xffff");
+    UT_CheckEvent_Setup(&EventTest, SAMPLE_INVALID_MSGID_ERR_EID, "SAMPLE: invalid command packet,MID = 0xffffffff");
 
     /*
      * The CFE_SB_GetMsgId() stub uses a data buffer to hold the
@@ -497,7 +497,7 @@ void Test_SAMPLE_VerifyCmdLength(void)
      */
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetTotalMsgLength), 1, sizeof(TestMsg));
     UT_CheckEvent_Setup(&EventTest, SAMPLE_LEN_ERR_EID,
-                        "Invalid Msg length: ID = 0xFFFF,  CC = 0, Len = 18, Expected = 8");
+                        "Invalid Msg length: ID = 0xFFFFFFFF,  CC = 0, Len = 18, Expected = 8");
 
     SAMPLE_VerifyCmdLength(&TestMsg, sizeof(TestMsg));
 
