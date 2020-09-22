@@ -48,7 +48,7 @@ typedef struct
 {
     uint16      ExpectedEvent;
     uint32      MatchCount;
-    const char *ExpectedText;
+    const char *ExpectedFormat;
 } UT_CheckEvent_t;
 
 /*
@@ -58,7 +58,6 @@ static int32 UT_CheckEvent_Hook(void *UserObj, int32 StubRetcode, uint32 CallCou
                                 va_list va)
 {
     UT_CheckEvent_t *State = UserObj;
-    char             TestText[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     uint16           EventId;
     const char *     Spec;
 
@@ -71,24 +70,34 @@ static int32 UT_CheckEvent_Hook(void *UserObj, int32 StubRetcode, uint32 CallCou
         EventId = UT_Hook_GetArgValueByName(Context, "EventID", uint16);
         if (EventId == State->ExpectedEvent)
         {
-            /*
-             * Example of how to validate the full argument set.
-             * If reference text was supplied, also check against this.
-             *
-             * NOTE: While this can be done, use with discretion - This isn't really
-             * verifying that the FSW code unit generated the correct event text,
-             * rather it is validating what the system snprintf() library function
-             * produces when passed the format string and args.
-             *
-             * __This derived string is not an actual output of the unit under test__
-             */
-            if (State->ExpectedText != NULL)
+            if (State->ExpectedFormat != NULL)
             {
                 Spec = UT_Hook_GetArgValueByName(Context, "Spec", const char *);
                 if (Spec != NULL)
                 {
-                    vsnprintf(TestText, sizeof(TestText), Spec, va);
-                    if (strcmp(TestText, State->ExpectedText) == 0)
+                    /*
+                     * Example of how to validate the full argument set.
+                     * ------------------------------------------------
+                     *
+                     * If really desired one can call something like:
+                     *
+                     * char TestText[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
+                     * vsnprintf(TestText, sizeof(TestText), Spec, va);
+                     *
+                     * And then compare the output (TestText) to the expected fully-rendered string.
+                     *
+                     * NOTE: While this can be done, use with discretion - This isn't really
+                     * verifying that the FSW code unit generated the correct event text,
+                     * rather it is validating what the system snprintf() library function
+                     * produces when passed the format string and args.
+                     *
+                     * This type of check has been demonstrated to make tests very fragile,
+                     * because it is influenced by many factors outside the control of the
+                     * test case.
+                     *
+                     * __This derived string is not an actual output of the unit under test__
+                     */
+                    if (strcmp(Spec, State->ExpectedFormat) == 0)
                     {
                         ++State->MatchCount;
                     }
@@ -108,11 +117,11 @@ static int32 UT_CheckEvent_Hook(void *UserObj, int32 StubRetcode, uint32 CallCou
  * Helper function to set up for event checking
  * This attaches the hook function to CFE_EVS_SendEvent
  */
-static void UT_CheckEvent_Setup(UT_CheckEvent_t *Evt, uint16 ExpectedEvent, const char *ExpectedText)
+static void UT_CheckEvent_Setup(UT_CheckEvent_t *Evt, uint16 ExpectedEvent, const char *ExpectedFormat)
 {
     memset(Evt, 0, sizeof(*Evt));
     Evt->ExpectedEvent = ExpectedEvent;
-    Evt->ExpectedText  = ExpectedText;
+    Evt->ExpectedFormat = ExpectedFormat;
     UT_SetVaHookFunction(UT_KEY(CFE_EVS_SendEvent), UT_CheckEvent_Hook, Evt);
 }
 
@@ -272,7 +281,7 @@ void Test_SAMPLE_ProcessCommandPacket(void)
     UT_CheckEvent_t EventTest;
 
     memset(&TestMsg, 0, sizeof(TestMsg));
-    UT_CheckEvent_Setup(&EventTest, SAMPLE_INVALID_MSGID_ERR_EID, "SAMPLE: invalid command packet,MID = 0xffff");
+    UT_CheckEvent_Setup(&EventTest, SAMPLE_INVALID_MSGID_ERR_EID, "SAMPLE: invalid command packet,MID = 0x%x");
 
     /*
      * The CFE_SB_GetMsgId() stub uses a data buffer to hold the
@@ -351,7 +360,7 @@ void Test_SAMPLE_ProcessGroundCommand(void)
     SAMPLE_ProcessGroundCommand(&TestMsg.Base);
 
     /* test an invalid CC */
-    UT_CheckEvent_Setup(&EventTest, SAMPLE_COMMAND_ERR_EID, "Invalid ground command code: CC = 1000");
+    UT_CheckEvent_Setup(&EventTest, SAMPLE_COMMAND_ERR_EID, "Invalid ground command code: CC = %d");
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetCmdCode), 1, 1000);
     SAMPLE_ProcessGroundCommand(&TestMsg.Base);
 
@@ -497,7 +506,7 @@ void Test_SAMPLE_VerifyCmdLength(void)
      */
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetTotalMsgLength), 1, sizeof(TestMsg));
     UT_CheckEvent_Setup(&EventTest, SAMPLE_LEN_ERR_EID,
-                        "Invalid Msg length: ID = 0xFFFF,  CC = 0, Len = 18, Expected = 8");
+                        "Invalid Msg length: ID = 0x%X,  CC = %d, Len = %d, Expected = %d");
 
     SAMPLE_VerifyCmdLength(&TestMsg, sizeof(TestMsg));
 

@@ -8,6 +8,13 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+### Development Build: 1.2.0-rc1+dev13
+
+- Unit test MID string format now 32bit
+- Installs unit test to target directory
+- Checks only format string in UT event test
+- See <https://github.com/nasa/sample_app/pull/98>
+
 ### Development Build: 1.2.0-rc1+dev5
 
 - Applies standard coding style.

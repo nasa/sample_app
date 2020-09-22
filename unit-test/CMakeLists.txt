@@ -67,7 +67,9 @@ foreach(SRCFILE sample_app.c)
     
     # Add it to the set of tests to run as part of "make test"
     add_test(${TESTNAME} ${TESTNAME}-testrunner)
-    install(TARGETS ${TESTNAME}-testrunner DESTINATION ${TGTNAME}/${UT_INSTALL_SUBDIR})
+    foreach(TGT ${INSTALL_TARGET_LIST})
+        install(TARGETS ${TESTNAME}-testrunner DESTINATION ${TGT}/${UT_INSTALL_SUBDIR})
+    endforeach()
     
 endforeach()
 
