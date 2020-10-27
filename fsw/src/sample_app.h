@@ -43,9 +43,9 @@
 #include "sample_app_msg.h"
 
 /***********************************************************************/
-#define SAMPLE_PIPE_DEPTH 32 /* Depth of the Command Pipe for Application */
+#define SAMPLE_APP_PIPE_DEPTH 32 /* Depth of the Command Pipe for Application */
 
-#define SAMPLE_NUMBER_OF_TABLES 1 /* Number of Table(s) */
+#define SAMPLE_APP_NUMBER_OF_TABLES 1 /* Number of Table(s) */
 
 /* Define filenames of default data images for tables */
 #define SAMPLE_APP_TABLE_FILE "/cf/sample_app_tbl.tbl"
@@ -63,9 +63,9 @@
  */
 typedef union
 {
-    CFE_SB_Msg_t   MsgHdr;
-    SAMPLE_HkTlm_t HkTlm;
-} SAMPLE_HkBuffer_t;
+    CFE_SB_Msg_t       MsgHdr;
+    SAMPLE_APP_HkTlm_t HkTlm;
+} SAMPLE_APP_HkBuffer_t;
 
 /*
 ** Global Data
@@ -81,7 +81,7 @@ typedef struct
     /*
     ** Housekeeping telemetry packet...
     */
-    SAMPLE_HkBuffer_t HkBuf;
+    SAMPLE_APP_HkBuffer_t HkBuf;
 
     /*
     ** Run Status variable used in the main processing loop
@@ -97,33 +97,33 @@ typedef struct
     /*
     ** Initialization data (not reported in housekeeping)...
     */
-    char   PipeName[16];
+    char   PipeName[CFE_MISSION_MAX_API_LEN];
     uint16 PipeDepth;
 
-    CFE_EVS_BinFilter_t EventFilters[SAMPLE_EVENT_COUNTS];
-    CFE_TBL_Handle_t    TblHandles[SAMPLE_NUMBER_OF_TABLES];
+    CFE_EVS_BinFilter_t EventFilters[SAMPLE_APP_EVENT_COUNTS];
+    CFE_TBL_Handle_t    TblHandles[SAMPLE_APP_NUMBER_OF_TABLES];
 
-} SAMPLE_AppData_t;
+} SAMPLE_APP_Data_t;
 
 /****************************************************************************/
 /*
 ** Local function prototypes.
 **
-** Note: Except for the entry point (SAMPLE_AppMain), these
+** Note: Except for the entry point (SAMPLE_APP_Main), these
 **       functions are not called from any other source module.
 */
-void  SAMPLE_AppMain(void);
-int32 SAMPLE_AppInit(void);
-void  SAMPLE_ProcessCommandPacket(CFE_SB_MsgPtr_t Msg);
-void  SAMPLE_ProcessGroundCommand(CFE_SB_MsgPtr_t Msg);
-int32 SAMPLE_ReportHousekeeping(const CFE_SB_CmdHdr_t *Msg);
-int32 SAMPLE_ResetCounters(const SAMPLE_ResetCounters_t *Msg);
-int32 SAMPLE_Process(const SAMPLE_Process_t *Msg);
-int32 SAMPLE_Noop(const SAMPLE_Noop_t *Msg);
-void  SAMPLE_GetCrc(const char *TableName);
+void  SAMPLE_APP_Main(void);
+int32 SAMPLE_APP_Init(void);
+void  SAMPLE_APP_ProcessCommandPacket(CFE_SB_MsgPtr_t Msg);
+void  SAMPLE_APP_ProcessGroundCommand(CFE_SB_MsgPtr_t Msg);
+int32 SAMPLE_APP_ReportHousekeeping(const CFE_SB_CmdHdr_t *Msg);
+int32 SAMPLE_APP_ResetCounters(const SAMPLE_APP_ResetCounters_t *Msg);
+int32 SAMPLE_APP_Process(const SAMPLE_APP_Process_t *Msg);
+int32 SAMPLE_APP_Noop(const SAMPLE_APP_Noop_t *Msg);
+void  SAMPLE_APP_GetCrc(const char *TableName);
 
-int32 SAMPLE_TblValidationFunc(void *TblData);
+int32 SAMPLE_APP_TblValidationFunc(void *TblData);
 
-bool SAMPLE_VerifyCmdLength(CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength);
+bool SAMPLE_APP_VerifyCmdLength(CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength);
 
 #endif /* _sample_app_h_ */

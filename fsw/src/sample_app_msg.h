@@ -46,7 +46,7 @@ typedef struct
 {
     uint8 CmdHeader[CFE_SB_CMD_HDR_SIZE];
 
-} SAMPLE_NoArgsCmd_t;
+} SAMPLE_APP_NoArgsCmd_t;
 
 /*
 ** The following commands all share the "NoArgs" format
@@ -55,9 +55,9 @@ typedef struct
 ** allows them to change independently in the future without changing the prototype
 ** of the handler function
 */
-typedef SAMPLE_NoArgsCmd_t SAMPLE_Noop_t;
-typedef SAMPLE_NoArgsCmd_t SAMPLE_ResetCounters_t;
-typedef SAMPLE_NoArgsCmd_t SAMPLE_Process_t;
+typedef SAMPLE_APP_NoArgsCmd_t SAMPLE_APP_Noop_t;
+typedef SAMPLE_APP_NoArgsCmd_t SAMPLE_APP_ResetCounters_t;
+typedef SAMPLE_APP_NoArgsCmd_t SAMPLE_APP_Process_t;
 
 /*************************************************************************/
 /*
@@ -69,14 +69,14 @@ typedef struct
     uint8 CommandErrorCounter;
     uint8 CommandCounter;
     uint8 spare[2];
-} SAMPLE_HkTlm_Payload_t;
+} SAMPLE_APP_HkTlm_Payload_t;
 
 typedef struct
 {
-    uint8                  TlmHeader[CFE_SB_TLM_HDR_SIZE];
-    SAMPLE_HkTlm_Payload_t Payload;
+    uint8                      TlmHeader[CFE_SB_TLM_HDR_SIZE];
+    SAMPLE_APP_HkTlm_Payload_t Payload;
 
-} OS_PACK SAMPLE_HkTlm_t;
+} OS_PACK SAMPLE_APP_HkTlm_t;
 
 #endif /* _sample_app_msg_h_ */
 
