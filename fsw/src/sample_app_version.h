@@ -38,10 +38,10 @@
 
 /* Version Macro Definitions */
 
-#define SAMPLE_APP_MAJOR_VERSION 1 /*!< @brief ONLY APPLY for OFFICIAL releases. Major version number. */
-#define SAMPLE_APP_MINOR_VERSION 1 /*!< @brief ONLY APPLY for OFFICIAL releases. Minor version number. */
-#define SAMPLE_APP_REVISION      0 /*!< @brief ONLY APPLY for OFFICIAL releases. Revision version number. */
-#define SAMPLE_APP_MISSION_REV   0 /*!< @brief ONLY USED by MISSION Implementations. Mission revision */
+#define SAMPLE_APP_MAJOR_VERSION 1  /*!< @brief ONLY APPLY for OFFICIAL releases. Major version number. */
+#define SAMPLE_APP_MINOR_VERSION 1  /*!< @brief ONLY APPLY for OFFICIAL releases. Minor version number. */
+#define SAMPLE_APP_REVISION      99 /*!< @brief ONLY APPLY for OFFICIAL releases. The value "99" indicates a development version. Revision version number. */ 
+#define SAMPLE_APP_MISSION_REV 0 /*!< @brief ONLY USED by MISSION Implementations. Mission revision */
 
 #define SAMPLE_APP_STR_HELPER(x) #x /*!< @brief Helper function to concatenate strings from integer macros */
 #define SAMPLE_APP_STR(x) \
