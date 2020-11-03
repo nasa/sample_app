@@ -8,6 +8,12 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+### Development Build: 1.2.0-rc1+dev18
+
+- No behavior changes. All identifiers now use the prefix `SAMPLE_APP_`. Changes the name of the main function from SAMPLE_AppMain to SAMPLE_APP_Main which affects the CFE startup script.
+- Set REVISION to "99" to indicate development version status
+- See <https://github.com/nasa/sample_app/pull/102>
+
 ### Development Build: 1.2.0-rc1+dev13
 
 - Unit test MID string format now 32bit
@@ -35,7 +41,7 @@ sample_app is an example for how to build and link an application in cFS. See al
 ### Development Build: 1.1.10
 
 - Test cases now compare an expected event string with a string derived from the spec string and arguments that were output by the unit under test.
-- Replace references to `ccsds.h` types with the `cfe_sb.h`-provided type. 
+- Replace references to `ccsds.h` types with the `cfe_sb.h`-provided type.
 - See <https://github.com/nasa/sample_app/pull/71>
 
 ### Development Build: 1.1.9
