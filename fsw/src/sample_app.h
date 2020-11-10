@@ -58,16 +58,6 @@
 *************************************************************************/
 
 /*
- * Buffer to hold telemetry data prior to sending
- * Defined as a union to ensure proper alignment for a CFE_SB_Msg_t type
- */
-typedef union
-{
-    CFE_SB_Msg_t       MsgHdr;
-    SAMPLE_APP_HkTlm_t HkTlm;
-} SAMPLE_APP_HkBuffer_t;
-
-/*
 ** Global Data
 */
 typedef struct
@@ -81,7 +71,7 @@ typedef struct
     /*
     ** Housekeeping telemetry packet...
     */
-    SAMPLE_APP_HkBuffer_t HkBuf;
+    SAMPLE_APP_HkTlm_t HkTlm;
 
     /*
     ** Run Status variable used in the main processing loop
@@ -91,8 +81,8 @@ typedef struct
     /*
     ** Operational data (not reported in housekeeping)...
     */
-    CFE_SB_PipeId_t CommandPipe;
-    CFE_SB_MsgPtr_t MsgPtr;
+    CFE_SB_PipeId_t    CommandPipe;
+    CFE_MSG_Message_t *MsgPtr;
 
     /*
     ** Initialization data (not reported in housekeeping)...
@@ -114,8 +104,8 @@ typedef struct
 */
 void  SAMPLE_APP_Main(void);
 int32 SAMPLE_APP_Init(void);
-void  SAMPLE_APP_ProcessCommandPacket(CFE_SB_MsgPtr_t Msg);
-void  SAMPLE_APP_ProcessGroundCommand(CFE_SB_MsgPtr_t Msg);
+void  SAMPLE_APP_ProcessCommandPacket(CFE_MSG_Message_t *MsgPtr);
+void  SAMPLE_APP_ProcessGroundCommand(CFE_MSG_Message_t *MsgPtr);
 int32 SAMPLE_APP_ReportHousekeeping(const CFE_SB_CmdHdr_t *Msg);
 int32 SAMPLE_APP_ResetCounters(const SAMPLE_APP_ResetCounters_t *Msg);
 int32 SAMPLE_APP_Process(const SAMPLE_APP_Process_t *Msg);
@@ -124,6 +114,6 @@ void  SAMPLE_APP_GetCrc(const char *TableName);
 
 int32 SAMPLE_APP_TblValidationFunc(void *TblData);
 
-bool SAMPLE_APP_VerifyCmdLength(CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength);
+bool SAMPLE_APP_VerifyCmdLength(CFE_MSG_Message_t *MsgPtr, CFE_MSG_Size_t ExpectedLength);
 
 #endif /* _sample_app_h_ */
