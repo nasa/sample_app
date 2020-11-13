@@ -43,7 +43,7 @@
 SAMPLE_APP_Data_t SAMPLE_APP_Data;
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  * *  * * * * **/
-/* SAMPLE_APP_Main() -- Application entry point and main process loop          */
+/* SAMPLE_APP_Main() -- Application entry point and main process loop         */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  * *  * * * * **/
 void SAMPLE_APP_Main(void)
@@ -113,7 +113,7 @@ void SAMPLE_APP_Main(void)
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  */
 /*                                                                            */
-/* SAMPLE_APP_Init() --  initialization                                        */
+/* SAMPLE_APP_Init() --  initialization                                       */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 int32 SAMPLE_APP_Init(void)
@@ -168,7 +168,7 @@ int32 SAMPLE_APP_Init(void)
     /*
     ** Initialize housekeeping packet (clear user data area).
     */
-    CFE_SB_InitMsg(&SAMPLE_APP_Data.HkBuf.MsgHdr, SAMPLE_APP_HK_TLM_MID, sizeof(SAMPLE_APP_Data.HkBuf), true);
+    CFE_MSG_Init(&SAMPLE_APP_Data.HkTlm.TlmHeader.BaseMsg, SAMPLE_APP_HK_TLM_MID, sizeof(SAMPLE_APP_Data.HkTlm));
 
     /*
     ** Create Software Bus message pipe.
@@ -225,27 +225,27 @@ int32 SAMPLE_APP_Init(void)
 } /* End of SAMPLE_APP_Init() */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*  Name:  SAMPLE_APP_ProcessCommandPacket                                        */
+/*  Name:  SAMPLE_APP_ProcessCommandPacket                                    */
 /*                                                                            */
 /*  Purpose:                                                                  */
 /*     This routine will process any packet that is received on the SAMPLE    */
 /*     command pipe.                                                          */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
-void SAMPLE_APP_ProcessCommandPacket(CFE_SB_MsgPtr_t Msg)
+void SAMPLE_APP_ProcessCommandPacket(CFE_MSG_Message_t *MsgPtr)
 {
-    CFE_SB_MsgId_t MsgId;
+    CFE_SB_MsgId_t MsgId = CFE_SB_INVALID_MSG_ID;
 
-    MsgId = CFE_SB_GetMsgId(Msg);
+    CFE_MSG_GetMsgId(MsgPtr, &MsgId);
 
     switch (MsgId)
     {
         case SAMPLE_APP_CMD_MID:
-            SAMPLE_APP_ProcessGroundCommand(Msg);
+            SAMPLE_APP_ProcessGroundCommand(MsgPtr);
             break;
 
         case SAMPLE_APP_SEND_HK_MID:
-            SAMPLE_APP_ReportHousekeeping((CFE_SB_CmdHdr_t *)Msg);
+            SAMPLE_APP_ReportHousekeeping((CFE_SB_CmdHdr_t *)MsgPtr);
             break;
 
         default:
@@ -260,14 +260,14 @@ void SAMPLE_APP_ProcessCommandPacket(CFE_SB_MsgPtr_t Msg)
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 /*                                                                            */
-/* SAMPLE_APP_ProcessGroundCommand() -- SAMPLE ground commands                    */
+/* SAMPLE_APP_ProcessGroundCommand() -- SAMPLE ground commands                */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-void SAMPLE_APP_ProcessGroundCommand(CFE_SB_MsgPtr_t Msg)
+void SAMPLE_APP_ProcessGroundCommand(CFE_MSG_Message_t *MsgPtr)
 {
-    uint16 CommandCode;
+    CFE_MSG_FcnCode_t CommandCode = 0;
 
-    CommandCode = CFE_SB_GetCmdCode(Msg);
+    CFE_MSG_GetFcnCode(MsgPtr, &CommandCode);
 
     /*
     ** Process "known" SAMPLE app ground commands
@@ -275,25 +275,25 @@ void SAMPLE_APP_ProcessGroundCommand(CFE_SB_MsgPtr_t Msg)
     switch (CommandCode)
     {
         case SAMPLE_APP_NOOP_CC:
-            if (SAMPLE_APP_VerifyCmdLength(Msg, sizeof(SAMPLE_APP_Noop_t)))
+            if (SAMPLE_APP_VerifyCmdLength(MsgPtr, sizeof(SAMPLE_APP_Noop_t)))
             {
-                SAMPLE_APP_Noop((SAMPLE_APP_Noop_t *)Msg);
+                SAMPLE_APP_Noop((SAMPLE_APP_Noop_t *)MsgPtr);
             }
 
             break;
 
         case SAMPLE_APP_RESET_COUNTERS_CC:
-            if (SAMPLE_APP_VerifyCmdLength(Msg, sizeof(SAMPLE_APP_ResetCounters_t)))
+            if (SAMPLE_APP_VerifyCmdLength(MsgPtr, sizeof(SAMPLE_APP_ResetCounters_t)))
             {
-                SAMPLE_APP_ResetCounters((SAMPLE_APP_ResetCounters_t *)Msg);
+                SAMPLE_APP_ResetCounters((SAMPLE_APP_ResetCounters_t *)MsgPtr);
             }
 
             break;
 
         case SAMPLE_APP_PROCESS_CC:
-            if (SAMPLE_APP_VerifyCmdLength(Msg, sizeof(SAMPLE_APP_Process_t)))
+            if (SAMPLE_APP_VerifyCmdLength(MsgPtr, sizeof(SAMPLE_APP_Process_t)))
             {
-                SAMPLE_APP_Process((SAMPLE_APP_Process_t *)Msg);
+                SAMPLE_APP_Process((SAMPLE_APP_Process_t *)MsgPtr);
             }
 
             break;
@@ -325,14 +325,14 @@ int32 SAMPLE_APP_ReportHousekeeping(const CFE_SB_CmdHdr_t *Msg)
     /*
     ** Get command execution counters...
     */
-    SAMPLE_APP_Data.HkBuf.HkTlm.Payload.CommandErrorCounter = SAMPLE_APP_Data.ErrCounter;
-    SAMPLE_APP_Data.HkBuf.HkTlm.Payload.CommandCounter      = SAMPLE_APP_Data.CmdCounter;
+    SAMPLE_APP_Data.HkTlm.Payload.CommandErrorCounter = SAMPLE_APP_Data.ErrCounter;
+    SAMPLE_APP_Data.HkTlm.Payload.CommandCounter      = SAMPLE_APP_Data.CmdCounter;
 
     /*
     ** Send housekeeping telemetry packet...
     */
-    CFE_SB_TimeStampMsg(&SAMPLE_APP_Data.HkBuf.MsgHdr);
-    CFE_SB_SendMsg(&SAMPLE_APP_Data.HkBuf.MsgHdr);
+    CFE_SB_TimeStampMsg(&SAMPLE_APP_Data.HkTlm.TlmHeader.BaseMsg);
+    CFE_SB_SendMsg(&SAMPLE_APP_Data.HkTlm.TlmHeader.BaseMsg);
 
     /*
     ** Manage any pending table loads, validations, etc.
@@ -429,23 +429,27 @@ int32 SAMPLE_APP_Process(const SAMPLE_APP_Process_t *Msg)
 /* SAMPLE_APP_VerifyCmdLength() -- Verify command packet length                   */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-bool SAMPLE_APP_VerifyCmdLength(CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength)
+bool SAMPLE_APP_VerifyCmdLength(CFE_MSG_Message_t *MsgPtr, CFE_MSG_Size_t ExpectedLength)
 {
-    bool result = true;
+    bool              result       = true;
+    CFE_MSG_Size_t    ActualLength = 0;
+    CFE_SB_MsgId_t    MsgId        = CFE_SB_INVALID_MSG_ID;
+    CFE_MSG_FcnCode_t FcnCode      = 0;
 
-    uint16 ActualLength = CFE_SB_GetTotalMsgLength(Msg);
+    CFE_MSG_GetSize(MsgPtr, &ActualLength);
 
     /*
     ** Verify the command packet length.
     */
     if (ExpectedLength != ActualLength)
     {
-        CFE_SB_MsgId_t MessageID   = CFE_SB_GetMsgId(Msg);
-        uint16         CommandCode = CFE_SB_GetCmdCode(Msg);
+        CFE_MSG_GetMsgId(MsgPtr, &MsgId);
+        CFE_MSG_GetFcnCode(MsgPtr, &FcnCode);
 
         CFE_EVS_SendEvent(SAMPLE_APP_LEN_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "Invalid Msg length: ID = 0x%X,  CC = %d, Len = %d, Expected = %d",
-                          (unsigned int)CFE_SB_MsgIdToValue(MessageID), CommandCode, ActualLength, ExpectedLength);
+                          "Invalid Msg length: ID = 0x%X,  CC = %u, Len = %u, Expected = %u",
+                          (unsigned int)CFE_SB_MsgIdToValue(MsgId), (unsigned int)FcnCode,
+                          (unsigned int)ActualLength, (unsigned int)ExpectedLength);
 
         result = false;
 
