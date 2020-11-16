@@ -133,6 +133,8 @@ static void UT_CheckEvent_Setup(UT_CheckEvent_t *Evt, uint16 ExpectedEvent, cons
 
 void Test_SAMPLE_APP_Main(void)
 {
+    CFE_SB_MsgId_t MsgId = CFE_SB_INVALID_MSG_ID;
+
     /*
      * Test Case For:
      * void SAMPLE_APP_Main( void )
@@ -196,6 +198,9 @@ void Test_SAMPLE_APP_Main(void)
      * The deferred retcode will accomplish this.
      */
     UT_SetDeferredRetcode(UT_KEY(CFE_ES_RunLoop), 1, true);
+
+    /* Set up buffer for command processing */
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &MsgId, sizeof(MsgId), false);
 
     /*
      * Invoke again
@@ -267,38 +272,44 @@ void Test_SAMPLE_APP_ProcessCommandPacket(void)
 {
     /*
      * Test Case For:
-     * void SAMPLE_APP_ProcessCommandPacket( CFE_SB_MsgPtr_t Msg )
+     * void SAMPLE_APP_ProcessCommandPacket
      */
     /* a buffer large enough for any command message */
     union
     {
-        CFE_SB_Msg_t               Base;
+        CFE_MSG_Message_t          Base;
         CFE_SB_CmdHdr_t            Cmd;
         SAMPLE_APP_Noop_t          Noop;
         SAMPLE_APP_ResetCounters_t Reset;
         SAMPLE_APP_Process_t       Process;
     } TestMsg;
-    CFE_SB_MsgId_t  TestMsgId;
-    UT_CheckEvent_t EventTest;
+    CFE_SB_MsgId_t    TestMsgId;
+    CFE_MSG_FcnCode_t FcnCode;
+    CFE_MSG_Size_t    MsgSize;
+    UT_CheckEvent_t   EventTest;
 
     memset(&TestMsg, 0, sizeof(TestMsg));
     UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_INVALID_MSGID_ERR_EID, "SAMPLE: invalid command packet,MID = 0x%x");
 
     /*
-     * The CFE_SB_GetMsgId() stub uses a data buffer to hold the
+     * The CFE_MSG_GetMsgId() stub uses a data buffer to hold the
      * message ID values to return.
      */
     TestMsgId = SAMPLE_APP_CMD_MID;
-    UT_SetDataBuffer(UT_KEY(CFE_SB_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
+    FcnCode = SAMPLE_APP_NOOP_CC;
+    MsgSize = sizeof(SAMPLE_APP_Noop_t);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
     SAMPLE_APP_ProcessCommandPacket(&TestMsg.Base);
 
     TestMsgId = SAMPLE_APP_SEND_HK_MID;
-    UT_SetDataBuffer(UT_KEY(CFE_SB_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     SAMPLE_APP_ProcessCommandPacket(&TestMsg.Base);
 
     /* invalid message id */
     TestMsgId = CFE_SB_INVALID_MSG_ID;
-    UT_SetDataBuffer(UT_KEY(CFE_SB_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     SAMPLE_APP_ProcessCommandPacket(&TestMsg.Base);
 
     /*
@@ -312,13 +323,15 @@ void Test_SAMPLE_APP_ProcessGroundCommand(void)
 {
     /*
      * Test Case For:
-     * void SAMPLE_APP_ProcessGroundCommand( CFE_SB_MsgPtr_t Msg )
+     * void SAMPLE_APP_ProcessGroundCommand
      */
+    CFE_MSG_FcnCode_t FcnCode;
+    CFE_MSG_Size_t    Size;
 
     /* a buffer large enough for any command message */
     union
     {
-        CFE_SB_Msg_t               Base;
+        CFE_MSG_Message_t          Base;
         CFE_SB_CmdHdr_t            Cmd;
         SAMPLE_APP_Noop_t          Noop;
         SAMPLE_APP_ResetCounters_t Reset;
@@ -330,7 +343,7 @@ void Test_SAMPLE_APP_ProcessGroundCommand(void)
 
     /*
      * call with each of the supported command codes
-     * The CFE_SB_GetCmdCode stub allows the code to be
+     * The CFE_MSG_GetFcnCode stub allows the code to be
      * set to whatever is needed.  There is no return
      * value here and the actual implementation of these
      * commands have separate test cases, so this just
@@ -338,31 +351,44 @@ void Test_SAMPLE_APP_ProcessGroundCommand(void)
      */
 
     /* test dispatch of NOOP */
-    UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetCmdCode), 1, SAMPLE_APP_NOOP_CC);
-    UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetTotalMsgLength), 1, sizeof(TestMsg.Noop));
+    FcnCode = SAMPLE_APP_NOOP_CC;
+    Size = sizeof(TestMsg.Noop);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &Size, sizeof(Size), false);
     UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_COMMANDNOP_INF_EID, NULL);
 
     SAMPLE_APP_ProcessGroundCommand(&TestMsg.Base);
 
+    UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_COMMANDNOP_INF_EID generated (%u)",
+                  (unsigned int)EventTest.MatchCount);
+
     /* test dispatch of RESET */
-    UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetCmdCode), 1, SAMPLE_APP_RESET_COUNTERS_CC);
-    UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetTotalMsgLength), 1, sizeof(TestMsg.Reset));
+    FcnCode = SAMPLE_APP_RESET_COUNTERS_CC;
+    Size = sizeof(TestMsg.Reset);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &Size, sizeof(Size), false);
     UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_COMMANDRST_INF_EID, NULL);
 
     SAMPLE_APP_ProcessGroundCommand(&TestMsg.Base);
 
+    UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_COMMANDRST_INF_EID generated (%u)",
+                  (unsigned int)EventTest.MatchCount);
+
     /* test dispatch of PROCESS */
     /* note this will end up calling SAMPLE_APP_Process(), and as such it needs to
      * avoid dereferencing a table which does not exist. */
+    FcnCode = SAMPLE_APP_PROCESS_CC;
+    Size = sizeof(TestMsg.Process);
     UT_SetForceFail(UT_KEY(CFE_TBL_GetAddress), CFE_TBL_ERR_UNREGISTERED);
-    UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetCmdCode), 1, SAMPLE_APP_PROCESS_CC);
-    UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetTotalMsgLength), 1, sizeof(TestMsg.Process));
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &Size, sizeof(Size), false);
 
     SAMPLE_APP_ProcessGroundCommand(&TestMsg.Base);
 
     /* test an invalid CC */
+    FcnCode = 1000;
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
     UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_COMMAND_ERR_EID, "Invalid ground command code: CC = %d");
-    UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetCmdCode), 1, 1000);
     SAMPLE_APP_ProcessGroundCommand(&TestMsg.Base);
 
     /*
@@ -378,12 +404,12 @@ void Test_SAMPLE_APP_ReportHousekeeping(void)
      * Test Case For:
      * void SAMPLE_APP_ReportHousekeeping( const CFE_SB_CmdHdr_t *Msg )
      */
-    CFE_SB_Msg_t * MsgSend;
-    CFE_SB_Msg_t * MsgTimestamp;
-    CFE_SB_MsgId_t MsgId = CFE_SB_ValueToMsgId(SAMPLE_APP_SEND_HK_MID);
+    CFE_MSG_Message_t *MsgSend;
+    CFE_MSG_Message_t *MsgTimestamp;
+    CFE_SB_MsgId_t     MsgId = CFE_SB_ValueToMsgId(SAMPLE_APP_SEND_HK_MID);
 
     /* Set message id to return so SAMPLE_APP_Housekeeping will be called */
-    UT_SetDataBuffer(UT_KEY(CFE_SB_GetMsgId), &MsgId, sizeof(MsgId), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &MsgId, sizeof(MsgId), false);
 
     /* Set up to capture send message address */
     UT_SetDataBuffer(UT_KEY(CFE_SB_SendMsg), &MsgSend, sizeof(MsgSend), false);
@@ -392,15 +418,15 @@ void Test_SAMPLE_APP_ReportHousekeeping(void)
     UT_SetDataBuffer(UT_KEY(CFE_SB_TimeStampMsg), &MsgTimestamp, sizeof(MsgTimestamp), false);
 
     /* Call unit under test, NULL pointer confirms command access is through APIs */
-    SAMPLE_APP_ProcessCommandPacket((CFE_SB_Msg_t *)NULL);
+    SAMPLE_APP_ProcessCommandPacket((CFE_MSG_Message_t *)NULL);
 
     /* Confirm message sent*/
     UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_SendMsg)) == 1, "CFE_SB_SendMsg() called once");
-    UtAssert_True(MsgSend == &SAMPLE_APP_Data.HkBuf.MsgHdr, "CFE_SB_SendMsg() address matches expected");
+    UtAssert_True(MsgSend == &SAMPLE_APP_Data.HkTlm.TlmHeader.BaseMsg, "CFE_SB_SendMsg() address matches expected");
 
     /* Confirm timestamp msg address */
     UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_TimeStampMsg)) == 1, "CFE_SB_TimeStampMsg() called once");
-    UtAssert_True(MsgTimestamp == &SAMPLE_APP_Data.HkBuf.MsgHdr, "CFE_SB_TimeStampMsg() adress matches expected");
+    UtAssert_True(MsgTimestamp == &SAMPLE_APP_Data.HkTlm.TlmHeader.BaseMsg, "CFE_SB_TimeStampMsg() adress matches expected");
 
     /*
      * Confirm that the CFE_TBL_Manage() call was done
@@ -495,21 +521,21 @@ void Test_SAMPLE_APP_VerifyCmdLength(void)
 {
     /*
      * Test Case For:
-     * bool SAMPLE_APP_VerifyCmdLength( CFE_SB_MsgPtr_t Msg, uint16 ExpectedLength )
+     * bool SAMPLE_APP_VerifyCmdLength
      */
-    CFE_SB_Msg_t    TestMsg;
-    UT_CheckEvent_t EventTest;
-
-    memset(&TestMsg, 0, sizeof(TestMsg));
+    UT_CheckEvent_t   EventTest;
+    CFE_MSG_Size_t    size    = 1;
+    CFE_MSG_FcnCode_t fcncode = 2;
+    CFE_SB_MsgId_t    msgid   = CFE_SB_ValueToMsgId(3);
 
     /*
      * test a match case
      */
-    UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetTotalMsgLength), 1, sizeof(TestMsg));
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &size, sizeof(size), false);
     UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_LEN_ERR_EID,
-                        "Invalid Msg length: ID = 0x%X,  CC = %d, Len = %d, Expected = %d");
+                        "Invalid Msg length: ID = 0x%X,  CC = %u, Len = %u, Expected = %u");
 
-    SAMPLE_APP_VerifyCmdLength(&TestMsg, sizeof(TestMsg));
+    SAMPLE_APP_VerifyCmdLength(NULL, size);
 
     /*
      * Confirm that the event was NOT generated
@@ -520,8 +546,10 @@ void Test_SAMPLE_APP_VerifyCmdLength(void)
     /*
      * test a mismatch case
      */
-    UT_SetDeferredRetcode(UT_KEY(CFE_SB_GetTotalMsgLength), 1, 10 + sizeof(TestMsg));
-    SAMPLE_APP_VerifyCmdLength(&TestMsg, sizeof(TestMsg));
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &size, sizeof(size), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &msgid, sizeof(msgid), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &fcncode, sizeof(fcncode), false);
+    SAMPLE_APP_VerifyCmdLength(NULL, size+1);
 
     /*
      * Confirm that the event WAS generated

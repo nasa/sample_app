@@ -73,10 +73,10 @@ typedef struct
 
 typedef struct
 {
-    uint8                      TlmHeader[CFE_SB_TLM_HDR_SIZE];
+    CFE_SB_TlmHdr_t            TlmHeader;
     SAMPLE_APP_HkTlm_Payload_t Payload;
+} SAMPLE_APP_HkTlm_t;
 
-} OS_PACK SAMPLE_APP_HkTlm_t;
 
 #endif /* _sample_app_msg_h_ */
 

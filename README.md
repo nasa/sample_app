@@ -8,6 +8,12 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+### Development Build: 1.2.0-rc1+dev22
+
+- Replaces deprecated SB API's with MSG
+- No impact, removes undesirable pattern use of `OS_PACK`
+- See <https://github.com/nasa/sample_app/pull/108>
+
 ### Development Build: 1.2.0-rc1+dev18
 
 - No behavior changes. All identifiers now use the prefix `SAMPLE_APP_`. Changes the name of the main function from SAMPLE_AppMain to SAMPLE_APP_Main which affects the CFE startup script.
