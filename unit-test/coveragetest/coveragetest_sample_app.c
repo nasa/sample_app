@@ -208,17 +208,17 @@ void Test_SAMPLE_APP_Main(void)
     SAMPLE_APP_Main();
 
     /*
-     * Confirm that CFE_SB_RcvMsg() (inside the loop) was called
+     * Confirm that CFE_SB_ReceiveBuffer() (inside the loop) was called
      */
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_RcvMsg)) == 1, "CFE_SB_RcvMsg() called");
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_ReceiveBuffer)) == 1, "CFE_SB_ReceiveBuffer() called");
 
     /*
-     * Now also make the CFE_SB_RcvMsg call fail,
+     * Now also make the CFE_SB_ReceiveBuffer call fail,
      * to exercise that error path.  This sends an
      * event which can be checked with a hook function.
      */
     UT_SetDeferredRetcode(UT_KEY(CFE_ES_RunLoop), 1, true);
-    UT_SetDeferredRetcode(UT_KEY(CFE_SB_RcvMsg), 1, CFE_SB_PIPE_RD_ERR);
+    UT_SetDeferredRetcode(UT_KEY(CFE_SB_ReceiveBuffer), 1, CFE_SB_PIPE_RD_ERR);
     UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_PIPE_ERR_EID, "SAMPLE APP: SB Pipe Read Error, App Will Exit");
 
     /*
@@ -277,15 +277,12 @@ void Test_SAMPLE_APP_ProcessCommandPacket(void)
     /* a buffer large enough for any command message */
     union
     {
-        CFE_MSG_Message_t          Base;
-        CFE_SB_CmdHdr_t            Cmd;
-        SAMPLE_APP_Noop_t          Noop;
-        SAMPLE_APP_ResetCounters_t Reset;
-        SAMPLE_APP_Process_t       Process;
+        CFE_SB_Buffer_t      SBBuf;
+        SAMPLE_APP_NoopCmd_t Noop;
     } TestMsg;
     CFE_SB_MsgId_t    TestMsgId;
     CFE_MSG_FcnCode_t FcnCode;
-    CFE_MSG_Size_t    MsgSize;
+    size_t            MsgSize;
     UT_CheckEvent_t   EventTest;
 
     memset(&TestMsg, 0, sizeof(TestMsg));
@@ -296,21 +293,21 @@ void Test_SAMPLE_APP_ProcessCommandPacket(void)
      * message ID values to return.
      */
     TestMsgId = SAMPLE_APP_CMD_MID;
-    FcnCode = SAMPLE_APP_NOOP_CC;
-    MsgSize = sizeof(SAMPLE_APP_Noop_t);
+    FcnCode   = SAMPLE_APP_NOOP_CC;
+    MsgSize   = sizeof(TestMsg.Noop);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
-    SAMPLE_APP_ProcessCommandPacket(&TestMsg.Base);
+    SAMPLE_APP_ProcessCommandPacket(&TestMsg.SBBuf);
 
     TestMsgId = SAMPLE_APP_SEND_HK_MID;
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    SAMPLE_APP_ProcessCommandPacket(&TestMsg.Base);
+    SAMPLE_APP_ProcessCommandPacket(&TestMsg.SBBuf);
 
     /* invalid message id */
     TestMsgId = CFE_SB_INVALID_MSG_ID;
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
-    SAMPLE_APP_ProcessCommandPacket(&TestMsg.Base);
+    SAMPLE_APP_ProcessCommandPacket(&TestMsg.SBBuf);
 
     /*
      * Confirm that the event was generated only _once_
@@ -326,16 +323,15 @@ void Test_SAMPLE_APP_ProcessGroundCommand(void)
      * void SAMPLE_APP_ProcessGroundCommand
      */
     CFE_MSG_FcnCode_t FcnCode;
-    CFE_MSG_Size_t    Size;
+    size_t            Size;
 
     /* a buffer large enough for any command message */
     union
     {
-        CFE_MSG_Message_t          Base;
-        CFE_SB_CmdHdr_t            Cmd;
-        SAMPLE_APP_Noop_t          Noop;
-        SAMPLE_APP_ResetCounters_t Reset;
-        SAMPLE_APP_Process_t       Process;
+        CFE_SB_Buffer_t               SBBuf;
+        SAMPLE_APP_NoopCmd_t          Noop;
+        SAMPLE_APP_ResetCountersCmd_t Reset;
+        SAMPLE_APP_ProcessCmd_t       Process;
     } TestMsg;
     UT_CheckEvent_t EventTest;
 
@@ -352,24 +348,24 @@ void Test_SAMPLE_APP_ProcessGroundCommand(void)
 
     /* test dispatch of NOOP */
     FcnCode = SAMPLE_APP_NOOP_CC;
-    Size = sizeof(TestMsg.Noop);
+    Size    = sizeof(TestMsg.Noop);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &Size, sizeof(Size), false);
     UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_COMMANDNOP_INF_EID, NULL);
 
-    SAMPLE_APP_ProcessGroundCommand(&TestMsg.Base);
+    SAMPLE_APP_ProcessGroundCommand(&TestMsg.SBBuf);
 
     UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_COMMANDNOP_INF_EID generated (%u)",
                   (unsigned int)EventTest.MatchCount);
 
     /* test dispatch of RESET */
     FcnCode = SAMPLE_APP_RESET_COUNTERS_CC;
-    Size = sizeof(TestMsg.Reset);
+    Size    = sizeof(TestMsg.Reset);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &Size, sizeof(Size), false);
     UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_COMMANDRST_INF_EID, NULL);
 
-    SAMPLE_APP_ProcessGroundCommand(&TestMsg.Base);
+    SAMPLE_APP_ProcessGroundCommand(&TestMsg.SBBuf);
 
     UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_COMMANDRST_INF_EID generated (%u)",
                   (unsigned int)EventTest.MatchCount);
@@ -378,18 +374,18 @@ void Test_SAMPLE_APP_ProcessGroundCommand(void)
     /* note this will end up calling SAMPLE_APP_Process(), and as such it needs to
      * avoid dereferencing a table which does not exist. */
     FcnCode = SAMPLE_APP_PROCESS_CC;
-    Size = sizeof(TestMsg.Process);
+    Size    = sizeof(TestMsg.Process);
     UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_GetAddress), CFE_TBL_ERR_UNREGISTERED);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &Size, sizeof(Size), false);
 
-    SAMPLE_APP_ProcessGroundCommand(&TestMsg.Base);
+    SAMPLE_APP_ProcessGroundCommand(&TestMsg.SBBuf);
 
     /* test an invalid CC */
     FcnCode = 1000;
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
     UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_COMMAND_ERR_EID, "Invalid ground command code: CC = %d");
-    SAMPLE_APP_ProcessGroundCommand(&TestMsg.Base);
+    SAMPLE_APP_ProcessGroundCommand(&TestMsg.SBBuf);
 
     /*
      * Confirm that the event was generated only _once_
@@ -412,21 +408,22 @@ void Test_SAMPLE_APP_ReportHousekeeping(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &MsgId, sizeof(MsgId), false);
 
     /* Set up to capture send message address */
-    UT_SetDataBuffer(UT_KEY(CFE_SB_SendMsg), &MsgSend, sizeof(MsgSend), false);
+    UT_SetDataBuffer(UT_KEY(CFE_SB_TransmitMsg), &MsgSend, sizeof(MsgSend), false);
 
     /* Set up to capture timestamp message address */
     UT_SetDataBuffer(UT_KEY(CFE_SB_TimeStampMsg), &MsgTimestamp, sizeof(MsgTimestamp), false);
 
     /* Call unit under test, NULL pointer confirms command access is through APIs */
-    SAMPLE_APP_ProcessCommandPacket((CFE_MSG_Message_t *)NULL);
+    SAMPLE_APP_ProcessCommandPacket((CFE_SB_Buffer_t *)NULL);
 
     /* Confirm message sent*/
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_SendMsg)) == 1, "CFE_SB_SendMsg() called once");
-    UtAssert_True(MsgSend == &SAMPLE_APP_Data.HkTlm.TlmHeader.BaseMsg, "CFE_SB_SendMsg() address matches expected");
+    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_TransmitMsg)) == 1, "CFE_SB_TransmitMsg() called once");
+    UtAssert_True(MsgSend == &SAMPLE_APP_Data.HkTlm.TlmHeader.Msg, "CFE_SB_TransmitMsg() address matches expected");
 
     /* Confirm timestamp msg address */
     UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_TimeStampMsg)) == 1, "CFE_SB_TimeStampMsg() called once");
-    UtAssert_True(MsgTimestamp == &SAMPLE_APP_Data.HkTlm.TlmHeader.BaseMsg, "CFE_SB_TimeStampMsg() adress matches expected");
+    UtAssert_True(MsgTimestamp == &SAMPLE_APP_Data.HkTlm.TlmHeader.Msg,
+                  "CFE_SB_TimeStampMsg() adress matches expected");
 
     /*
      * Confirm that the CFE_TBL_Manage() call was done
@@ -440,8 +437,8 @@ void Test_SAMPLE_APP_NoopCmd(void)
      * Test Case For:
      * void SAMPLE_APP_NoopCmd( const SAMPLE_APP_Noop_t *Msg )
      */
-    SAMPLE_APP_Noop_t TestMsg;
-    UT_CheckEvent_t   EventTest;
+    SAMPLE_APP_NoopCmd_t TestMsg;
+    UT_CheckEvent_t      EventTest;
 
     memset(&TestMsg, 0, sizeof(TestMsg));
 
@@ -463,8 +460,8 @@ void Test_SAMPLE_APP_ResetCounters(void)
      * Test Case For:
      * void SAMPLE_APP_ResetCounters( const SAMPLE_APP_ResetCounters_t *Msg )
      */
-    SAMPLE_APP_ResetCounters_t TestMsg;
-    UT_CheckEvent_t            EventTest;
+    SAMPLE_APP_ResetCountersCmd_t TestMsg;
+    UT_CheckEvent_t               EventTest;
 
     memset(&TestMsg, 0, sizeof(TestMsg));
 
@@ -485,9 +482,9 @@ void Test_SAMPLE_APP_ProcessCC(void)
      * Test Case For:
      * void  SAMPLE_APP_ProcessCC( const SAMPLE_APP_Process_t *Msg )
      */
-    SAMPLE_APP_Process_t TestMsg;
-    SAMPLE_APP_Table_t   TestTblData;
-    void *               TblPtr = &TestTblData;
+    SAMPLE_APP_ProcessCmd_t TestMsg;
+    SAMPLE_APP_Table_t      TestTblData;
+    void *                  TblPtr = &TestTblData;
 
     memset(&TestTblData, 0, sizeof(TestTblData));
     memset(&TestMsg, 0, sizeof(TestMsg));
@@ -524,7 +521,7 @@ void Test_SAMPLE_APP_VerifyCmdLength(void)
      * bool SAMPLE_APP_VerifyCmdLength
      */
     UT_CheckEvent_t   EventTest;
-    CFE_MSG_Size_t    size    = 1;
+    size_t            size    = 1;
     CFE_MSG_FcnCode_t fcncode = 2;
     CFE_SB_MsgId_t    msgid   = CFE_SB_ValueToMsgId(3);
 
@@ -549,7 +546,7 @@ void Test_SAMPLE_APP_VerifyCmdLength(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &size, sizeof(size), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &msgid, sizeof(msgid), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &fcncode, sizeof(fcncode), false);
-    SAMPLE_APP_VerifyCmdLength(NULL, size+1);
+    SAMPLE_APP_VerifyCmdLength(NULL, size + 1);
 
     /*
      * Confirm that the event WAS generated
