@@ -379,7 +379,7 @@ void Test_SAMPLE_APP_ProcessGroundCommand(void)
      * avoid dereferencing a table which does not exist. */
     FcnCode = SAMPLE_APP_PROCESS_CC;
     Size = sizeof(TestMsg.Process);
-    UT_SetForceFail(UT_KEY(CFE_TBL_GetAddress), CFE_TBL_ERR_UNREGISTERED);
+    UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_GetAddress), CFE_TBL_ERR_UNREGISTERED);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &Size, sizeof(Size), false);
 
@@ -513,7 +513,7 @@ void Test_SAMPLE_APP_ProcessCC(void)
      * Configure the CFE_TBL_GetAddress function to return an error
      * Exercise the error return path
      */
-    UT_SetForceFail(UT_KEY(CFE_TBL_GetAddress), CFE_TBL_ERR_UNREGISTERED);
+    UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_GetAddress), CFE_TBL_ERR_UNREGISTERED);
     UT_TEST_FUNCTION_RC(SAMPLE_APP_Process(&TestMsg), CFE_TBL_ERR_UNREGISTERED);
 }
 
@@ -592,7 +592,7 @@ void Test_SAMPLE_APP_GetCrc(void)
      * the message using a hook function, if desired.
      */
 
-    UT_SetForceFail(UT_KEY(CFE_TBL_GetInfo), CFE_TBL_ERR_INVALID_NAME);
+    UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_GetInfo), CFE_TBL_ERR_INVALID_NAME);
     SAMPLE_APP_GetCrc("UT");
     UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 1, "CFE_ES_WriteToSysLog() called");
 
