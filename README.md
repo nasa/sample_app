@@ -8,6 +8,13 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+
+### Development Build: 1.2.0-rc1+dev29
+
+- Aligns messages according to changes in cFE <https://github.com/nasa/cFE/issues/1009>. Uses the "raw" message cmd/tlm types in definition
+- See <https://github.com/nasa/sample_app/pull/114>
+
+
 ### Development Build: 1.2.0-rc1+dev25
 
 - Rename `UT_SetForceFail` to `UT_SetDefaultReturnValue` since some functions that retain more than 1 value are not necessarily failing
