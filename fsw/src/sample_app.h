@@ -81,8 +81,7 @@ typedef struct
     /*
     ** Operational data (not reported in housekeeping)...
     */
-    CFE_SB_PipeId_t    CommandPipe;
-    CFE_MSG_Message_t *MsgPtr;
+    CFE_SB_PipeId_t CommandPipe;
 
     /*
     ** Initialization data (not reported in housekeeping)...
@@ -104,16 +103,16 @@ typedef struct
 */
 void  SAMPLE_APP_Main(void);
 int32 SAMPLE_APP_Init(void);
-void  SAMPLE_APP_ProcessCommandPacket(CFE_MSG_Message_t *MsgPtr);
-void  SAMPLE_APP_ProcessGroundCommand(CFE_MSG_Message_t *MsgPtr);
-int32 SAMPLE_APP_ReportHousekeeping(const CFE_SB_CmdHdr_t *Msg);
-int32 SAMPLE_APP_ResetCounters(const SAMPLE_APP_ResetCounters_t *Msg);
-int32 SAMPLE_APP_Process(const SAMPLE_APP_Process_t *Msg);
-int32 SAMPLE_APP_Noop(const SAMPLE_APP_Noop_t *Msg);
+void  SAMPLE_APP_ProcessCommandPacket(CFE_SB_Buffer_t *SBBufPtr);
+void  SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr);
+int32 SAMPLE_APP_ReportHousekeeping(const CFE_MSG_CommandHeader_t *Msg);
+int32 SAMPLE_APP_ResetCounters(const SAMPLE_APP_ResetCountersCmd_t *Msg);
+int32 SAMPLE_APP_Process(const SAMPLE_APP_ProcessCmd_t *Msg);
+int32 SAMPLE_APP_Noop(const SAMPLE_APP_NoopCmd_t *Msg);
 void  SAMPLE_APP_GetCrc(const char *TableName);
 
 int32 SAMPLE_APP_TblValidationFunc(void *TblData);
 
-bool SAMPLE_APP_VerifyCmdLength(CFE_MSG_Message_t *MsgPtr, CFE_MSG_Size_t ExpectedLength);
+bool SAMPLE_APP_VerifyCmdLength(CFE_MSG_Message_t *MsgPtr, size_t ExpectedLength);
 
 #endif /* _sample_app_h_ */
