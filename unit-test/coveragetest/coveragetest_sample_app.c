@@ -593,7 +593,7 @@ void Test_SAMPLE_APP_GetCrc(void)
     SAMPLE_APP_GetCrc("UT");
     UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 1, "CFE_ES_WriteToSysLog() called");
 
-    UT_ClearForceFail(UT_KEY(CFE_TBL_GetInfo));
+    UT_ClearDefaultReturnValue(UT_KEY(CFE_TBL_GetInfo));
     SAMPLE_APP_GetCrc("UT");
     UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 2, "CFE_ES_WriteToSysLog() called");
 }
