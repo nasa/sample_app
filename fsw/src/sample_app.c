@@ -400,7 +400,7 @@ int32 SAMPLE_APP_Process(const SAMPLE_APP_ProcessCmd_t *Msg)
 
     status = CFE_TBL_GetAddress((void *)&TblPtr, SAMPLE_APP_Data.TblHandles[0]);
 
-    if (status != CFE_SUCCESS)
+    if (status < CFE_SUCCESS)
     {
         CFE_ES_WriteToSysLog("Sample App: Fail to get table address: 0x%08lx", (unsigned long)status);
         return status;
