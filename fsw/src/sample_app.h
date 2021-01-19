@@ -62,30 +62,30 @@
 */
 typedef struct
 {
-    /*
-    ** Command interface counters...
-    */
+    
+    // Command interface counters...
+    
     uint8 CmdCounter;
     uint8 ErrCounter;
 
-    /*
-    ** Housekeeping telemetry packet...
-    */
+    
+    // Housekeeping telemetry packet...
+    
     SAMPLE_APP_HkTlm_t HkTlm;
 
-    /*
-    ** Run Status variable used in the main processing loop
-    */
+    
+    // Run Status variable used in the main processing loop
+    
     uint32 RunStatus;
 
-    /*
-    ** Operational data (not reported in housekeeping)...
-    */
+    
+    // Operational data (not reported in housekeeping)...
+    
     CFE_SB_PipeId_t CommandPipe;
 
-    /*
-    ** Initialization data (not reported in housekeeping)...
-    */
+    
+    // Initialization data (not reported in housekeeping)...
+    
     char   PipeName[CFE_MISSION_MAX_API_LEN];
     uint16 PipeDepth;
 

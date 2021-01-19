@@ -36,6 +36,3 @@
 
 #endif /* _sample_app_msgids_h_ */
 
-/************************/
-/*  End of File Comment */
-/************************/

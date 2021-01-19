@@ -42,6 +42,3 @@ typedef struct
 
 #endif /* _sample_app_table_h_ */
 
-/************************/
-/*  End of File Comment */
-/************************/

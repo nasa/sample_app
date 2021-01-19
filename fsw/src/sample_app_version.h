@@ -63,6 +63,3 @@
 
 #endif /* SAMPLE_APP_VERSION_H */
 
-/************************/
-/*  End of File Comment */
-/************************/

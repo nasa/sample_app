@@ -41,7 +41,3 @@
 #define SAMPLE_APP_EVENT_COUNTS 7
 
 #endif /* _sample_app_events_h_ */
-
-/************************/
-/*  End of File Comment */
-/************************/

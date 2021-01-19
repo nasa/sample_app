@@ -77,7 +77,3 @@ typedef struct
 } SAMPLE_APP_HkTlm_t;
 
 #endif /* _sample_app_msg_h_ */
-
-/************************/
-/*  End of File Comment */
-/************************/

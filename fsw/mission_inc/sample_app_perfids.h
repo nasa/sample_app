@@ -32,7 +32,3 @@
 #define SAMPLE_APP_PERF_ID 91
 
 #endif /* _sample_app_perfids_h_ */
-
-/************************/
-/*  End of File Comment */
-/************************/
