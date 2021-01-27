@@ -8,6 +8,12 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+### Development Build: 1.2.0-rc1+dev37
+
+- Documentation: Add `Security.md` with instructions on reporting vulnerabilities
+- Resolves bug where success code was reported as an error for `CFE_TBL_GetAddress`.
+- Rename `UT_ClearForceFail` as `UT_ClearDefaultValue` given change from <https://github.com/nasa/osal/issues/724>
+- See <https://github.com/nasa/sample_app/pull/121>
 
 ### Development Build: 1.2.0-rc1+dev29
 
