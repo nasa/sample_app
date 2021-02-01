@@ -1,3 +1,6 @@
+![Static Analysis](https://github.com/nasa/sample_app/workflows/Static%20Analysis/badge.svg)
+![Format Check](https://github.com/nasa/sample_app/workflows/Format%20Check/badge.svg)
+
 # Core Flight System : Framework : App : Sample
 
 This repository contains a sample application (sample_app), which is a framework component of the Core Flight System.
