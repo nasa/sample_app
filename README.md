@@ -11,6 +11,12 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+### Development Build: 1.2.0-rc1+dev48
+
+- Fix #126, simplify build to use wrappers and interface libs
+- Fix #128, Add Testing Tools to the Security Policy
+- See <https://github.com/nasa/sample_app/pull/130>
+
 ### Development Build: 1.2.0-rc1+dev37
 
 - Documentation: Add `Security.md` with instructions on reporting vulnerabilities
