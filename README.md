@@ -11,6 +11,13 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+### Development Build: 1.2.0-rc1+dev56
+
+- Replaces <> with " in local includes
+- Adds CONTRIBUTIING.md that links to the main cFS contributing guide.
+- Adds a description for the requirements of command and telemetry Message IDs to explain why the Msg IDs have those requirements in documentation.
+- See <https://github.com/nasa/sample_app/pull/137>
+
 ### Development Build: 1.2.0-rc1+dev48
 
 - Fix #126, simplify build to use wrappers and interface libs

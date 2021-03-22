@@ -24,15 +24,20 @@
 **  Define Sample App  Message IDs
 **
 ** Notes:
-**
+**  Message ID bits relate to the message header based on which version
+**  of the message id implementation is being used
 **
 *************************************************************************/
 #ifndef _sample_app_msgids_h_
 #define _sample_app_msgids_h_
 
+/* The Sample App assumes default configuration which uses V1 of message id implementation */
+
+/* V1 Command Message IDs must be 0x18xx */
 #define SAMPLE_APP_CMD_MID     0x1882
 #define SAMPLE_APP_SEND_HK_MID 0x1883
-#define SAMPLE_APP_HK_TLM_MID  0x0883
+/* V1 Telemetry Message IDs must be 0x08xx */
+#define SAMPLE_APP_HK_TLM_MID 0x0883
 
 #endif /* _sample_app_msgids_h_ */
 
