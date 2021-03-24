@@ -18,15 +18,14 @@
 **  limitations under the License.
 */
 
-/*
-** File: sample_app_coveragetest_common.h
-**
-** Purpose:
-** Common definitions for all sample_app coverage tests
-*/
+/**
+ * @file
+ *
+ * Common definitions for all sample_app coverage tests
+ */
 
-#ifndef _SAMPLE_APP_COVERAGETEST_COMMON_H_
-#define _SAMPLE_APP_COVERAGETEST_COMMON_H_
+#ifndef SAMPLE_APP_COVERAGETEST_COMMON_H
+#define SAMPLE_APP_COVERAGETEST_COMMON_H
 
 /*
  * Includes
@@ -66,4 +65,4 @@ void Sample_UT_Setup(void);
  */
 void Sample_UT_TearDown(void);
 
-#endif
+#endif /* SAMPLE_APP_COVERAGETEST_COMMON_H */

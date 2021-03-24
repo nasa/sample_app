@@ -18,21 +18,17 @@
 **      See the License for the specific language governing permissions and
 **      limitations under the License.
 **
-** File: sample_app_perfids.h
-**
-** Purpose:
-**  Define Sample App Performance IDs
-**
-** Notes:
-**
 *************************************************************************/
-#ifndef _sample_app_perfids_h_
-#define _sample_app_perfids_h_
+
+/**
+ * @file
+ *
+ * Define Sample App Performance IDs
+ */
+
+#ifndef SAMPLE_APP_PERFIDS_H
+#define SAMPLE_APP_PERFIDS_H
 
 #define SAMPLE_APP_PERF_ID 91
 
-#endif /* _sample_app_perfids_h_ */
-
-/************************/
-/*  End of File Comment */
-/************************/
+#endif /* SAMPLE_APP_PERFIDS_H */

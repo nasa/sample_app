@@ -18,17 +18,16 @@
 **      See the License for the specific language governing permissions and
 **      limitations under the License.
 **
-** File: sample_app_msg.h
-**
-** Purpose:
-**  Define SAMPLE App  Messages and info
-**
-** Notes:
-**
-**
 *******************************************************************************/
-#ifndef _sample_app_msg_h_
-#define _sample_app_msg_h_
+
+/**
+ * @file
+ *
+ * Define SAMPLE App  Messages and info
+ */
+
+#ifndef SAMPLE_APP_MSG_H
+#define SAMPLE_APP_MSG_H
 
 /*
 ** SAMPLE App command codes
@@ -76,8 +75,4 @@ typedef struct
     SAMPLE_APP_HkTlm_Payload_t Payload;   /**< \brief Telemetry payload */
 } SAMPLE_APP_HkTlm_t;
 
-#endif /* _sample_app_msg_h_ */
-
-/************************/
-/*  End of File Comment */
-/************************/
+#endif /* SAMPLE_APP_MSG_H */

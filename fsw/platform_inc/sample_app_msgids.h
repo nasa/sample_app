@@ -18,20 +18,18 @@
 **      See the License for the specific language governing permissions and
 **      limitations under the License.
 **
-** File: sample_app_msgids.h
-**
-** Purpose:
-**  Define Sample App  Message IDs
-**
-** Notes:
-**  Message ID bits relate to the message header based on which version
-**  of the message id implementation is being used
-**
 *************************************************************************/
-#ifndef _sample_app_msgids_h_
-#define _sample_app_msgids_h_
 
-/* The Sample App assumes default configuration which uses V1 of message id implementation */
+/**
+ * @file
+ *
+ * Define Sample App Message IDs
+ *
+ * \note The Sample App assumes default configuration which uses V1 of message id implementation
+ */
+
+#ifndef SAMPLE_APP_MSGIDS_H
+#define SAMPLE_APP_MSGIDS_H
 
 /* V1 Command Message IDs must be 0x18xx */
 #define SAMPLE_APP_CMD_MID     0x1882
@@ -39,8 +37,4 @@
 /* V1 Telemetry Message IDs must be 0x08xx */
 #define SAMPLE_APP_HK_TLM_MID 0x0883
 
-#endif /* _sample_app_msgids_h_ */
-
-/************************/
-/*  End of File Comment */
-/************************/
+#endif /* SAMPLE_APP_MSGIDS_H */
