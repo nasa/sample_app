@@ -52,11 +52,6 @@ void SAMPLE_APP_Main(void)
     CFE_SB_Buffer_t *SBBufPtr;
 
     /*
-    ** Register the app with Executive services
-    */
-    CFE_ES_RegisterApp();
-
-    /*
     ** Create the first Performance Log entry
     */
     CFE_ES_PerfLogEntry(SAMPLE_APP_PERF_ID);
