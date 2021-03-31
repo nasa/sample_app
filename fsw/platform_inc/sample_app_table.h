@@ -18,17 +18,16 @@
 **      See the License for the specific language governing permissions and
 **      limitations under the License.
 **
-** File: sample_app_table.h
-**
-** Purpose:
-**  Define sample app table
-**
-** Notes:
-**
-**
 *******************************************************************************/
-#ifndef _sample_app_table_h_
-#define _sample_app_table_h_
+
+/**
+ * @file
+ *
+ * Define sample app table
+ */
+
+#ifndef SAMPLE_APP_TABLE_H
+#define SAMPLE_APP_TABLE_H
 
 /*
 ** Table structure
@@ -40,8 +39,4 @@ typedef struct
 
 } SAMPLE_APP_Table_t;
 
-#endif /* _sample_app_table_h_ */
-
-/************************/
-/*  End of File Comment */
-/************************/
+#endif /* SAMPLE_APP_TABLE_H */

@@ -20,11 +20,10 @@
 **
 *************************************************************************/
 
-/*! @file sample_app_version.h
- * @brief Purpose:
+/**
+ * @file
  *
  *  The Sample App header file containing version information
- *
  */
 
 #ifndef SAMPLE_APP_VERSION_H
@@ -62,7 +61,3 @@
     ", Last Official Release: v1.1.0" /* For full support please use this version */
 
 #endif /* SAMPLE_APP_VERSION_H */
-
-/************************/
-/*  End of File Comment */
-/************************/
