@@ -11,6 +11,13 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+### Development Build: 1.2.0-rc1+dev62
+
+- Removes app registration call, `CFE_ES_RegisterApp()` since applications do not need to register themselves.
+- Apply standard header guard on all header files by removing leading underscore. Convert file-scope block comments to doxygen format.
+- See <https://github.com/nasa/sample_app/pull/145>
+
+
 ### Development Build: 1.2.0-rc1+dev56
 
 - Replaces <> with " in local includes
