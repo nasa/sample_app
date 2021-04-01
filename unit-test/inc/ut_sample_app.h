@@ -18,22 +18,24 @@
 **  limitations under the License.
 */
 
-/*
-** File: ut_sample_app.h
-**
-** Purpose:
-** Extra scaffolding functions for the sample_app unit test
-**
-** Notes:
-** This is an extra UT-specific extern declaration
-** to obtain access to an internal data structure
-**
-** UT often needs to modify internal data structures in ways that
-** actual applications never would (bypassing the normal API) in
-** order to exercise or set up for off-nominal cases.
-*/
-#ifndef _UT_SAMPLE_APP_H_
-#define _UT_SAMPLE_APP_H_
+/**
+ * @file
+ *
+ *
+ * Purpose:
+ * Extra scaffolding functions for the sample_app unit test
+ *
+ * Notes:
+ * This is an extra UT-specific extern declaration
+ * to obtain access to an internal data structure
+ *
+ * UT often needs to modify internal data structures in ways that
+ * actual applications never would (bypassing the normal API) in
+ * order to exercise or set up for off-nominal cases.
+ */
+
+#ifndef UT_SAMPLE_APP_H
+#define UT_SAMPLE_APP_H
 
 /*
  * Necessary to include these here to get the definition of the
@@ -47,4 +49,4 @@
  */
 extern SAMPLE_APP_Data_t SAMPLE_APP_Data;
 
-#endif /* _UT_SAMPLE_APP_H_ */
+#endif /* UT_SAMPLE_APP_H */

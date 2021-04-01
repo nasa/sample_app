@@ -18,16 +18,16 @@
 **      See the License for the specific language governing permissions and
 **      limitations under the License.
 **
-** File: sample_app_events.h
-**
-** Purpose:
-**  Define SAMPLE App Events IDs
-**
-** Notes:
-**
 *************************************************************************/
-#ifndef _sample_app_events_h_
-#define _sample_app_events_h_
+
+/**
+ * @file
+ *
+ * Define SAMPLE App Events IDs
+ */
+
+#ifndef SAMPLE_APP_EVENTS_H
+#define SAMPLE_APP_EVENTS_H
 
 #define SAMPLE_APP_RESERVED_EID          0
 #define SAMPLE_APP_STARTUP_INF_EID       1
@@ -40,8 +40,4 @@
 
 #define SAMPLE_APP_EVENT_COUNTS 7
 
-#endif /* _sample_app_events_h_ */
-
-/************************/
-/*  End of File Comment */
-/************************/
+#endif /* SAMPLE_APP_EVENTS_H */

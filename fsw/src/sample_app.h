@@ -18,16 +18,16 @@
 **      See the License for the specific language governing permissions and
 **      limitations under the License.
 **
-** File: sample_app.h
-**
-** Purpose:
-**   This file is main hdr file for the SAMPLE application.
-**
-**
 *******************************************************************************/
 
-#ifndef _sample_app_h_
-#define _sample_app_h_
+/**
+ * @file
+ *
+ * Main header file for the SAMPLE application
+ */
+
+#ifndef SAMPLE_APP_H
+#define SAMPLE_APP_H
 
 /*
 ** Required header files.
@@ -115,4 +115,4 @@ int32 SAMPLE_APP_TblValidationFunc(void *TblData);
 
 bool SAMPLE_APP_VerifyCmdLength(CFE_MSG_Message_t *MsgPtr, size_t ExpectedLength);
 
-#endif /* _sample_app_h_ */
+#endif /* SAMPLE_APP_H */

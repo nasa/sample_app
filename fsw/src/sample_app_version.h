@@ -20,11 +20,10 @@
 **
 *************************************************************************/
 
-/*! @file sample_app_version.h
- * @brief Purpose:
+/**
+ * @file
  *
  *  The Sample App header file containing version information
- *
  */
 
 #ifndef SAMPLE_APP_VERSION_H
@@ -32,7 +31,7 @@
 
 /* Development Build Macro Definitions */
 
-#define SAMPLE_APP_BUILD_NUMBER 56 /*!< Development Build: Number of commits since baseline */
+#define SAMPLE_APP_BUILD_NUMBER 62 /*!< Development Build: Number of commits since baseline */
 #define SAMPLE_APP_BUILD_BASELINE \
     "v1.2.0-rc1" /*!< Development Build: git tag that is the base for the current development */
 
@@ -62,7 +61,3 @@
     ", Last Official Release: v1.1.0" /* For full support please use this version */
 
 #endif /* SAMPLE_APP_VERSION_H */
-
-/************************/
-/*  End of File Comment */
-/************************/
