@@ -11,65 +11,70 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
-### Development Build: 1.2.0-rc1+dev62
+### Development Build: v1.2.0-rc1+dev66
+
+-  Implement Coding Standard in CodeQL workflow
+- See <https://github.com/nasa/sample_app/pull/150> and <https://github.com/nasa/cFS/pull/270>
+
+### Development Build: v1.2.0-rc1+dev62
 
 - Removes app registration call, `CFE_ES_RegisterApp()` since applications do not need to register themselves.
 - Apply standard header guard on all header files by removing leading underscore. Convert file-scope block comments to doxygen format.
 - See <https://github.com/nasa/sample_app/pull/145>
 
 
-### Development Build: 1.2.0-rc1+dev56
+### Development Build: v1.2.0-rc1+dev56
 
 - Replaces <> with " in local includes
 - Adds CONTRIBUTIING.md that links to the main cFS contributing guide.
 - Adds a description for the requirements of command and telemetry Message IDs to explain why the Msg IDs have those requirements in documentation.
 - See <https://github.com/nasa/sample_app/pull/137>
 
-### Development Build: 1.2.0-rc1+dev48
+### Development Build: v1.2.0-rc1+dev48
 
-- Fix #126, simplify build to use wrappers and interface libs
-- Fix #128, Add Testing Tools to the Security Policy
+- Simplify build to use wrappers and interface libs
+- Add Testing Tools to the Security Policy
 - See <https://github.com/nasa/sample_app/pull/130>
 
-### Development Build: 1.2.0-rc1+dev37
+### Development Build: v1.2.0-rc1+dev37
 
 - Documentation: Add `Security.md` with instructions on reporting vulnerabilities
 - Resolves bug where success code was reported as an error for `CFE_TBL_GetAddress`.
 - Rename `UT_ClearForceFail` as `UT_ClearDefaultValue` given change from <https://github.com/nasa/osal/issues/724>
 - See <https://github.com/nasa/sample_app/pull/121>
 
-### Development Build: 1.2.0-rc1+dev29
+### Development Build: v1.2.0-rc1+dev29
 
 - Aligns messages according to changes in cFE <https://github.com/nasa/cFE/issues/1009>. Uses the "raw" message cmd/tlm types in definition
 - See <https://github.com/nasa/sample_app/pull/114>
 
 
-### Development Build: 1.2.0-rc1+dev25
+### Development Build: v1.2.0-rc1+dev25
 
 - Rename `UT_SetForceFail` to `UT_SetDefaultReturnValue` since some functions that retain more than 1 value are not necessarily failing
 - See <https://github.com/nasa/sample_app/pull/113>
 
 
-### Development Build: 1.2.0-rc1+dev22
+### Development Build: v1.2.0-rc1+dev22
 
 - Replaces deprecated SB API's with MSG
 - No impact, removes undesirable pattern use of `OS_PACK`
 - See <https://github.com/nasa/sample_app/pull/108>
 
-### Development Build: 1.2.0-rc1+dev18
+### Development Build: v1.2.0-rc1+dev18
 
 - No behavior changes. All identifiers now use the prefix `SAMPLE_APP_`. Changes the name of the main function from SAMPLE_AppMain to SAMPLE_APP_Main which affects the CFE startup script.
 - Set REVISION to "99" to indicate development version status
 - See <https://github.com/nasa/sample_app/pull/102>
 
-### Development Build: 1.2.0-rc1+dev13
+### Development Build: v1.2.0-rc1+dev13
 
 - Unit test MID string format now 32bit
 - Installs unit test to target directory
 - Checks only format string in UT event test
 - See <https://github.com/nasa/sample_app/pull/98>
 
-### Development Build: 1.2.0-rc1+dev5
+### Development Build: v1.2.0-rc1+dev5
 
 - Applies standard coding style.
 - Removes test code call of CFE_SB_InitMsg and sets the API/stub buffers directly.
