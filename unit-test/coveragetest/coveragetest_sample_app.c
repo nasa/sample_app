@@ -423,7 +423,7 @@ void Test_SAMPLE_APP_ReportHousekeeping(void)
     /* Confirm timestamp msg address */
     UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_TimeStampMsg)) == 1, "CFE_SB_TimeStampMsg() called once");
     UtAssert_True(MsgTimestamp == &SAMPLE_APP_Data.HkTlm.TlmHeader.Msg,
-                  "CFE_SB_TimeStampMsg() adress matches expected");
+                  "CFE_SB_TimeStampMsg() address matches expected");
 
     /*
      * Confirm that the CFE_TBL_Manage() call was done
