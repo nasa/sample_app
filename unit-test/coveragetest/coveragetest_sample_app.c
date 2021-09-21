@@ -292,7 +292,7 @@ void Test_SAMPLE_APP_ProcessCommandPacket(void)
      * The CFE_MSG_GetMsgId() stub uses a data buffer to hold the
      * message ID values to return.
      */
-    TestMsgId = SAMPLE_APP_CMD_MID;
+    TestMsgId = CFE_SB_ValueToMsgId(SAMPLE_APP_CMD_MID);
     FcnCode   = SAMPLE_APP_NOOP_CC;
     MsgSize   = sizeof(TestMsg.Noop);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
@@ -300,7 +300,7 @@ void Test_SAMPLE_APP_ProcessCommandPacket(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &MsgSize, sizeof(MsgSize), false);
     SAMPLE_APP_ProcessCommandPacket(&TestMsg.SBBuf);
 
-    TestMsgId = SAMPLE_APP_SEND_HK_MID;
+    TestMsgId = CFE_SB_ValueToMsgId(SAMPLE_APP_SEND_HK_MID);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &TestMsgId, sizeof(TestMsgId), false);
     SAMPLE_APP_ProcessCommandPacket(&TestMsg.SBBuf);
 
