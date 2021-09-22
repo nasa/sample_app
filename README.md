@@ -11,6 +11,10 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+### Development Build: v1.2.0-rc1+dev73
+
+- Apply CFE_SB_ValueToMsgId where required
+- See <https://github.com/nasa/sample_app/pull/155> and <https://github.com/nasa/cFS/pull/359>
 ### Development Build: v1.2.0-rc1+dev66
 
 -  Implement Coding Standard in CodeQL workflow
