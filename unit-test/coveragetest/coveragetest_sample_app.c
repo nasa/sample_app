@@ -418,12 +418,11 @@ void Test_SAMPLE_APP_ReportHousekeeping(void)
 
     /* Confirm message sent*/
     UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_TransmitMsg)) == 1, "CFE_SB_TransmitMsg() called once");
-    UtAssert_True(MsgSend == &SAMPLE_APP_Data.HkTlm.TlmHeader.Msg, "CFE_SB_TransmitMsg() address matches expected");
+    UtAssert_ADDRESS_EQ(MsgSend, &SAMPLE_APP_Data.HkTlm);
 
     /* Confirm timestamp msg address */
     UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_TimeStampMsg)) == 1, "CFE_SB_TimeStampMsg() called once");
-    UtAssert_True(MsgTimestamp == &SAMPLE_APP_Data.HkTlm.TlmHeader.Msg,
-                  "CFE_SB_TimeStampMsg() address matches expected");
+    UtAssert_ADDRESS_EQ(MsgTimestamp, &SAMPLE_APP_Data.HkTlm);
 
     /*
      * Confirm that the CFE_TBL_Manage() call was done
