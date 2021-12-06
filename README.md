@@ -11,6 +11,12 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+### Development Build: v1.3.0-rc4+dev4
+
+- Use CFE_MSG_PTR conversion macro
+- Update baseline for cFS-Caelum-rc4 to v1.3.0-rc4
+- See <https://github.com/nasa/sample_app/pull/163> and <https://github.com/nasa/cFS/pull/390>
+
 ### Development Build: v1.2.0-rc1+dev73
 
 - Apply CFE_SB_ValueToMsgId where required

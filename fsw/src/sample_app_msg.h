@@ -71,8 +71,8 @@ typedef struct
 
 typedef struct
 {
-    CFE_MSG_TelemetryHeader_t  TlmHeader; /**< \brief Telemetry header */
-    SAMPLE_APP_HkTlm_Payload_t Payload;   /**< \brief Telemetry payload */
+    CFE_MSG_TelemetryHeader_t  TelemetryHeader; /**< \brief Telemetry header */
+    SAMPLE_APP_HkTlm_Payload_t Payload;         /**< \brief Telemetry payload */
 } SAMPLE_APP_HkTlm_t;
 
 #endif /* SAMPLE_APP_MSG_H */
