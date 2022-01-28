@@ -38,12 +38,13 @@
  * Includes
  */
 
-#include "sample_lib.h"
+#include "sample_lib.h" /* For SAMPLE_LIB_Function */
 #include "sample_app_coveragetest_common.h"
 #include "ut_sample_app.h"
 
-/* to get the SAMPLE_LIB_Function() declaration */
-
+/*
+ * Unit test check event hook information
+ */
 typedef struct
 {
     uint16      ExpectedEvent;
@@ -113,12 +114,25 @@ static int32 UT_CheckEvent_Hook(void *UserObj, int32 StubRetcode, uint32 CallCou
     return 0;
 }
 
+/* Macro to get expected event name */
+#define UT_CHECKEVENT_SETUP(Evt, ExpectedEvent, ExpectedFormat) \
+    UT_CheckEvent_Setup_Impl(Evt, ExpectedEvent, #ExpectedEvent, ExpectedFormat)
+
 /*
  * Helper function to set up for event checking
  * This attaches the hook function to CFE_EVS_SendEvent
  */
-static void UT_CheckEvent_Setup(UT_CheckEvent_t *Evt, uint16 ExpectedEvent, const char *ExpectedFormat)
+static void UT_CheckEvent_Setup_Impl(UT_CheckEvent_t *Evt, uint16 ExpectedEvent, const char *EventName,
+                                     const char *ExpectedFormat)
 {
+    if (ExpectedFormat == NULL)
+    {
+        UtPrintf("CheckEvent will match: %s(%u)", EventName, ExpectedEvent);
+    }
+    else
+    {
+        UtPrintf("CheckEvent will match: %s(%u), \"%s\"", EventName, ExpectedEvent, ExpectedFormat);
+    }
     memset(Evt, 0, sizeof(*Evt));
     Evt->ExpectedEvent  = ExpectedEvent;
     Evt->ExpectedFormat = ExpectedFormat;
@@ -155,7 +169,7 @@ void Test_SAMPLE_APP_Main(void)
     /*
      * Confirm that CFE_ES_ExitApp() was called at the end of execution
      */
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_ExitApp)) == 1, "CFE_ES_ExitApp() called");
+    UtAssert_STUB_COUNT(CFE_ES_ExitApp, 1);
 
     /*
      * Now set up individual cases for each of the error paths.
@@ -179,14 +193,8 @@ void Test_SAMPLE_APP_Main(void)
     /*
      * This can validate that the internal "RunStatus" was
      * set to CFE_ES_RunStatus_APP_ERROR, by querying the struct directly.
-     *
-     * It is always advisable to include the _actual_ values
-     * when asserting on conditions, so if/when it fails, the
-     * log will show what the incorrect value was.
      */
-    UtAssert_True(SAMPLE_APP_Data.RunStatus == CFE_ES_RunStatus_APP_ERROR,
-                  "SAMPLE_APP_Data.RunStatus (%lu) == CFE_ES_RunStatus_APP_ERROR",
-                  (unsigned long)SAMPLE_APP_Data.RunStatus);
+    UtAssert_UINT32_EQ(SAMPLE_APP_Data.RunStatus, CFE_ES_RunStatus_APP_ERROR);
 
     /*
      * Note that CFE_ES_RunLoop returns a boolean value,
@@ -210,7 +218,7 @@ void Test_SAMPLE_APP_Main(void)
     /*
      * Confirm that CFE_SB_ReceiveBuffer() (inside the loop) was called
      */
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_ReceiveBuffer)) == 1, "CFE_SB_ReceiveBuffer() called");
+    UtAssert_STUB_COUNT(CFE_SB_ReceiveBuffer, 1);
 
     /*
      * Now also make the CFE_SB_ReceiveBuffer call fail,
@@ -219,7 +227,7 @@ void Test_SAMPLE_APP_Main(void)
      */
     UT_SetDeferredRetcode(UT_KEY(CFE_ES_RunLoop), 1, true);
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_ReceiveBuffer), 1, CFE_SB_PIPE_RD_ERR);
-    UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_PIPE_ERR_EID, "SAMPLE APP: SB Pipe Read Error, App Will Exit");
+    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_PIPE_ERR_EID, "SAMPLE APP: SB Pipe Read Error, App Will Exit");
 
     /*
      * Invoke again
@@ -229,8 +237,7 @@ void Test_SAMPLE_APP_Main(void)
     /*
      * Confirm that the event was generated
      */
-    UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_APP_PIPE_ERR_EID generated (%u)",
-                  (unsigned int)EventTest.MatchCount);
+    UtAssert_UINT32_EQ(EventTest.MatchCount, 1);
 }
 
 void Test_SAMPLE_APP_Init(void)
@@ -241,31 +248,31 @@ void Test_SAMPLE_APP_Init(void)
      */
 
     /* nominal case should return CFE_SUCCESS */
-    UT_TEST_FUNCTION_RC(SAMPLE_APP_Init(), CFE_SUCCESS);
+    UtAssert_INT32_EQ(SAMPLE_APP_Init(), CFE_SUCCESS);
 
     /* trigger a failure for each of the sub-calls,
      * and confirm a write to syslog for each.
      * Note that this count accumulates, because the status
      * is _not_ reset between these test cases. */
     UT_SetDeferredRetcode(UT_KEY(CFE_EVS_Register), 1, CFE_EVS_INVALID_PARAMETER);
-    UT_TEST_FUNCTION_RC(SAMPLE_APP_Init(), CFE_EVS_INVALID_PARAMETER);
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 1, "CFE_ES_WriteToSysLog() called");
+    UtAssert_INT32_EQ(SAMPLE_APP_Init(), CFE_EVS_INVALID_PARAMETER);
+    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 1);
 
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_CreatePipe), 1, CFE_SB_BAD_ARGUMENT);
-    UT_TEST_FUNCTION_RC(SAMPLE_APP_Init(), CFE_SB_BAD_ARGUMENT);
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 2, "CFE_ES_WriteToSysLog() called");
+    UtAssert_INT32_EQ(SAMPLE_APP_Init(), CFE_SB_BAD_ARGUMENT);
+    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 2);
 
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_Subscribe), 1, CFE_SB_BAD_ARGUMENT);
-    UT_TEST_FUNCTION_RC(SAMPLE_APP_Init(), CFE_SB_BAD_ARGUMENT);
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 3, "CFE_ES_WriteToSysLog() called");
+    UtAssert_INT32_EQ(SAMPLE_APP_Init(), CFE_SB_BAD_ARGUMENT);
+    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 3);
 
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_Subscribe), 2, CFE_SB_BAD_ARGUMENT);
-    UT_TEST_FUNCTION_RC(SAMPLE_APP_Init(), CFE_SB_BAD_ARGUMENT);
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 4, "CFE_ES_WriteToSysLog() called");
+    UtAssert_INT32_EQ(SAMPLE_APP_Init(), CFE_SB_BAD_ARGUMENT);
+    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 4);
 
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_Register), 1, CFE_TBL_ERR_INVALID_OPTIONS);
-    UT_TEST_FUNCTION_RC(SAMPLE_APP_Init(), CFE_TBL_ERR_INVALID_OPTIONS);
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 5, "CFE_ES_WriteToSysLog() called");
+    UtAssert_INT32_EQ(SAMPLE_APP_Init(), CFE_TBL_ERR_INVALID_OPTIONS);
+    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 5);
 }
 
 void Test_SAMPLE_APP_ProcessCommandPacket(void)
@@ -286,7 +293,7 @@ void Test_SAMPLE_APP_ProcessCommandPacket(void)
     UT_CheckEvent_t   EventTest;
 
     memset(&TestMsg, 0, sizeof(TestMsg));
-    UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_INVALID_MSGID_ERR_EID, "SAMPLE: invalid command packet,MID = 0x%x");
+    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_INVALID_MSGID_ERR_EID, "SAMPLE: invalid command packet,MID = 0x%x");
 
     /*
      * The CFE_MSG_GetMsgId() stub uses a data buffer to hold the
@@ -312,8 +319,7 @@ void Test_SAMPLE_APP_ProcessCommandPacket(void)
     /*
      * Confirm that the event was generated only _once_
      */
-    UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_APP_COMMAND_ERR_EID generated (%u)",
-                  (unsigned int)EventTest.MatchCount);
+    UtAssert_UINT32_EQ(EventTest.MatchCount, 1);
 }
 
 void Test_SAMPLE_APP_ProcessGroundCommand(void)
@@ -351,24 +357,22 @@ void Test_SAMPLE_APP_ProcessGroundCommand(void)
     Size    = sizeof(TestMsg.Noop);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &Size, sizeof(Size), false);
-    UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_COMMANDNOP_INF_EID, NULL);
+    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_COMMANDNOP_INF_EID, NULL);
 
     SAMPLE_APP_ProcessGroundCommand(&TestMsg.SBBuf);
 
-    UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_COMMANDNOP_INF_EID generated (%u)",
-                  (unsigned int)EventTest.MatchCount);
+    UtAssert_UINT32_EQ(EventTest.MatchCount, 1);
 
     /* test dispatch of RESET */
     FcnCode = SAMPLE_APP_RESET_COUNTERS_CC;
     Size    = sizeof(TestMsg.Reset);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &Size, sizeof(Size), false);
-    UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_COMMANDRST_INF_EID, NULL);
+    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_COMMANDRST_INF_EID, NULL);
 
     SAMPLE_APP_ProcessGroundCommand(&TestMsg.SBBuf);
 
-    UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_COMMANDRST_INF_EID generated (%u)",
-                  (unsigned int)EventTest.MatchCount);
+    UtAssert_UINT32_EQ(EventTest.MatchCount, 1);
 
     /* test dispatch of PROCESS */
     /* note this will end up calling SAMPLE_APP_Process(), and as such it needs to
@@ -384,14 +388,13 @@ void Test_SAMPLE_APP_ProcessGroundCommand(void)
     /* test an invalid CC */
     FcnCode = 1000;
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_COMMAND_ERR_EID, "Invalid ground command code: CC = %d");
+    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_COMMAND_ERR_EID, "Invalid ground command code: CC = %d");
     SAMPLE_APP_ProcessGroundCommand(&TestMsg.SBBuf);
 
     /*
      * Confirm that the event was generated only _once_
      */
-    UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_APP_COMMAND_ERR_EID generated (%u)",
-                  (unsigned int)EventTest.MatchCount);
+    UtAssert_UINT32_EQ(EventTest.MatchCount, 1);
 }
 
 void Test_SAMPLE_APP_ReportHousekeeping(void)
@@ -417,17 +420,17 @@ void Test_SAMPLE_APP_ReportHousekeeping(void)
     SAMPLE_APP_ProcessCommandPacket((CFE_SB_Buffer_t *)NULL);
 
     /* Confirm message sent*/
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_TransmitMsg)) == 1, "CFE_SB_TransmitMsg() called once");
+    UtAssert_STUB_COUNT(CFE_SB_TransmitMsg, 1);
     UtAssert_ADDRESS_EQ(MsgSend, &SAMPLE_APP_Data.HkTlm);
 
     /* Confirm timestamp msg address */
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_SB_TimeStampMsg)) == 1, "CFE_SB_TimeStampMsg() called once");
+    UtAssert_STUB_COUNT(CFE_SB_TimeStampMsg, 1);
     UtAssert_ADDRESS_EQ(MsgTimestamp, &SAMPLE_APP_Data.HkTlm);
 
     /*
      * Confirm that the CFE_TBL_Manage() call was done
      */
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_TBL_Manage)) == 1, "CFE_TBL_Manage() called");
+    UtAssert_STUB_COUNT(CFE_TBL_Manage, 1);
 }
 
 void Test_SAMPLE_APP_NoopCmd(void)
@@ -442,15 +445,14 @@ void Test_SAMPLE_APP_NoopCmd(void)
     memset(&TestMsg, 0, sizeof(TestMsg));
 
     /* test dispatch of NOOP */
-    UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_COMMANDNOP_INF_EID, NULL);
+    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_COMMANDNOP_INF_EID, NULL);
 
-    UT_TEST_FUNCTION_RC(SAMPLE_APP_Noop(&TestMsg), CFE_SUCCESS);
+    UtAssert_INT32_EQ(SAMPLE_APP_Noop(&TestMsg), CFE_SUCCESS);
 
     /*
      * Confirm that the event was generated
      */
-    UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_APP_COMMANDNOP_INF_EID generated (%u)",
-                  (unsigned int)EventTest.MatchCount);
+    UtAssert_UINT32_EQ(EventTest.MatchCount, 1);
 }
 
 void Test_SAMPLE_APP_ResetCounters(void)
@@ -464,15 +466,14 @@ void Test_SAMPLE_APP_ResetCounters(void)
 
     memset(&TestMsg, 0, sizeof(TestMsg));
 
-    UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_COMMANDRST_INF_EID, "SAMPLE: RESET command");
+    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_COMMANDRST_INF_EID, "SAMPLE: RESET command");
 
-    UT_TEST_FUNCTION_RC(SAMPLE_APP_ResetCounters(&TestMsg), CFE_SUCCESS);
+    UtAssert_INT32_EQ(SAMPLE_APP_ResetCounters(&TestMsg), CFE_SUCCESS);
 
     /*
      * Confirm that the event was generated
      */
-    UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_APP_COMMANDRST_INF_EID generated (%u)",
-                  (unsigned int)EventTest.MatchCount);
+    UtAssert_UINT32_EQ(EventTest.MatchCount, 1);
 }
 
 void Test_SAMPLE_APP_ProcessCC(void)
@@ -492,25 +493,25 @@ void Test_SAMPLE_APP_ProcessCC(void)
     TestTblData.Int1 = 40;
     TestTblData.Int2 = 50;
     UT_SetDataBuffer(UT_KEY(CFE_TBL_GetAddress), &TblPtr, sizeof(TblPtr), false);
-    UT_TEST_FUNCTION_RC(SAMPLE_APP_Process(&TestMsg), CFE_SUCCESS);
+    UtAssert_INT32_EQ(SAMPLE_APP_Process(&TestMsg), CFE_SUCCESS);
 
     /*
      * Confirm that the CFE_TBL_GetAddress() call was done
      */
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_TBL_GetAddress)) == 1, "CFE_TBL_GetAddress() called");
+    UtAssert_STUB_COUNT(CFE_TBL_GetAddress, 1);
 
     /*
      * Confirm that the SAMPLE_LIB_Function() call was done
      * NOTE: This stub is provided by the sample_lib library
      */
-    UtAssert_True(UT_GetStubCount(UT_KEY(SAMPLE_LIB_Function)) == 1, "SAMPLE_LIB_Function() called");
+    UtAssert_STUB_COUNT(SAMPLE_LIB_Function, 1);
 
     /*
      * Configure the CFE_TBL_GetAddress function to return an error
      * Exercise the error return path
      */
     UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_GetAddress), CFE_TBL_ERR_UNREGISTERED);
-    UT_TEST_FUNCTION_RC(SAMPLE_APP_Process(&TestMsg), CFE_TBL_ERR_UNREGISTERED);
+    UtAssert_INT32_EQ(SAMPLE_APP_Process(&TestMsg), CFE_TBL_ERR_UNREGISTERED);
 }
 
 void Test_SAMPLE_APP_VerifyCmdLength(void)
@@ -528,7 +529,7 @@ void Test_SAMPLE_APP_VerifyCmdLength(void)
      * test a match case
      */
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &size, sizeof(size), false);
-    UT_CheckEvent_Setup(&EventTest, SAMPLE_APP_LEN_ERR_EID,
+    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_LEN_ERR_EID,
                         "Invalid Msg length: ID = 0x%X,  CC = %u, Len = %u, Expected = %u");
 
     SAMPLE_APP_VerifyCmdLength(NULL, size);
@@ -536,8 +537,7 @@ void Test_SAMPLE_APP_VerifyCmdLength(void)
     /*
      * Confirm that the event was NOT generated
      */
-    UtAssert_True(EventTest.MatchCount == 0, "SAMPLE_APP_LEN_ERR_EID NOT generated (%u)",
-                  (unsigned int)EventTest.MatchCount);
+    UtAssert_UINT32_EQ(EventTest.MatchCount, 0);
 
     /*
      * test a mismatch case
@@ -550,8 +550,7 @@ void Test_SAMPLE_APP_VerifyCmdLength(void)
     /*
      * Confirm that the event WAS generated
      */
-    UtAssert_True(EventTest.MatchCount == 1, "SAMPLE_APP_LEN_ERR_EID generated (%u)",
-                  (unsigned int)EventTest.MatchCount);
+    UtAssert_UINT32_EQ(EventTest.MatchCount, 1);
 }
 
 void Test_SAMPLE_APP_TblValidationFunc(void)
@@ -565,11 +564,11 @@ void Test_SAMPLE_APP_TblValidationFunc(void)
     memset(&TestTblData, 0, sizeof(TestTblData));
 
     /* nominal case (0) should succeed */
-    UT_TEST_FUNCTION_RC(SAMPLE_APP_TblValidationFunc(&TestTblData), CFE_SUCCESS);
+    UtAssert_INT32_EQ(SAMPLE_APP_TblValidationFunc(&TestTblData), CFE_SUCCESS);
 
     /* error case should return SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE */
     TestTblData.Int1 = 1 + SAMPLE_APP_TBL_ELEMENT_1_MAX;
-    UT_TEST_FUNCTION_RC(SAMPLE_APP_TblValidationFunc(&TestTblData), SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE);
+    UtAssert_INT32_EQ(SAMPLE_APP_TblValidationFunc(&TestTblData), SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE);
 }
 
 void Test_SAMPLE_APP_GetCrc(void)
@@ -590,11 +589,11 @@ void Test_SAMPLE_APP_GetCrc(void)
 
     UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_GetInfo), CFE_TBL_ERR_INVALID_NAME);
     SAMPLE_APP_GetCrc("UT");
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 1, "CFE_ES_WriteToSysLog() called");
+    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 1);
 
     UT_ClearDefaultReturnValue(UT_KEY(CFE_TBL_GetInfo));
     SAMPLE_APP_GetCrc("UT");
-    UtAssert_True(UT_GetStubCount(UT_KEY(CFE_ES_WriteToSysLog)) == 2, "CFE_ES_WriteToSysLog() called");
+    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 2);
 }
 
 /*
