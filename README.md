@@ -11,6 +11,12 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+### Development Build: v1.3.0-rc4+dev9
+
+- Use preferred UT patterns
+- Reuse CodeQL, Static Analysis, and Format Check
+- See <https://github.com/nasa/cFS/pull/414>
+
 ### Development Build: v1.3.0-rc4+dev4
 
 - Use CFE_MSG_PTR conversion macro
