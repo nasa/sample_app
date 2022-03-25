@@ -27,7 +27,7 @@
 
 /* Development Build Macro Definitions */
 
-#define SAMPLE_APP_BUILD_NUMBER 9 /*!< Development Build: Number of commits since baseline */
+#define SAMPLE_APP_BUILD_NUMBER 16 /*!< Development Build: Number of commits since baseline */
 #define SAMPLE_APP_BUILD_BASELINE \
     "v1.3.0-rc4" /*!< Development Build: git tag that is the base for the current development */
 
@@ -36,7 +36,7 @@
  */
 #define SAMPLE_APP_MAJOR_VERSION 1  /*!< @brief Major version number. */
 #define SAMPLE_APP_MINOR_VERSION 1  /*!< @brief Minor version number. */
-#define SAMPLE_APP_REVISION      99 /**< @brief Revision version number. Value of 99 indicates a development version.*/
+#define SAMPLE_APP_REVISION      99 /*!< @brief Revision version number. Value of 99 indicates a development version.*/
 
 /*!
  * @brief Mission revision.

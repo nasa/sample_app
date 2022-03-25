@@ -11,6 +11,11 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+### Development Build: v1.3.0-rc4+dev16
+
+- Update copyright headers
+- Standardize version information
+- See <https://github.com/nasa/sample_app/pull/171> and <https://github.com/nasa/cFS/pull/445>
 ### Development Build: v1.3.0-rc4+dev9
 
 - Use preferred UT patterns
