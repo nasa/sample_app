@@ -8,7 +8,8 @@ on:
 jobs:
   codeql:
     name: Codeql Analysis
-    uses: nasa/cFS/.github/workflows/codeql-build.yml@main
+    uses: nasa/cFS/.github/workflows/codeql-reusable.yml@main
     with: 
-      make-prep: 'make prep'
-      make: 'make sample_app && make native/default_cpu1/apps/sample_app/unit-test/'
+      component-path: apps/sample_app
+      prep: 'make prep; make -C build/tools/elf2cfetbl'
+      make: 'make -C build/native/default_cpu1/apps/sample_app'
