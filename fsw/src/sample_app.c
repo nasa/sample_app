@@ -129,27 +129,9 @@ int32 SAMPLE_APP_Init(void)
     SAMPLE_APP_Data.PipeName[sizeof(SAMPLE_APP_Data.PipeName) - 1] = 0;
 
     /*
-    ** Initialize event filter table...
-    */
-    SAMPLE_APP_Data.EventFilters[0].EventID = SAMPLE_APP_STARTUP_INF_EID;
-    SAMPLE_APP_Data.EventFilters[0].Mask    = 0x0000;
-    SAMPLE_APP_Data.EventFilters[1].EventID = SAMPLE_APP_COMMAND_ERR_EID;
-    SAMPLE_APP_Data.EventFilters[1].Mask    = 0x0000;
-    SAMPLE_APP_Data.EventFilters[2].EventID = SAMPLE_APP_COMMANDNOP_INF_EID;
-    SAMPLE_APP_Data.EventFilters[2].Mask    = 0x0000;
-    SAMPLE_APP_Data.EventFilters[3].EventID = SAMPLE_APP_COMMANDRST_INF_EID;
-    SAMPLE_APP_Data.EventFilters[3].Mask    = 0x0000;
-    SAMPLE_APP_Data.EventFilters[4].EventID = SAMPLE_APP_INVALID_MSGID_ERR_EID;
-    SAMPLE_APP_Data.EventFilters[4].Mask    = 0x0000;
-    SAMPLE_APP_Data.EventFilters[5].EventID = SAMPLE_APP_LEN_ERR_EID;
-    SAMPLE_APP_Data.EventFilters[5].Mask    = 0x0000;
-    SAMPLE_APP_Data.EventFilters[6].EventID = SAMPLE_APP_PIPE_ERR_EID;
-    SAMPLE_APP_Data.EventFilters[6].Mask    = 0x0000;
-
-    /*
     ** Register the events
     */
-    status = CFE_EVS_Register(SAMPLE_APP_Data.EventFilters, SAMPLE_APP_EVENT_COUNTS, CFE_EVS_EventFilter_BINARY);
+    status = CFE_EVS_Register(NULL, 0, CFE_EVS_EventFilter_BINARY);
     if (status != CFE_SUCCESS)
     {
         CFE_ES_WriteToSysLog("Sample App: Error Registering Events, RC = 0x%08lX\n", (unsigned long)status);

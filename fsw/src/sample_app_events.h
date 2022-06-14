@@ -34,6 +34,4 @@
 #define SAMPLE_APP_LEN_ERR_EID           6
 #define SAMPLE_APP_PIPE_ERR_EID          7
 
-#define SAMPLE_APP_EVENT_COUNTS 7
-
 #endif /* SAMPLE_APP_EVENTS_H */
