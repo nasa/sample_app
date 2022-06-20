@@ -85,8 +85,7 @@ typedef struct
     char   PipeName[CFE_MISSION_MAX_API_LEN];
     uint16 PipeDepth;
 
-    CFE_EVS_BinFilter_t EventFilters[SAMPLE_APP_EVENT_COUNTS];
-    CFE_TBL_Handle_t    TblHandles[SAMPLE_APP_NUMBER_OF_TABLES];
+    CFE_TBL_Handle_t TblHandles[SAMPLE_APP_NUMBER_OF_TABLES];
 
 } SAMPLE_APP_Data_t;
 
