@@ -11,6 +11,12 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+### Development Build: v1.3.0-rc4+dev21
+
+- Remove registration of empty event filters
+- Update codeql workflow for reusable updates
+- See <https://github.com/nasa/cFS/pull/505> 
+
 ### Development Build: v1.3.0-rc4+dev16
 
 - Update copyright headers
