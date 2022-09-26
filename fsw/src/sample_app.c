@@ -43,6 +43,7 @@
 SAMPLE_APP_Data_t SAMPLE_APP_Data;
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  * *  * * * * **/
+/*                                                                            */
 /* SAMPLE_APP_Main() -- Application entry point and main process loop         */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  * *  * * * * **/
@@ -305,7 +306,7 @@ void SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr)
 } /* End of SAMPLE_APP_ProcessGroundCommand() */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*  Name:  SAMPLE_APP_ReportHousekeeping                                          */
+/*  Name:  SAMPLE_APP_ReportHousekeeping                                      */
 /*                                                                            */
 /*  Purpose:                                                                  */
 /*         This function is triggered in response to a task telemetry request */
@@ -343,7 +344,7 @@ int32 SAMPLE_APP_ReportHousekeeping(const CFE_MSG_CommandHeader_t *Msg)
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 /*                                                                            */
-/* SAMPLE_APP_Noop -- SAMPLE NOOP commands                                        */
+/* SAMPLE_APP_Noop -- SAMPLE NOOP commands                                    */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 int32 SAMPLE_APP_Noop(const SAMPLE_APP_NoopCmd_t *Msg)
@@ -359,7 +360,7 @@ int32 SAMPLE_APP_Noop(const SAMPLE_APP_NoopCmd_t *Msg)
 } /* End of SAMPLE_APP_Noop */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*  Name:  SAMPLE_APP_ResetCounters                                               */
+/*  Name:  SAMPLE_APP_ResetCounters                                           */
 /*                                                                            */
 /*  Purpose:                                                                  */
 /*         This function resets all the global counter variables that are     */
@@ -379,7 +380,7 @@ int32 SAMPLE_APP_ResetCounters(const SAMPLE_APP_ResetCountersCmd_t *Msg)
 } /* End of SAMPLE_APP_ResetCounters() */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*  Name:  SAMPLE_APP_Process                                                     */
+/*  Name:  SAMPLE_APP_Process                                                 */
 /*                                                                            */
 /*  Purpose:                                                                  */
 /*         This function Process Ground Station Command                       */
@@ -421,7 +422,7 @@ int32 SAMPLE_APP_Process(const SAMPLE_APP_ProcessCmd_t *Msg)
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 /*                                                                            */
-/* SAMPLE_APP_VerifyCmdLength() -- Verify command packet length                   */
+/* SAMPLE_APP_VerifyCmdLength() -- Verify command packet length               */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 bool SAMPLE_APP_VerifyCmdLength(CFE_MSG_Message_t *MsgPtr, size_t ExpectedLength)
@@ -457,7 +458,7 @@ bool SAMPLE_APP_VerifyCmdLength(CFE_MSG_Message_t *MsgPtr, size_t ExpectedLength
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
-/* SAMPLE_APP_TblValidationFunc -- Verify contents of First Table      */
+/* SAMPLE_APP_TblValidationFunc -- Verify contents of First Table  */
 /* buffer contents                                                 */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -481,8 +482,7 @@ int32 SAMPLE_APP_TblValidationFunc(void *TblData)
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
-/* SAMPLE_APP_GetCrc -- Output CRC                                     */
-/*                                                                 */
+/* SAMPLE_APP_GetCrc -- Output CRC                                 */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SAMPLE_APP_GetCrc(const char *TableName)
