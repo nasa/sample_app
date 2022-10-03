@@ -136,7 +136,7 @@ int32 SAMPLE_APP_Init(void)
     if (status != CFE_SUCCESS)
     {
         CFE_ES_WriteToSysLog("Sample App: Error Registering Events, RC = 0x%08lX\n", (unsigned long)status);
-        return (status);
+        return status;
     }
 
     /*
@@ -152,7 +152,7 @@ int32 SAMPLE_APP_Init(void)
     if (status != CFE_SUCCESS)
     {
         CFE_ES_WriteToSysLog("Sample App: Error creating pipe, RC = 0x%08lX\n", (unsigned long)status);
-        return (status);
+        return status;
     }
 
     /*
@@ -162,7 +162,7 @@ int32 SAMPLE_APP_Init(void)
     if (status != CFE_SUCCESS)
     {
         CFE_ES_WriteToSysLog("Sample App: Error Subscribing to HK request, RC = 0x%08lX\n", (unsigned long)status);
-        return (status);
+        return status;
     }
 
     /*
@@ -173,7 +173,7 @@ int32 SAMPLE_APP_Init(void)
     {
         CFE_ES_WriteToSysLog("Sample App: Error Subscribing to Command, RC = 0x%08lX\n", (unsigned long)status);
 
-        return (status);
+        return status;
     }
 
     /*
@@ -185,7 +185,7 @@ int32 SAMPLE_APP_Init(void)
     {
         CFE_ES_WriteToSysLog("Sample App: Error Registering Table, RC = 0x%08lX\n", (unsigned long)status);
 
-        return (status);
+        return status;
     }
     else
     {
@@ -195,7 +195,7 @@ int32 SAMPLE_APP_Init(void)
     CFE_EVS_SendEvent(SAMPLE_APP_STARTUP_INF_EID, CFE_EVS_EventType_INFORMATION, "SAMPLE App Initialized.%s",
                       SAMPLE_APP_VERSION_STRING);
 
-    return (CFE_SUCCESS);
+    return CFE_SUCCESS;
 
 } /* End of SAMPLE_APP_Init() */
 
@@ -431,7 +431,7 @@ bool SAMPLE_APP_VerifyCmdLength(CFE_MSG_Message_t *MsgPtr, size_t ExpectedLength
         SAMPLE_APP_Data.ErrCounter++;
     }
 
-    return (result);
+    return result;
 
 } /* End of SAMPLE_APP_VerifyCmdLength() */
 
