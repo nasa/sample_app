@@ -11,6 +11,12 @@ sample_app is an example for how to build and link an application in cFS. See al
 
 ## Version History
 
+### Development Build: v1.3.0-rc4+dev27
+- Misaligned comments
+- Remove unnecessary parentheses around return values.
+- Remove 'return;' from last line of void functions.
+- See <https://github.com/nasa/sample_app/pull/177>, <https://github.com/nasa/sample_app/pull/179>, and <https://github.com/nasa/sample_app/pull/181>
+
 ### Development Build: v1.3.0-rc4+dev21
 
 - Remove registration of empty event filters
