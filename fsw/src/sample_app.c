@@ -228,9 +228,6 @@ void SAMPLE_APP_ProcessCommandPacket(CFE_SB_Buffer_t *SBBufPtr)
                               "SAMPLE: invalid command packet,MID = 0x%x", (unsigned int)CFE_SB_MsgIdToValue(MsgId));
             break;
     }
-
-    return;
-
 } /* End SAMPLE_APP_ProcessCommandPacket */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
@@ -279,9 +276,6 @@ void SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr)
                               "Invalid ground command code: CC = %d", CommandCode);
             break;
     }
-
-    return;
-
 } /* End of SAMPLE_APP_ProcessGroundCommand() */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
@@ -480,7 +474,4 @@ void SAMPLE_APP_GetCrc(const char *TableName)
         Crc = TblInfoPtr.Crc;
         CFE_ES_WriteToSysLog("Sample App: CRC: 0x%08lX\n\n", (unsigned long)Crc);
     }
-
-    return;
-
 } /* End of SAMPLE_APP_GetCrc */
