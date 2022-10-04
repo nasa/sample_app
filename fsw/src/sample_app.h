@@ -86,7 +86,6 @@ typedef struct
     uint16 PipeDepth;
 
     CFE_TBL_Handle_t TblHandles[SAMPLE_APP_NUMBER_OF_TABLES];
-
 } SAMPLE_APP_Data_t;
 
 /****************************************************************************/
