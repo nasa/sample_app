@@ -1,5 +1,10 @@
 # Changelog
 
+## Development Build: v1.3.0-rc4+dev35
+- Remove redundant comments
+- Create CHANGELOG.md
+- See <https://github.com/nasa/sample_app/pull/185> and <https://github.com/nasa/sample_app/pull/183>
+
 ## Development Build: v1.3.0-rc4+dev27
 - Misaligned comments
 - Remove unnecessary parentheses around return values.
