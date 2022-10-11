@@ -40,7 +40,7 @@ SAMPLE_APP_Data_t SAMPLE_APP_Data;
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  * *  * * * * **/
 /*                                                                            */
-/* SAMPLE_APP_Main() -- Application entry point and main process loop         */
+/* Application entry point and main process loop                              */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  * *  * * * * **/
 void SAMPLE_APP_Main(void)
@@ -101,12 +101,11 @@ void SAMPLE_APP_Main(void)
     CFE_ES_PerfLogExit(SAMPLE_APP_PERF_ID);
 
     CFE_ES_ExitApp(SAMPLE_APP_Data.RunStatus);
-
-} /* End of SAMPLE_APP_Main() */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  */
 /*                                                                            */
-/* SAMPLE_APP_Init() --  initialization                                       */
+/* Initialization                                                             */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 int32 SAMPLE_APP_Init(void)
@@ -196,11 +195,9 @@ int32 SAMPLE_APP_Init(void)
                       SAMPLE_APP_VERSION_STRING);
 
     return CFE_SUCCESS;
-
-} /* End of SAMPLE_APP_Init() */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*  Name:  SAMPLE_APP_ProcessCommandPacket                                    */
 /*                                                                            */
 /*  Purpose:                                                                  */
 /*     This routine will process any packet that is received on the SAMPLE    */
@@ -228,11 +225,11 @@ void SAMPLE_APP_ProcessCommandPacket(CFE_SB_Buffer_t *SBBufPtr)
                               "SAMPLE: invalid command packet,MID = 0x%x", (unsigned int)CFE_SB_MsgIdToValue(MsgId));
             break;
     }
-} /* End SAMPLE_APP_ProcessCommandPacket */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 /*                                                                            */
-/* SAMPLE_APP_ProcessGroundCommand() -- SAMPLE ground commands                */
+/* SAMPLE ground commands                                                     */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 void SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr)
@@ -276,10 +273,9 @@ void SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr)
                               "Invalid ground command code: CC = %d", CommandCode);
             break;
     }
-} /* End of SAMPLE_APP_ProcessGroundCommand() */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*  Name:  SAMPLE_APP_ReportHousekeeping                                      */
 /*                                                                            */
 /*  Purpose:                                                                  */
 /*         This function is triggered in response to a task telemetry request */
@@ -312,28 +308,24 @@ int32 SAMPLE_APP_ReportHousekeeping(const CFE_MSG_CommandHeader_t *Msg)
     }
 
     return CFE_SUCCESS;
-
-} /* End of SAMPLE_APP_ReportHousekeeping() */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 /*                                                                            */
-/* SAMPLE_APP_Noop -- SAMPLE NOOP commands                                    */
+/* SAMPLE NOOP commands                                                       */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 int32 SAMPLE_APP_Noop(const SAMPLE_APP_NoopCmd_t *Msg)
 {
-
     SAMPLE_APP_Data.CmdCounter++;
 
     CFE_EVS_SendEvent(SAMPLE_APP_COMMANDNOP_INF_EID, CFE_EVS_EventType_INFORMATION, "SAMPLE: NOOP command %s",
                       SAMPLE_APP_VERSION);
 
     return CFE_SUCCESS;
-
-} /* End of SAMPLE_APP_Noop */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*  Name:  SAMPLE_APP_ResetCounters                                           */
 /*                                                                            */
 /*  Purpose:                                                                  */
 /*         This function resets all the global counter variables that are     */
@@ -342,18 +334,15 @@ int32 SAMPLE_APP_Noop(const SAMPLE_APP_NoopCmd_t *Msg)
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
 int32 SAMPLE_APP_ResetCounters(const SAMPLE_APP_ResetCountersCmd_t *Msg)
 {
-
     SAMPLE_APP_Data.CmdCounter = 0;
     SAMPLE_APP_Data.ErrCounter = 0;
 
     CFE_EVS_SendEvent(SAMPLE_APP_COMMANDRST_INF_EID, CFE_EVS_EventType_INFORMATION, "SAMPLE: RESET command");
 
     return CFE_SUCCESS;
-
-} /* End of SAMPLE_APP_ResetCounters() */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*  Name:  SAMPLE_APP_Process                                                 */
 /*                                                                            */
 /*  Purpose:                                                                  */
 /*         This function Process Ground Station Command                       */
@@ -390,12 +379,11 @@ int32 SAMPLE_APP_Process(const SAMPLE_APP_ProcessCmd_t *Msg)
     SAMPLE_LIB_Function();
 
     return CFE_SUCCESS;
-
-} /* End of SAMPLE_APP_ProcessCC */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 /*                                                                            */
-/* SAMPLE_APP_VerifyCmdLength() -- Verify command packet length               */
+/* Verify command packet length                                               */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 bool SAMPLE_APP_VerifyCmdLength(CFE_MSG_Message_t *MsgPtr, size_t ExpectedLength)
@@ -426,13 +414,11 @@ bool SAMPLE_APP_VerifyCmdLength(CFE_MSG_Message_t *MsgPtr, size_t ExpectedLength
     }
 
     return result;
-
-} /* End of SAMPLE_APP_VerifyCmdLength() */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
-/* SAMPLE_APP_TblValidationFunc -- Verify contents of First Table  */
-/* buffer contents                                                 */
+/* Verify contents of First Table buffer contents                  */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 int32 SAMPLE_APP_TblValidationFunc(void *TblData)
@@ -450,12 +436,11 @@ int32 SAMPLE_APP_TblValidationFunc(void *TblData)
     }
 
     return ReturnCode;
-
-} /* End of SAMPLE_APP_TBLValidationFunc() */
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*                                                                 */
-/* SAMPLE_APP_GetCrc -- Output CRC                                 */
+/* Output CRC                                                      */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SAMPLE_APP_GetCrc(const char *TableName)
@@ -474,4 +459,4 @@ void SAMPLE_APP_GetCrc(const char *TableName)
         Crc = TblInfoPtr.Crc;
         CFE_ES_WriteToSysLog("Sample App: CRC: 0x%08lX\n\n", (unsigned long)Crc);
     }
-} /* End of SAMPLE_APP_GetCrc */
+}
