@@ -234,14 +234,14 @@ void SAMPLE_APP_ProcessCommandPacket(CFE_SB_Buffer_t *SBBufPtr)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 void SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr)
 {
-    CFE_MSG_FcnCode_t CommandCode = 0;
+    CFE_MSG_FcnCode_t FcnCode = 0;
 
-    CFE_MSG_GetFcnCode(&SBBufPtr->Msg, &CommandCode);
+    CFE_MSG_GetFcnCode(&SBBufPtr->Msg, &FcnCode);
 
     /*
     ** Process "known" SAMPLE app ground commands
     */
-    switch (CommandCode)
+    switch (FcnCode)
     {
         case SAMPLE_APP_NOOP_CC:
             if (SAMPLE_APP_VerifyCmdLength(&SBBufPtr->Msg, sizeof(SAMPLE_APP_NoopCmd_t)))
@@ -270,7 +270,7 @@ void SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr)
         /* default case already found during FC vs length test */
         default:
             CFE_EVS_SendEvent(SAMPLE_APP_COMMAND_ERR_EID, CFE_EVS_EventType_ERROR,
-                              "Invalid ground command code: CC = %d", CommandCode);
+                              "Invalid ground command code: CC = %d", FcnCode);
             break;
     }
 }
