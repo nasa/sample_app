@@ -189,6 +189,12 @@ int32 SAMPLE_APP_Init(void)
     else
     {
         status = CFE_TBL_Load(SAMPLE_APP_Data.TblHandles[0], CFE_TBL_SRC_FILE, SAMPLE_APP_TABLE_FILE);
+        if (status != CFE_SUCCESS)
+        {
+            CFE_ES_WriteToSysLog("Sample App: Error Loading Table, RC = 0x%08lX\n", (unsigned long)status);
+
+            return status;
+        }
     }
 
     CFE_EVS_SendEvent(SAMPLE_APP_STARTUP_INF_EID, CFE_EVS_EventType_INFORMATION, "SAMPLE App Initialized.%s",
