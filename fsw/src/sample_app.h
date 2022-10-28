@@ -44,9 +44,9 @@
 #define SAMPLE_APP_NUMBER_OF_TABLES 1 /* Number of Table(s) */
 
 /* Define filenames of default data images for tables */
-#define SAMPLE_APP_TABLE_FILE "/cf/sample_app_tbl.tbl"
+#define SAMPLE_APP_TBL_FILE "/cf/sample_app_tbl.tbl"
 
-#define SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE -1
+#define SAMPLE_APP_TBL_OUT_OF_RANGE_ERR_CODE -1
 
 #define SAMPLE_APP_TBL_ELEMENT_1_MAX 10
 /************************************************************************
@@ -103,7 +103,7 @@ int32 SAMPLE_APP_ReportHousekeeping(const CFE_MSG_CommandHeader_t *Msg);
 int32 SAMPLE_APP_ResetCounters(const SAMPLE_APP_ResetCountersCmd_t *Msg);
 int32 SAMPLE_APP_Process(const SAMPLE_APP_ProcessCmd_t *Msg);
 int32 SAMPLE_APP_Noop(const SAMPLE_APP_NoopCmd_t *Msg);
-void  SAMPLE_APP_GetCrc(const char *TableName);
+void  SAMPLE_APP_GetCrc(const char *TblName);
 
 int32 SAMPLE_APP_TblValidationFunc(void *TblData);
 

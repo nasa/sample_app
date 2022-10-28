@@ -188,7 +188,7 @@ int32 SAMPLE_APP_Init(void)
     }
     else
     {
-        status = CFE_TBL_Load(SAMPLE_APP_Data.TblHandles[0], CFE_TBL_SRC_FILE, SAMPLE_APP_TABLE_FILE);
+        status = CFE_TBL_Load(SAMPLE_APP_Data.TblHandles[0], CFE_TBL_SRC_FILE, SAMPLE_APP_TBL_FILE);
     }
 
     CFE_EVS_SendEvent(SAMPLE_APP_STARTUP_INF_EID, CFE_EVS_EventType_INFORMATION, "SAMPLE App Initialized.%s",
@@ -352,7 +352,7 @@ int32 SAMPLE_APP_Process(const SAMPLE_APP_ProcessCmd_t *Msg)
 {
     int32               status;
     SAMPLE_APP_Table_t *TblPtr;
-    const char *        TableName = "SAMPLE_APP.SampleAppTable";
+    const char *        TblName = "SAMPLE_APP.SampleAppTable";
 
     /* Sample Use of Table */
 
@@ -366,7 +366,7 @@ int32 SAMPLE_APP_Process(const SAMPLE_APP_ProcessCmd_t *Msg)
 
     CFE_ES_WriteToSysLog("Sample App: Table Value 1: %d  Value 2: %d", TblPtr->Int1, TblPtr->Int2);
 
-    SAMPLE_APP_GetCrc(TableName);
+    SAMPLE_APP_GetCrc(TblName);
 
     status = CFE_TBL_ReleaseAddress(SAMPLE_APP_Data.TblHandles[0]);
     if (status != CFE_SUCCESS)
@@ -432,7 +432,7 @@ int32 SAMPLE_APP_TblValidationFunc(void *TblData)
     if (TblDataPtr->Int1 > SAMPLE_APP_TBL_ELEMENT_1_MAX)
     {
         /* First element is out of range, return an appropriate error code */
-        ReturnCode = SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE;
+        ReturnCode = SAMPLE_APP_TBL_OUT_OF_RANGE_ERR_CODE;
     }
 
     return ReturnCode;
@@ -443,13 +443,13 @@ int32 SAMPLE_APP_TblValidationFunc(void *TblData)
 /* Output CRC                                                      */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-void SAMPLE_APP_GetCrc(const char *TableName)
+void SAMPLE_APP_GetCrc(const char *TblName)
 {
     int32          status;
     uint32         Crc;
     CFE_TBL_Info_t TblInfoPtr;
 
-    status = CFE_TBL_GetInfo(&TblInfoPtr, TableName);
+    status = CFE_TBL_GetInfo(&TblInfoPtr, TblName);
     if (status != CFE_SUCCESS)
     {
         CFE_ES_WriteToSysLog("Sample App: Error Getting Table Info");
