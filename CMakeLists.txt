@@ -1,7 +1,6 @@
 project(CFE_SAMPLE_APP C)
 
-include_directories(fsw/mission_inc)
-include_directories(fsw/platform_inc)
+include_directories(fsw/inc)
 
 # Create the app module
 add_cfe_app(sample_app fsw/src/sample_app.c)
