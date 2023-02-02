@@ -29,10 +29,6 @@
 ** Required header files.
 */
 #include "cfe.h"
-#include "cfe_error.h"
-#include "cfe_evs.h"
-#include "cfe_sb.h"
-#include "cfe_es.h"
 
 #include "sample_app_perfids.h"
 #include "sample_app_msgids.h"
