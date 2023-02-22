@@ -39,7 +39,6 @@
  * Necessary to include these here to get the definition of the
  * "SAMPLE_APP_Data_t" typedef.
  */
-#include "sample_app_events.h"
 #include "sample_app.h"
 
 /*
