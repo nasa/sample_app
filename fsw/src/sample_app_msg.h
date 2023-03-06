@@ -19,14 +19,14 @@
 /**
  * @file
  *
- * Define SAMPLE App  Messages and info
+ * Define Sample App messages and info
  */
 
 #ifndef SAMPLE_APP_MSG_H
 #define SAMPLE_APP_MSG_H
 
 /*
-** SAMPLE App command codes
+** Sample App command codes
 */
 #define SAMPLE_APP_NOOP_CC           0
 #define SAMPLE_APP_RESET_COUNTERS_CC 1
@@ -55,7 +55,7 @@ typedef SAMPLE_APP_NoArgsCmd_t SAMPLE_APP_ProcessCmd_t;
 
 /*************************************************************************/
 /*
-** Type definition (SAMPLE App housekeeping)
+** Type definition (Sample App housekeeping)
 */
 
 typedef struct

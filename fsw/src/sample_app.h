@@ -19,7 +19,7 @@
 /**
  * @file
  *
- * Main header file for the SAMPLE application
+ * Main header file for the Sample application
  */
 
 #ifndef SAMPLE_APP_H
