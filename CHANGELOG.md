@@ -1,5 +1,9 @@
 # Changelog
 
+## Development Build: v1.3.0-rc4+dev39
+- update cmake recipe
+- See <https://github.com/nasa/sample_app/pull/203>
+
 ## Development Build: v1.3.0-rc4+dev35
 - Remove redundant comments
 - Create CHANGELOG.md
