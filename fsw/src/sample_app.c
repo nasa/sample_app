@@ -74,8 +74,14 @@ void SAMPLE_APP_Main(void)
         */
         CFE_ES_PerfLogExit(SAMPLE_APP_PERF_ID);
 
-        /* Pend on receipt of command packet */
-        status = CFE_SB_ReceiveBuffer(&SBBufPtr, SAMPLE_APP_Data.CommandPipe, CFE_SB_PEND_FOREVER);
+        /*
+         * Pend on receipt of command packet
+         *
+         * Note that apps should not wait forever here, to ensure
+         * that the status of CFE_ES_RunLoop() is also checked periodically,
+         * even if no software bus messages arrive.
+         */
+        status = CFE_SB_ReceiveBuffer(&SBBufPtr, SAMPLE_APP_Data.CommandPipe, SAMPLE_APP_SB_WAIT_PERIOD);
 
         /*
         ** Performance Log Entry Stamp
@@ -86,8 +92,9 @@ void SAMPLE_APP_Main(void)
         {
             SAMPLE_APP_ProcessCommandPacket(SBBufPtr);
         }
-        else
+        else if (status != CFE_SB_TIME_OUT)
         {
+            /* Timeout is normal if no activity, but anything else constitutes a real error */
             CFE_EVS_SendEvent(SAMPLE_APP_PIPE_ERR_EID, CFE_EVS_EventType_ERROR,
                               "SAMPLE APP: SB Pipe Read Error, App Will Exit");
 
