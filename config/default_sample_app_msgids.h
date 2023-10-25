@@ -18,39 +18,15 @@
 
 /**
  * @file
- *
- * Common definitions for all sample_app coverage tests
+ *   SAMPLE_APP Application Message IDs
  */
+#ifndef SAMPLE_APP_MSGIDS_H
+#define SAMPLE_APP_MSGIDS_H
 
-#ifndef SAMPLE_APP_COVERAGETEST_COMMON_H
-#define SAMPLE_APP_COVERAGETEST_COMMON_H
+/* V1 Command Message IDs must be 0x18xx */
+#define SAMPLE_APP_CMD_MID     0x1882
+#define SAMPLE_APP_SEND_HK_MID 0x1883
+/* V1 Telemetry Message IDs must be 0x08xx */
+#define SAMPLE_APP_HK_TLM_MID 0x0883
 
-/*
- * Includes
- */
-
-#include "utassert.h"
-#include "uttest.h"
-#include "utstubs.h"
-
-#include "cfe.h"
-#include "sample_app_eventids.h"
-#include "sample_app.h"
-#include "sample_app_tbl.h"
-
-/*
- * Macro to add a test case to the list of tests to execute
- */
-#define ADD_TEST(test) UtTest_Add((Test_##test), Sample_UT_Setup, Sample_UT_TearDown, #test)
-
-/*
- * Setup function prior to every test
- */
-void Sample_UT_Setup(void);
-
-/*
- * Teardown function after every test
- */
-void Sample_UT_TearDown(void);
-
-#endif /* SAMPLE_APP_COVERAGETEST_COMMON_H */
+#endif

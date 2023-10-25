@@ -19,38 +19,18 @@
 /**
  * @file
  *
- * Common definitions for all sample_app coverage tests
+ * SAMPLE_APP Application Mission Configuration Header File
+ *
+ * This is a compatibility header for the "mission_cfg.h" file that has
+ * traditionally provided public config definitions for each CFS app.
+ *
+ * @note This file may be overridden/superceded by mission-provided defintions
+ * either by overriding this header or by generating definitions from a command/data
+ * dictionary tool.
  */
+#ifndef SAMPLE_APP_MISSION_CFG_H
+#define SAMPLE_APP_MISSION_CFG_H
 
-#ifndef SAMPLE_APP_COVERAGETEST_COMMON_H
-#define SAMPLE_APP_COVERAGETEST_COMMON_H
+/* Placeholder - SAMPLE_APP currently has no mission-scope config options */
 
-/*
- * Includes
- */
-
-#include "utassert.h"
-#include "uttest.h"
-#include "utstubs.h"
-
-#include "cfe.h"
-#include "sample_app_eventids.h"
-#include "sample_app.h"
-#include "sample_app_tbl.h"
-
-/*
- * Macro to add a test case to the list of tests to execute
- */
-#define ADD_TEST(test) UtTest_Add((Test_##test), Sample_UT_Setup, Sample_UT_TearDown, #test)
-
-/*
- * Setup function prior to every test
- */
-void Sample_UT_Setup(void);
-
-/*
- * Teardown function after every test
- */
-void Sample_UT_TearDown(void);
-
-#endif /* SAMPLE_APP_COVERAGETEST_COMMON_H */
+#endif

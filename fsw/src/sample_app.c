@@ -24,10 +24,10 @@
 /*
 ** Include Files:
 */
-#include "sample_app_events.h"
+#include "sample_app_eventids.h"
 #include "sample_app_version.h"
 #include "sample_app.h"
-#include "sample_app_table.h"
+#include "sample_app_tbl.h"
 
 /* The sample_lib module provides the SAMPLE_LIB_Function() prototype */
 #include <string.h>
@@ -239,7 +239,7 @@ void SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr)
     CFE_MSG_GetFcnCode(&SBBufPtr->Msg, &CommandCode);
 
     /*
-    ** Process "known" SAMPLE app ground commands
+    ** Process "known" Sample App ground commands
     */
     switch (CommandCode)
     {

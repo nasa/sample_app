@@ -18,39 +18,28 @@
 
 /**
  * @file
+ *   Specification for the SAMPLE_APP table related
+ *   constant definitions.
  *
- * Common definitions for all sample_app coverage tests
+ * @note
+ *   These Macro definitions have been put in this file (instead of
+ *   sample_app_tbl.h). DO NOT PUT ANY TYPEDEFS OR
+ *   STRUCTURE DEFINITIONS IN THIS FILE!
+ *   ADD THEM TO sample_app_tbl.h IF NEEDED!
  */
+#ifndef SAMPLE_APP_TBLDEFS_H
+#define SAMPLE_APP_TBLDEFS_H
 
-#ifndef SAMPLE_APP_COVERAGETEST_COMMON_H
-#define SAMPLE_APP_COVERAGETEST_COMMON_H
+#include "common_types.h"
+#include "sample_app_mission_cfg.h"
 
 /*
- * Includes
- */
+** Example Table structure
+*/
+typedef struct
+{
+    uint16 Int1;
+    uint16 Int2;
+} SAMPLE_APP_Table_t;
 
-#include "utassert.h"
-#include "uttest.h"
-#include "utstubs.h"
-
-#include "cfe.h"
-#include "sample_app_eventids.h"
-#include "sample_app.h"
-#include "sample_app_tbl.h"
-
-/*
- * Macro to add a test case to the list of tests to execute
- */
-#define ADD_TEST(test) UtTest_Add((Test_##test), Sample_UT_Setup, Sample_UT_TearDown, #test)
-
-/*
- * Setup function prior to every test
- */
-void Sample_UT_Setup(void);
-
-/*
- * Teardown function after every test
- */
-void Sample_UT_TearDown(void);
-
-#endif /* SAMPLE_APP_COVERAGETEST_COMMON_H */
+#endif

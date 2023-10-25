@@ -18,20 +18,27 @@
 
 /**
  * @file
+ *   SAMPLE_APP Application Private Config Definitions
  *
- * Define SAMPLE App Events IDs
+ * This provides default values for configurable items that are internal
+ * to this module and do NOT affect the interface(s) of this module.  Changes
+ * to items in this file only affect the local module and will be transparent
+ * to external entities that are using the public interface(s).
+ *
+ * @note This file may be overridden/superceded by mission-provided defintions
+ * either by overriding this header or by generating definitions from a command/data
+ * dictionary tool.
  */
+#ifndef SAMPLE_APP_INTERNAL_CFG_H
+#define SAMPLE_APP_INTERNAL_CFG_H
 
-#ifndef SAMPLE_APP_EVENTS_H
-#define SAMPLE_APP_EVENTS_H
+/***********************************************************************/
+#define SAMPLE_APP_PIPE_DEPTH 32 /* Depth of the Command Pipe for Application */
 
-#define SAMPLE_APP_RESERVED_EID          0
-#define SAMPLE_APP_STARTUP_INF_EID       1
-#define SAMPLE_APP_COMMAND_ERR_EID       2
-#define SAMPLE_APP_COMMANDNOP_INF_EID    3
-#define SAMPLE_APP_COMMANDRST_INF_EID    4
-#define SAMPLE_APP_INVALID_MSGID_ERR_EID 5
-#define SAMPLE_APP_LEN_ERR_EID           6
-#define SAMPLE_APP_PIPE_ERR_EID          7
+#define SAMPLE_APP_NUMBER_OF_TABLES 1 /* Number of Table(s) */
 
-#endif /* SAMPLE_APP_EVENTS_H */
+#define SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE -1
+
+#define SAMPLE_APP_TBL_ELEMENT_1_MAX 10
+
+#endif

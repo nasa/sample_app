@@ -19,38 +19,19 @@
 /**
  * @file
  *
- * Common definitions for all sample_app coverage tests
+ * Define Sample App Events IDs
  */
 
-#ifndef SAMPLE_APP_COVERAGETEST_COMMON_H
-#define SAMPLE_APP_COVERAGETEST_COMMON_H
+#ifndef SAMPLE_APP_EVENTS_H
+#define SAMPLE_APP_EVENTS_H
 
-/*
- * Includes
- */
+#define SAMPLE_APP_RESERVED_EID          0
+#define SAMPLE_APP_STARTUP_INF_EID       1
+#define SAMPLE_APP_COMMAND_ERR_EID       2
+#define SAMPLE_APP_COMMANDNOP_INF_EID    3
+#define SAMPLE_APP_COMMANDRST_INF_EID    4
+#define SAMPLE_APP_INVALID_MSGID_ERR_EID 5
+#define SAMPLE_APP_LEN_ERR_EID           6
+#define SAMPLE_APP_PIPE_ERR_EID          7
 
-#include "utassert.h"
-#include "uttest.h"
-#include "utstubs.h"
-
-#include "cfe.h"
-#include "sample_app_eventids.h"
-#include "sample_app.h"
-#include "sample_app_tbl.h"
-
-/*
- * Macro to add a test case to the list of tests to execute
- */
-#define ADD_TEST(test) UtTest_Add((Test_##test), Sample_UT_Setup, Sample_UT_TearDown, #test)
-
-/*
- * Setup function prior to every test
- */
-void Sample_UT_Setup(void);
-
-/*
- * Teardown function after every test
- */
-void Sample_UT_TearDown(void);
-
-#endif /* SAMPLE_APP_COVERAGETEST_COMMON_H */
+#endif /* SAMPLE_APP_EVENTS_H */

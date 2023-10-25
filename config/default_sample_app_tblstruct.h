@@ -18,20 +18,28 @@
 
 /**
  * @file
+ *   Specification for the SAMPLE_APP table structures
  *
- * Define sample app table
+ * Provides default definitions for SAMPLE_APP table structures
+ *
+ * @note This file may be overridden/superceded by mission-provided defintions
+ * either by overriding this header or by generating definitions from a command/data
+ * dictionary tool.
  */
+#ifndef SAMPLE_APP_TBLSTRUCT_H
+#define SAMPLE_APP_TBLSTRUCT_H
 
-#ifndef SAMPLE_APP_TABLE_H
-#define SAMPLE_APP_TABLE_H
+/*************************************************************************
+ * Includes
+ *************************************************************************/
+#include "sample_app_tbldefs.h"
 
-/*
-** Table structure
-*/
-typedef struct
-{
-    uint16 Int1;
-    uint16 Int2;
-} SAMPLE_APP_Table_t;
+/************************************************************************
+ * Macro Definitions
+ ************************************************************************/
 
-#endif /* SAMPLE_APP_TABLE_H */
+/*************************************************************************
+ * Type Definitions
+ *************************************************************************/
+
+#endif

@@ -18,39 +18,27 @@
 
 /**
  * @file
+ *   Specification for the SAMPLE_APP command and telemetry
+ *   message constant definitions.
  *
- * Common definitions for all sample_app coverage tests
+ *  For SAMPLE_APP this is only the function/command code definitions
  */
+#ifndef SAMPLE_APP_MSGDEFS_H
+#define SAMPLE_APP_MSGDEFS_H
 
-#ifndef SAMPLE_APP_COVERAGETEST_COMMON_H
-#define SAMPLE_APP_COVERAGETEST_COMMON_H
+#include "common_types.h"
+#include "sample_app_fcncodes.h"
 
+/*************************************************************************/
 /*
- * Includes
- */
+** Type definition (Sample App housekeeping)
+*/
 
-#include "utassert.h"
-#include "uttest.h"
-#include "utstubs.h"
+typedef struct
+{
+    uint8 CommandErrorCounter;
+    uint8 CommandCounter;
+    uint8 spare[2];
+} SAMPLE_APP_HkTlm_Payload_t;
 
-#include "cfe.h"
-#include "sample_app_eventids.h"
-#include "sample_app.h"
-#include "sample_app_tbl.h"
-
-/*
- * Macro to add a test case to the list of tests to execute
- */
-#define ADD_TEST(test) UtTest_Add((Test_##test), Sample_UT_Setup, Sample_UT_TearDown, #test)
-
-/*
- * Setup function prior to every test
- */
-void Sample_UT_Setup(void);
-
-/*
- * Teardown function after every test
- */
-void Sample_UT_TearDown(void);
-
-#endif /* SAMPLE_APP_COVERAGETEST_COMMON_H */
+#endif
