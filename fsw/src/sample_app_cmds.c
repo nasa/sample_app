@@ -44,7 +44,7 @@ int32 SAMPLE_APP_Noop(const SAMPLE_APP_NoopCmd_t *Msg)
 {
     SAMPLE_APP_Data.CmdCounter++;
 
-    CFE_EVS_SendEvent(SAMPLE_APP_COMMANDNOP_INF_EID, CFE_EVS_EventType_INFORMATION, "SAMPLE: NOOP command %s",
+    CFE_EVS_SendEvent(SAMPLE_APP_NOOP_INF_EID, CFE_EVS_EventType_INFORMATION, "SAMPLE: NOOP command %s",
                       SAMPLE_APP_VERSION);
 
     return CFE_SUCCESS;
@@ -62,7 +62,7 @@ int32 SAMPLE_APP_ResetCounters(const SAMPLE_APP_ResetCountersCmd_t *Msg)
     SAMPLE_APP_Data.CmdCounter = 0;
     SAMPLE_APP_Data.ErrCounter = 0;
 
-    CFE_EVS_SendEvent(SAMPLE_APP_COMMANDRST_INF_EID, CFE_EVS_EventType_INFORMATION, "SAMPLE: RESET command");
+    CFE_EVS_SendEvent(SAMPLE_APP_RESET_INF_EID, CFE_EVS_EventType_INFORMATION, "SAMPLE: RESET command");
 
     return CFE_SUCCESS;
 }

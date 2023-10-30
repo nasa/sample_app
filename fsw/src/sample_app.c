@@ -191,7 +191,7 @@ int32 SAMPLE_APP_Init(void)
             status = CFE_TBL_Load(SAMPLE_APP_Data.TblHandles[0], CFE_TBL_SRC_FILE, SAMPLE_APP_TABLE_FILE);
         }
 
-        CFE_EVS_SendEvent(SAMPLE_APP_STARTUP_INF_EID, CFE_EVS_EventType_INFORMATION, "Sample App Initialized.%s",
+        CFE_EVS_SendEvent(SAMPLE_APP_INIT_INF_EID, CFE_EVS_EventType_INFORMATION, "Sample App Initialized.%s",
                           SAMPLE_APP_VERSION_STRING);
     }
 
