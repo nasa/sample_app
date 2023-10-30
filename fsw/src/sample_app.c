@@ -24,14 +24,14 @@
 /*
 ** Include Files:
 */
+#include <string.h>
+
+#include "sample_app.h"
+#include "sample_app_cmds.h"
+#include "sample_app_utils.h"
 #include "sample_app_events.h"
 #include "sample_app_version.h"
-#include "sample_app.h"
 #include "sample_app_table.h"
-
-/* The sample_lib module provides the SAMPLE_LIB_Function() prototype */
-#include <string.h>
-#include "sample_lib.h"
 
 /*
 ** global data
@@ -307,157 +307,4 @@ int32 SAMPLE_APP_ReportHousekeeping(const CFE_MSG_CommandHeader_t *Msg)
     }
 
     return CFE_SUCCESS;
-}
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*                                                                            */
-/* Sample App NOOP command                                                    */
-/*                                                                            */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-int32 SAMPLE_APP_Noop(const SAMPLE_APP_NoopCmd_t *Msg)
-{
-    SAMPLE_APP_Data.CmdCounter++;
-
-    CFE_EVS_SendEvent(SAMPLE_APP_NOOP_INF_EID, CFE_EVS_EventType_INFORMATION, "SAMPLE: NOOP command %s",
-                      SAMPLE_APP_VERSION);
-
-    return CFE_SUCCESS;
-}
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*                                                                            */
-/*  Purpose:                                                                  */
-/*         This function resets all the global counter variables that are     */
-/*         part of the task telemetry.                                        */
-/*                                                                            */
-/* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
-int32 SAMPLE_APP_ResetCounters(const SAMPLE_APP_ResetCountersCmd_t *Msg)
-{
-    SAMPLE_APP_Data.CmdCounter = 0;
-    SAMPLE_APP_Data.ErrCounter = 0;
-
-    CFE_EVS_SendEvent(SAMPLE_APP_RESET_INF_EID, CFE_EVS_EventType_INFORMATION, "SAMPLE: RESET command");
-
-    return CFE_SUCCESS;
-}
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*                                                                            */
-/*  Purpose:                                                                  */
-/*         This function processes Ground Station Commands                    */
-/*                                                                            */
-/* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
-int32 SAMPLE_APP_Process(const SAMPLE_APP_ProcessCmd_t *Msg)
-{
-    int32               status;
-    SAMPLE_APP_Table_t *TblPtr;
-    const char *        TableName = "SAMPLE_APP.SampleAppTable";
-
-    /* Sample Use of Table */
-
-    status = CFE_TBL_GetAddress((void *)&TblPtr, SAMPLE_APP_Data.TblHandles[0]);
-
-    if (status < CFE_SUCCESS)
-    {
-        CFE_ES_WriteToSysLog("Sample App: Fail to get table address: 0x%08lx", (unsigned long)status);
-    }
-    else
-    {
-        CFE_ES_WriteToSysLog("Sample App: Table Value 1: %d  Value 2: %d", TblPtr->Int1, TblPtr->Int2);
-
-        SAMPLE_APP_GetCrc(TableName);
-
-        status = CFE_TBL_ReleaseAddress(SAMPLE_APP_Data.TblHandles[0]);
-        if (status != CFE_SUCCESS)
-        {
-            CFE_ES_WriteToSysLog("Sample App: Fail to release table address: 0x%08lx", (unsigned long)status);
-        }
-        else
-        {
-            /* Invoke a function provided by SAMPLE_LIB */
-            SAMPLE_LIB_Function();
-        }
-    }
-
-    return status;
-}
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*                                                                            */
-/* Verify command packet length                                               */
-/*                                                                            */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-bool SAMPLE_APP_VerifyCmdLength(CFE_MSG_Message_t *MsgPtr, size_t ExpectedLength)
-{
-    bool              result       = true;
-    size_t            ActualLength = 0;
-    CFE_SB_MsgId_t    MsgId        = CFE_SB_INVALID_MSG_ID;
-    CFE_MSG_FcnCode_t FcnCode      = 0;
-
-    CFE_MSG_GetSize(MsgPtr, &ActualLength);
-
-    /*
-    ** Verify the command packet length.
-    */
-    if (ExpectedLength != ActualLength)
-    {
-        CFE_MSG_GetMsgId(MsgPtr, &MsgId);
-        CFE_MSG_GetFcnCode(MsgPtr, &FcnCode);
-
-        CFE_EVS_SendEvent(SAMPLE_APP_CMD_LEN_ERR_EID, CFE_EVS_EventType_ERROR,
-                          "Invalid Msg length: ID = 0x%X,  CC = %u, Len = %u, Expected = %u",
-                          (unsigned int)CFE_SB_MsgIdToValue(MsgId), (unsigned int)FcnCode, (unsigned int)ActualLength,
-                          (unsigned int)ExpectedLength);
-
-        result = false;
-
-        SAMPLE_APP_Data.ErrCounter++;
-    }
-
-    return result;
-}
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*                                                                            */
-/* Verify contents of First Table buffer contents                             */
-/*                                                                            */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-int32 SAMPLE_APP_TblValidationFunc(void *TblData)
-{
-    int32               ReturnCode = CFE_SUCCESS;
-    SAMPLE_APP_Table_t *TblDataPtr = (SAMPLE_APP_Table_t *)TblData;
-
-    /*
-    ** Sample Table Validation
-    */
-    if (TblDataPtr->Int1 > SAMPLE_APP_TBL_ELEMENT_1_MAX)
-    {
-        /* First element is out of range, return an appropriate error code */
-        ReturnCode = SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE;
-    }
-
-    return ReturnCode;
-}
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*                                                                            */
-/* Output CRC                                                                 */
-/*                                                                            */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-void SAMPLE_APP_GetCrc(const char *TableName)
-{
-    int32          status;
-    uint32         Crc;
-    CFE_TBL_Info_t TblInfoPtr;
-
-    status = CFE_TBL_GetInfo(&TblInfoPtr, TableName);
-    if (status != CFE_SUCCESS)
-    {
-        CFE_ES_WriteToSysLog("Sample App: Error Getting Table Info");
-    }
-    else
-    {
-        Crc = TblInfoPtr.Crc;
-        CFE_ES_WriteToSysLog("Sample App: CRC: 0x%08lX\n\n", (unsigned long)Crc);
-    }
 }

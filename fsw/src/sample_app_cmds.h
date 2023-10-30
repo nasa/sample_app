@@ -18,41 +18,19 @@
 
 /**
  * @file
- *
- * Common definitions for all sample_app coverage tests
+ *   This file contains the prototypes for the Sample App Ground Command-handling functions
  */
 
-#ifndef SAMPLE_APP_COVERAGETEST_COMMON_H
-#define SAMPLE_APP_COVERAGETEST_COMMON_H
+#ifndef SAMPLE_APP_CMDS_H
+#define SAMPLE_APP_CMDS_H
 
 /*
- * Includes
- */
-
-#include "utassert.h"
-#include "uttest.h"
-#include "utstubs.h"
-
-#include "cfe.h"
+** Required header files.
+*/
 #include "sample_app.h"
-#include "sample_app_cmds.h"
-#include "sample_app_utils.h"
-#include "sample_app_events.h"
-#include "sample_app_table.h"
 
-/*
- * Macro to add a test case to the list of tests to execute
- */
-#define ADD_TEST(test) UtTest_Add((Test_##test), Sample_UT_Setup, Sample_UT_TearDown, #test)
+int32 SAMPLE_APP_ResetCounters(const SAMPLE_APP_ResetCountersCmd_t *Msg);
+int32 SAMPLE_APP_Process(const SAMPLE_APP_ProcessCmd_t *Msg);
+int32 SAMPLE_APP_Noop(const SAMPLE_APP_NoopCmd_t *Msg);
 
-/*
- * Setup function prior to every test
- */
-void Sample_UT_Setup(void);
-
-/*
- * Teardown function after every test
- */
-void Sample_UT_TearDown(void);
-
-#endif /* SAMPLE_APP_COVERAGETEST_COMMON_H */
+#endif /* SAMPLE_APP_CMDS_H */
