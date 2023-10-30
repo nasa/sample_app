@@ -54,7 +54,7 @@ void SAMPLE_APP_Main(void)
     CFE_ES_PerfLogEntry(SAMPLE_APP_PERF_ID);
 
     /*
-    ** Perform application specific initialization
+    ** Perform application-specific initialization
     ** If the Initialization fails, set the RunStatus to
     ** CFE_ES_RunStatus_APP_ERROR and the App will not enter the RunLoop
     */
@@ -65,7 +65,7 @@ void SAMPLE_APP_Main(void)
     }
 
     /*
-    ** SAMPLE Runloop
+    ** Sample App Runloop
     */
     while (CFE_ES_RunLoop(&SAMPLE_APP_Data.RunStatus) == true)
     {
@@ -135,73 +135,77 @@ int32 SAMPLE_APP_Init(void)
     if (status != CFE_SUCCESS)
     {
         CFE_ES_WriteToSysLog("Sample App: Error Registering Events, RC = 0x%08lX\n", (unsigned long)status);
-        return status;
-    }
-
-    /*
-    ** Initialize housekeeping packet (clear user data area).
-    */
-    CFE_MSG_Init(CFE_MSG_PTR(SAMPLE_APP_Data.HkTlm.TelemetryHeader), CFE_SB_ValueToMsgId(SAMPLE_APP_HK_TLM_MID),
-                 sizeof(SAMPLE_APP_Data.HkTlm));
-
-    /*
-    ** Create Software Bus message pipe.
-    */
-    status = CFE_SB_CreatePipe(&SAMPLE_APP_Data.CommandPipe, SAMPLE_APP_Data.PipeDepth, SAMPLE_APP_Data.PipeName);
-    if (status != CFE_SUCCESS)
-    {
-        CFE_ES_WriteToSysLog("Sample App: Error creating pipe, RC = 0x%08lX\n", (unsigned long)status);
-        return status;
-    }
-
-    /*
-    ** Subscribe to Housekeeping request commands
-    */
-    status = CFE_SB_Subscribe(CFE_SB_ValueToMsgId(SAMPLE_APP_SEND_HK_MID), SAMPLE_APP_Data.CommandPipe);
-    if (status != CFE_SUCCESS)
-    {
-        CFE_ES_WriteToSysLog("Sample App: Error Subscribing to HK request, RC = 0x%08lX\n", (unsigned long)status);
-        return status;
-    }
-
-    /*
-    ** Subscribe to ground command packets
-    */
-    status = CFE_SB_Subscribe(CFE_SB_ValueToMsgId(SAMPLE_APP_CMD_MID), SAMPLE_APP_Data.CommandPipe);
-    if (status != CFE_SUCCESS)
-    {
-        CFE_ES_WriteToSysLog("Sample App: Error Subscribing to Command, RC = 0x%08lX\n", (unsigned long)status);
-
-        return status;
-    }
-
-    /*
-    ** Register Table(s)
-    */
-    status = CFE_TBL_Register(&SAMPLE_APP_Data.TblHandles[0], "SampleAppTable", sizeof(SAMPLE_APP_Table_t),
-                              CFE_TBL_OPT_DEFAULT, SAMPLE_APP_TblValidationFunc);
-    if (status != CFE_SUCCESS)
-    {
-        CFE_ES_WriteToSysLog("Sample App: Error Registering Table, RC = 0x%08lX\n", (unsigned long)status);
-
-        return status;
     }
     else
     {
-        status = CFE_TBL_Load(SAMPLE_APP_Data.TblHandles[0], CFE_TBL_SRC_FILE, SAMPLE_APP_TABLE_FILE);
+        /*
+         ** Initialize housekeeping packet (clear user data area).
+         */
+        CFE_MSG_Init(CFE_MSG_PTR(SAMPLE_APP_Data.HkTlm.TelemetryHeader), CFE_SB_ValueToMsgId(SAMPLE_APP_HK_TLM_MID),
+                     sizeof(SAMPLE_APP_Data.HkTlm));
+
+        /*
+         ** Create Software Bus message pipe.
+         */
+        status = CFE_SB_CreatePipe(&SAMPLE_APP_Data.CommandPipe, SAMPLE_APP_Data.PipeDepth, SAMPLE_APP_Data.PipeName);
+        if (status != CFE_SUCCESS)
+        {
+            CFE_ES_WriteToSysLog("Sample App: Error creating pipe, RC = 0x%08lX\n", (unsigned long)status);
+        }
     }
 
-    CFE_EVS_SendEvent(SAMPLE_APP_INIT_INF_EID, CFE_EVS_EventType_INFORMATION, "SAMPLE App Initialized.%s",
-                      SAMPLE_APP_VERSION_STRING);
+    if (status == CFE_SUCCESS)
+    {
+        /*
+        ** Subscribe to Housekeeping request commands
+        */
+        status = CFE_SB_Subscribe(CFE_SB_ValueToMsgId(SAMPLE_APP_SEND_HK_MID), SAMPLE_APP_Data.CommandPipe);
+        if (status != CFE_SUCCESS)
+        {
+            CFE_ES_WriteToSysLog("Sample App: Error Subscribing to HK request, RC = 0x%08lX\n", (unsigned long)status);
+        }
+    }
 
-    return CFE_SUCCESS;
+    if (status == CFE_SUCCESS)
+    {
+        /*
+        ** Subscribe to ground command packets
+        */
+        status = CFE_SB_Subscribe(CFE_SB_ValueToMsgId(SAMPLE_APP_CMD_MID), SAMPLE_APP_Data.CommandPipe);
+        if (status != CFE_SUCCESS)
+        {
+            CFE_ES_WriteToSysLog("Sample App: Error Subscribing to Command, RC = 0x%08lX\n", (unsigned long)status);
+        }
+    }
+
+    if (status == CFE_SUCCESS)
+    {
+        /*
+        ** Register Table(s)
+        */
+        status = CFE_TBL_Register(&SAMPLE_APP_Data.TblHandles[0], "SampleAppTable", sizeof(SAMPLE_APP_Table_t),
+                                  CFE_TBL_OPT_DEFAULT, SAMPLE_APP_TblValidationFunc);
+        if (status != CFE_SUCCESS)
+        {
+            CFE_ES_WriteToSysLog("Sample App: Error Registering Table, RC = 0x%08lX\n", (unsigned long)status);
+        }
+        else
+        {
+            status = CFE_TBL_Load(SAMPLE_APP_Data.TblHandles[0], CFE_TBL_SRC_FILE, SAMPLE_APP_TABLE_FILE);
+        }
+
+        CFE_EVS_SendEvent(SAMPLE_APP_STARTUP_INF_EID, CFE_EVS_EventType_INFORMATION, "Sample App Initialized.%s",
+                          SAMPLE_APP_VERSION_STRING);
+    }
+
+    return status;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 /*                                                                            */
 /*  Purpose:                                                                  */
-/*     This routine will process any packet that is received on the SAMPLE    */
-/*     command pipe.                                                          */
+/*     This routine will process any packet that is received on the Sample    */
+/*     App command pipe.                                                      */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
 void SAMPLE_APP_ProcessCommandPacket(CFE_SB_Buffer_t *SBBufPtr)
@@ -229,7 +233,7 @@ void SAMPLE_APP_ProcessCommandPacket(CFE_SB_Buffer_t *SBBufPtr)
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 /*                                                                            */
-/* SAMPLE ground commands                                                     */
+/* Process Ground Commands                                                    */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 void SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr)
@@ -239,7 +243,7 @@ void SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr)
     CFE_MSG_GetFcnCode(&SBBufPtr->Msg, &CommandCode);
 
     /*
-    ** Process "known" SAMPLE app ground commands
+    ** Process "known" Sample App ground commands
     */
     switch (CommandCode)
     {
@@ -248,7 +252,6 @@ void SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr)
             {
                 SAMPLE_APP_Noop((SAMPLE_APP_NoopCmd_t *)SBBufPtr);
             }
-
             break;
 
         case SAMPLE_APP_RESET_COUNTERS_CC:
@@ -256,7 +259,6 @@ void SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr)
             {
                 SAMPLE_APP_ResetCounters((SAMPLE_APP_ResetCountersCmd_t *)SBBufPtr);
             }
-
             break;
 
         case SAMPLE_APP_PROCESS_CC:
@@ -264,7 +266,6 @@ void SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr)
             {
                 SAMPLE_APP_Process((SAMPLE_APP_ProcessCmd_t *)SBBufPtr);
             }
-
             break;
 
         /* default case already found during FC vs length test */
@@ -279,9 +280,10 @@ void SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr)
 /*                                                                            */
 /*  Purpose:                                                                  */
 /*         This function is triggered in response to a task telemetry request */
-/*         from the housekeeping task. This function will gather the Apps     */
+/*         from the housekeeping task. This function will gather the App's    */
 /*         telemetry, packetize it and send it to the housekeeping task via   */
-/*         the software bus                                                   */
+/*         the software bus.                                                  */
+/*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
 int32 SAMPLE_APP_ReportHousekeeping(const CFE_MSG_CommandHeader_t *Msg)
 {
@@ -312,7 +314,7 @@ int32 SAMPLE_APP_ReportHousekeeping(const CFE_MSG_CommandHeader_t *Msg)
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 /*                                                                            */
-/* SAMPLE NOOP commands                                                       */
+/* Sample App NOOP command                                                    */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 int32 SAMPLE_APP_Noop(const SAMPLE_APP_NoopCmd_t *Msg)
@@ -345,7 +347,7 @@ int32 SAMPLE_APP_ResetCounters(const SAMPLE_APP_ResetCountersCmd_t *Msg)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 /*                                                                            */
 /*  Purpose:                                                                  */
-/*         This function Process Ground Station Command                       */
+/*         This function processes Ground Station Commands                    */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
 int32 SAMPLE_APP_Process(const SAMPLE_APP_ProcessCmd_t *Msg)
@@ -361,24 +363,26 @@ int32 SAMPLE_APP_Process(const SAMPLE_APP_ProcessCmd_t *Msg)
     if (status < CFE_SUCCESS)
     {
         CFE_ES_WriteToSysLog("Sample App: Fail to get table address: 0x%08lx", (unsigned long)status);
-        return status;
     }
-
-    CFE_ES_WriteToSysLog("Sample App: Table Value 1: %d  Value 2: %d", TblPtr->Int1, TblPtr->Int2);
-
-    SAMPLE_APP_GetCrc(TableName);
-
-    status = CFE_TBL_ReleaseAddress(SAMPLE_APP_Data.TblHandles[0]);
-    if (status != CFE_SUCCESS)
+    else
     {
-        CFE_ES_WriteToSysLog("Sample App: Fail to release table address: 0x%08lx", (unsigned long)status);
-        return status;
+        CFE_ES_WriteToSysLog("Sample App: Table Value 1: %d  Value 2: %d", TblPtr->Int1, TblPtr->Int2);
+
+        SAMPLE_APP_GetCrc(TableName);
+
+        status = CFE_TBL_ReleaseAddress(SAMPLE_APP_Data.TblHandles[0]);
+        if (status != CFE_SUCCESS)
+        {
+            CFE_ES_WriteToSysLog("Sample App: Fail to release table address: 0x%08lx", (unsigned long)status);
+        }
+        else
+        {
+            /* Invoke a function provided by SAMPLE_LIB */
+            SAMPLE_LIB_Function();
+        }
     }
 
-    /* Invoke a function provided by SAMPLE_APP_LIB */
-    SAMPLE_LIB_Function();
-
-    return CFE_SUCCESS;
+    return status;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
@@ -416,11 +420,11 @@ bool SAMPLE_APP_VerifyCmdLength(CFE_MSG_Message_t *MsgPtr, size_t ExpectedLength
     return result;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*                                                                 */
-/* Verify contents of First Table buffer contents                  */
-/*                                                                 */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
+/*                                                                            */
+/* Verify contents of First Table buffer contents                             */
+/*                                                                            */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 int32 SAMPLE_APP_TblValidationFunc(void *TblData)
 {
     int32               ReturnCode = CFE_SUCCESS;
@@ -438,11 +442,11 @@ int32 SAMPLE_APP_TblValidationFunc(void *TblData)
     return ReturnCode;
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*                                                                 */
-/* Output CRC                                                      */
-/*                                                                 */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
+/*                                                                            */
+/* Output CRC                                                                 */
+/*                                                                            */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 void SAMPLE_APP_GetCrc(const char *TableName)
 {
     int32          status;

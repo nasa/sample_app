@@ -19,7 +19,7 @@
 /**
  * @file
  *
- * Define SAMPLE App Events IDs
+ * Define Sample App Events IDs
  */
 
 #ifndef SAMPLE_APP_EVENTS_H
