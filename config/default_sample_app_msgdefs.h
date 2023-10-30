@@ -18,33 +18,27 @@
 
 /**
  * @file
+ *   Specification for the SAMPLE_APP command and telemetry
+ *   message constant definitions.
  *
- *
- * Purpose:
- * Extra scaffolding functions for the sample_app unit test
- *
- * Notes:
- * This is an extra UT-specific extern declaration
- * to obtain access to an internal data structure
- *
- * UT often needs to modify internal data structures in ways that
- * actual applications never would (bypassing the normal API) in
- * order to exercise or set up for off-nominal cases.
+ *  For SAMPLE_APP this is only the function/command code definitions
  */
+#ifndef SAMPLE_APP_MSGDEFS_H
+#define SAMPLE_APP_MSGDEFS_H
 
-#ifndef UT_SAMPLE_APP_H
-#define UT_SAMPLE_APP_H
+#include "common_types.h"
+#include "sample_app_fcncodes.h"
 
+/*************************************************************************/
 /*
- * Necessary to include these here to get the definition of the
- * "SAMPLE_APP_Data_t" typedef.
- */
-#include "sample_app_eventids.h"
-#include "sample_app.h"
+** Type definition (Sample App housekeeping)
+*/
 
-/*
- * Allow UT access to the global "SAMPLE_APP_Data" object.
- */
-extern SAMPLE_APP_Data_t SAMPLE_APP_Data;
+typedef struct
+{
+    uint8 CommandErrorCounter;
+    uint8 CommandCounter;
+    uint8 spare[2];
+} SAMPLE_APP_HkTlm_Payload_t;
 
-#endif /* UT_SAMPLE_APP_H */
+#endif

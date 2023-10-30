@@ -17,7 +17,7 @@
  ************************************************************************/
 
 #include "cfe_tbl_filedef.h" /* Required to obtain the CFE_TBL_FILEDEF macro definition */
-#include "sample_app_table.h"
+#include "sample_app_tbl.h"
 
 /*
 ** The following is an example of the declaration statement that defines the desired

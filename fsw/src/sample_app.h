@@ -19,7 +19,7 @@
 /**
  * @file
  *
- * Main header file for the SAMPLE application
+ * Main header file for the Sample application
  */
 
 #ifndef SAMPLE_APP_H
@@ -29,26 +29,14 @@
 ** Required header files.
 */
 #include "cfe.h"
-#include "cfe_error.h"
-#include "cfe_evs.h"
-#include "cfe_sb.h"
-#include "cfe_es.h"
+
+#include "sample_app_mission_cfg.h"
+#include "sample_app_platform_cfg.h"
 
 #include "sample_app_perfids.h"
 #include "sample_app_msgids.h"
 #include "sample_app_msg.h"
 
-/***********************************************************************/
-#define SAMPLE_APP_PIPE_DEPTH 32 /* Depth of the Command Pipe for Application */
-
-#define SAMPLE_APP_NUMBER_OF_TABLES 1 /* Number of Table(s) */
-
-/* Define filenames of default data images for tables */
-#define SAMPLE_APP_TABLE_FILE "/cf/sample_app_tbl.tbl"
-
-#define SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE -1
-
-#define SAMPLE_APP_TBL_ELEMENT_1_MAX 10
 /************************************************************************
 ** Type Definitions
 *************************************************************************/
@@ -88,6 +76,11 @@ typedef struct
     CFE_TBL_Handle_t TblHandles[SAMPLE_APP_NUMBER_OF_TABLES];
 } SAMPLE_APP_Data_t;
 
+/*
+** Global data structure
+*/
+extern SAMPLE_APP_Data_t SAMPLE_APP_Data;
+
 /****************************************************************************/
 /*
 ** Local function prototypes.
@@ -100,13 +93,5 @@ int32 SAMPLE_APP_Init(void);
 void  SAMPLE_APP_ProcessCommandPacket(CFE_SB_Buffer_t *SBBufPtr);
 void  SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr);
 int32 SAMPLE_APP_ReportHousekeeping(const CFE_MSG_CommandHeader_t *Msg);
-int32 SAMPLE_APP_ResetCounters(const SAMPLE_APP_ResetCountersCmd_t *Msg);
-int32 SAMPLE_APP_Process(const SAMPLE_APP_ProcessCmd_t *Msg);
-int32 SAMPLE_APP_Noop(const SAMPLE_APP_NoopCmd_t *Msg);
-void  SAMPLE_APP_GetCrc(const char *TableName);
-
-int32 SAMPLE_APP_TblValidationFunc(void *TblData);
-
-bool SAMPLE_APP_VerifyCmdLength(CFE_MSG_Message_t *MsgPtr, size_t ExpectedLength);
 
 #endif /* SAMPLE_APP_H */

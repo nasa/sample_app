@@ -18,33 +18,19 @@
 
 /**
  * @file
- *
- *
- * Purpose:
- * Extra scaffolding functions for the sample_app unit test
- *
- * Notes:
- * This is an extra UT-specific extern declaration
- * to obtain access to an internal data structure
- *
- * UT often needs to modify internal data structures in ways that
- * actual applications never would (bypassing the normal API) in
- * order to exercise or set up for off-nominal cases.
+ *   This file contains the prototypes for the Sample App Ground Command-handling functions
  */
 
-#ifndef UT_SAMPLE_APP_H
-#define UT_SAMPLE_APP_H
+#ifndef SAMPLE_APP_CMDS_H
+#define SAMPLE_APP_CMDS_H
 
 /*
- * Necessary to include these here to get the definition of the
- * "SAMPLE_APP_Data_t" typedef.
- */
-#include "sample_app_eventids.h"
+** Required header files.
+*/
 #include "sample_app.h"
 
-/*
- * Allow UT access to the global "SAMPLE_APP_Data" object.
- */
-extern SAMPLE_APP_Data_t SAMPLE_APP_Data;
+int32 SAMPLE_APP_ResetCounters(const SAMPLE_APP_ResetCountersCmd_t *Msg);
+int32 SAMPLE_APP_Process(const SAMPLE_APP_ProcessCmd_t *Msg);
+int32 SAMPLE_APP_Noop(const SAMPLE_APP_NoopCmd_t *Msg);
 
-#endif /* UT_SAMPLE_APP_H */
+#endif /* SAMPLE_APP_CMDS_H */

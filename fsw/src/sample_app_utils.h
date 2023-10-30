@@ -18,20 +18,19 @@
 
 /**
  * @file
- *
- * Define sample app table
+ *   This file contains the prototypes for the Sample App utility functions
  */
 
-#ifndef SAMPLE_APP_TABLE_H
-#define SAMPLE_APP_TABLE_H
+#ifndef SAMPLE_APP_UTILS_H
+#define SAMPLE_APP_UTILS_H
 
 /*
-** Table structure
+** Required header files.
 */
-typedef struct
-{
-    uint16 Int1;
-    uint16 Int2;
-} SAMPLE_APP_Table_t;
+#include "sample_app.h"
 
-#endif /* SAMPLE_APP_TABLE_H */
+bool  SAMPLE_APP_VerifyCmdLength(CFE_MSG_Message_t *MsgPtr, size_t ExpectedLength);
+int32 SAMPLE_APP_TblValidationFunc(void *TblData);
+void  SAMPLE_APP_GetCrc(const char *TableName);
+
+#endif /* SAMPLE_APP_UTILS_H */

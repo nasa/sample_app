@@ -23,7 +23,6 @@
 include_directories(${PROJECT_SOURCE_DIR}/fsw/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
 
-
 # Add a coverage test executable called "sample_app-ALL" that 
 # covers all of the functions in sample_app.  
 #
@@ -34,6 +33,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
 add_cfe_coverage_test(sample_app ALL 
     "coveragetest/coveragetest_sample_app.c"
     "${CFE_SAMPLE_APP_SOURCE_DIR}/fsw/src/sample_app.c"
+    "${CFE_SAMPLE_APP_SOURCE_DIR}/fsw/src/sample_app_cmds.c"
+    "${CFE_SAMPLE_APP_SOURCE_DIR}/fsw/src/sample_app_utils.c"
 )
 
 # The sample_app uses library functions provided by sample_lib so must be linked

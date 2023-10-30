@@ -20,11 +20,11 @@
 ** File: coveragetest_sample_app.c
 **
 ** Purpose:
-** Coverage Unit Test cases for the SAMPLE Application
+** Coverage Unit Test cases for the Sample Application
 **
 ** Notes:
 ** This implements various test cases to exercise all code
-** paths through all functions defined in the SAMPLE application.
+** paths through all functions defined in the Sample application.
 **
 ** It is primarily focused at providing examples of the various
 ** stub configurations, hook functions, and wrapper calls that
@@ -35,7 +35,6 @@
 /*
  * Includes
  */
-
 #include "sample_lib.h" /* For SAMPLE_LIB_Function */
 #include "sample_app_coveragetest_common.h"
 #include "ut_sample_app.h"
@@ -291,7 +290,7 @@ void Test_SAMPLE_APP_ProcessCommandPacket(void)
     UT_CheckEvent_t   EventTest;
 
     memset(&TestMsg, 0, sizeof(TestMsg));
-    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_INVALID_MSGID_ERR_EID, "SAMPLE: invalid command packet,MID = 0x%x");
+    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_MID_ERR_EID, "SAMPLE: invalid command packet,MID = 0x%x");
 
     /*
      * The CFE_MSG_GetMsgId() stub uses a data buffer to hold the
@@ -355,7 +354,7 @@ void Test_SAMPLE_APP_ProcessGroundCommand(void)
     Size    = sizeof(TestMsg.Noop);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &Size, sizeof(Size), false);
-    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_COMMANDNOP_INF_EID, NULL);
+    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_NOOP_INF_EID, NULL);
 
     SAMPLE_APP_ProcessGroundCommand(&TestMsg.SBBuf);
 
@@ -366,7 +365,7 @@ void Test_SAMPLE_APP_ProcessGroundCommand(void)
     Size    = sizeof(TestMsg.Reset);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &Size, sizeof(Size), false);
-    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_COMMANDRST_INF_EID, NULL);
+    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_RESET_INF_EID, NULL);
 
     SAMPLE_APP_ProcessGroundCommand(&TestMsg.SBBuf);
 
@@ -386,7 +385,7 @@ void Test_SAMPLE_APP_ProcessGroundCommand(void)
     /* test an invalid CC */
     FcnCode = 1000;
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
-    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_COMMAND_ERR_EID, "Invalid ground command code: CC = %d");
+    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_CC_ERR_EID, "Invalid ground command code: CC = %d");
     SAMPLE_APP_ProcessGroundCommand(&TestMsg.SBBuf);
 
     /*
@@ -443,7 +442,7 @@ void Test_SAMPLE_APP_NoopCmd(void)
     memset(&TestMsg, 0, sizeof(TestMsg));
 
     /* test dispatch of NOOP */
-    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_COMMANDNOP_INF_EID, NULL);
+    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_NOOP_INF_EID, NULL);
 
     UtAssert_INT32_EQ(SAMPLE_APP_Noop(&TestMsg), CFE_SUCCESS);
 
@@ -464,7 +463,7 @@ void Test_SAMPLE_APP_ResetCounters(void)
 
     memset(&TestMsg, 0, sizeof(TestMsg));
 
-    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_COMMANDRST_INF_EID, "SAMPLE: RESET command");
+    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_RESET_INF_EID, "SAMPLE: RESET command");
 
     UtAssert_INT32_EQ(SAMPLE_APP_ResetCounters(&TestMsg), CFE_SUCCESS);
 
@@ -494,6 +493,13 @@ void Test_SAMPLE_APP_ProcessCC(void)
     UtAssert_INT32_EQ(SAMPLE_APP_Process(&TestMsg), CFE_SUCCESS);
 
     /*
+     * Successful operation results in two calls to CFE_ES_WriteToSysLog() - one
+     * in this function reporting the table values, and one through
+     * SAMPLE_APP_GetCrc().
+     */
+    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 2);
+
+    /*
      * Confirm that the CFE_TBL_GetAddress() call was done
      */
     UtAssert_STUB_COUNT(CFE_TBL_GetAddress, 1);
@@ -505,11 +511,26 @@ void Test_SAMPLE_APP_ProcessCC(void)
     UtAssert_STUB_COUNT(SAMPLE_LIB_Function, 1);
 
     /*
-     * Configure the CFE_TBL_GetAddress function to return an error
-     * Exercise the error return path
+     * Configure the CFE_TBL_GetAddress function to return an error.
+     * Exercise the error return path.
+     * Error at this point should add only one additional call to
+     * CFE_ES_WriteToSysLog() through the CFE_TBL_GetAddress() error path.
      */
     UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_GetAddress), CFE_TBL_ERR_UNREGISTERED);
     UtAssert_INT32_EQ(SAMPLE_APP_Process(&TestMsg), CFE_TBL_ERR_UNREGISTERED);
+    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 3);
+
+    /*
+     * Configure CFE_TBL_ReleaseAddress() to return an error, exercising the
+     * error return path.
+     * Confirm three additional calls to CFE_ES_WriteToSysLog() - one
+     * reporting the table values, one through SAMPLE_APP_GetCrc() and one
+     * through the CFE_TBL_ReleaseAddress() error path.
+     */
+    UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_GetAddress), CFE_SUCCESS);
+    UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_ReleaseAddress), CFE_TBL_ERR_NO_ACCESS);
+    UtAssert_INT32_EQ(SAMPLE_APP_Process(&TestMsg), CFE_TBL_ERR_NO_ACCESS);
+    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 6);
 }
 
 void Test_SAMPLE_APP_VerifyCmdLength(void)
@@ -527,7 +548,7 @@ void Test_SAMPLE_APP_VerifyCmdLength(void)
      * test a match case
      */
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &size, sizeof(size), false);
-    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_LEN_ERR_EID,
+    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_CMD_LEN_ERR_EID,
                         "Invalid Msg length: ID = 0x%X,  CC = %u, Len = %u, Expected = %u");
 
     SAMPLE_APP_VerifyCmdLength(NULL, size);

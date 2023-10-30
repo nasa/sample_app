@@ -18,33 +18,19 @@
 
 /**
  * @file
+ *   Specification for the SAMPLE_APP table structures
  *
- *
- * Purpose:
- * Extra scaffolding functions for the sample_app unit test
- *
- * Notes:
- * This is an extra UT-specific extern declaration
- * to obtain access to an internal data structure
- *
- * UT often needs to modify internal data structures in ways that
- * actual applications never would (bypassing the normal API) in
- * order to exercise or set up for off-nominal cases.
+ * @note
+ *   Constants and enumerated types related to these table structures
+ *   are defined in sample_app_tbldefs.h.
  */
+#ifndef SAMPLE_APP_TBL_H
+#define SAMPLE_APP_TBL_H
 
-#ifndef UT_SAMPLE_APP_H
-#define UT_SAMPLE_APP_H
+#include "sample_app_tbldefs.h"
+#include "sample_app_tblstruct.h"
 
-/*
- * Necessary to include these here to get the definition of the
- * "SAMPLE_APP_Data_t" typedef.
- */
-#include "sample_app_eventids.h"
-#include "sample_app.h"
+/* Define filenames of default data images for tables */
+#define SAMPLE_APP_TABLE_FILE "/cf/sample_app_tbl.tbl"
 
-/*
- * Allow UT access to the global "SAMPLE_APP_Data" object.
- */
-extern SAMPLE_APP_Data_t SAMPLE_APP_Data;
-
-#endif /* UT_SAMPLE_APP_H */
+#endif
