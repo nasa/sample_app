@@ -112,13 +112,10 @@ int32 SAMPLE_APP_Init(void)
 {
     int32 status;
 
-    SAMPLE_APP_Data.RunStatus = CFE_ES_RunStatus_APP_RUN;
+    /* Zero out the global data structure */
+    memset(&SAMPLE_APP_Data, 0, sizeof(SAMPLE_APP_Data));
 
-    /*
-    ** Initialize app command execution counters
-    */
-    SAMPLE_APP_Data.CmdCounter = 0;
-    SAMPLE_APP_Data.ErrCounter = 0;
+    SAMPLE_APP_Data.RunStatus = CFE_ES_RunStatus_APP_RUN;
 
     /*
     ** Initialize app configuration data
