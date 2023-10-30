@@ -1,5 +1,15 @@
 # Changelog
 
+## Development Build: v1.3.0-rc4+dev56
+- Apply consistent Event ID names to common events
+- Remove component-specific cFE header #includes
+- Refactor SAMPLE_APP_Init/Process to remove multiple returns
+- Add test for missing branch in SAMPLE_APP_Process()
+- Zero out global data structure during initialization
+- Move cmds and utils into separate files
+- organize source files according to current patterns
+- See <https://github.com/nasa/sample_app/pull/189>, <https://github.com/nasa/sample_app/pull/195>, <https://github.com/nasa/sample_app/pull/198>, <https://github.com/nasa/sample_app/pull/200>, <https://github.com/nasa/sample_app/pull/201>, <https://github.com/nasa/sample_app/pull/205>, and <https://github.com/nasa/sample_app/pull/208>
+
 ## Development Build: v1.3.0-rc4+dev39
 - update cmake recipe
 - See <https://github.com/nasa/sample_app/pull/203>
