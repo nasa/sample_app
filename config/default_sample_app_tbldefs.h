@@ -18,33 +18,28 @@
 
 /**
  * @file
+ *   Specification for the SAMPLE_APP table related
+ *   constant definitions.
  *
- *
- * Purpose:
- * Extra scaffolding functions for the sample_app unit test
- *
- * Notes:
- * This is an extra UT-specific extern declaration
- * to obtain access to an internal data structure
- *
- * UT often needs to modify internal data structures in ways that
- * actual applications never would (bypassing the normal API) in
- * order to exercise or set up for off-nominal cases.
+ * @note
+ *   These Macro definitions have been put in this file (instead of
+ *   sample_app_tbl.h). DO NOT PUT ANY TYPEDEFS OR
+ *   STRUCTURE DEFINITIONS IN THIS FILE!
+ *   ADD THEM TO sample_app_tbl.h IF NEEDED!
  */
+#ifndef SAMPLE_APP_TBLDEFS_H
+#define SAMPLE_APP_TBLDEFS_H
 
-#ifndef UT_SAMPLE_APP_H
-#define UT_SAMPLE_APP_H
+#include "common_types.h"
+#include "sample_app_mission_cfg.h"
 
 /*
- * Necessary to include these here to get the definition of the
- * "SAMPLE_APP_Data_t" typedef.
- */
-#include "sample_app_eventids.h"
-#include "sample_app.h"
+** Example Table structure
+*/
+typedef struct
+{
+    uint16 Int1;
+    uint16 Int2;
+} SAMPLE_APP_Table_t;
 
-/*
- * Allow UT access to the global "SAMPLE_APP_Data" object.
- */
-extern SAMPLE_APP_Data_t SAMPLE_APP_Data;
-
-#endif /* UT_SAMPLE_APP_H */
+#endif

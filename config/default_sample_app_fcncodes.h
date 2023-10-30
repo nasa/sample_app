@@ -18,33 +18,25 @@
 
 /**
  * @file
+ *   Specification for the SAMPLE_APP command function codes
  *
- *
- * Purpose:
- * Extra scaffolding functions for the sample_app unit test
- *
- * Notes:
- * This is an extra UT-specific extern declaration
- * to obtain access to an internal data structure
- *
- * UT often needs to modify internal data structures in ways that
- * actual applications never would (bypassing the normal API) in
- * order to exercise or set up for off-nominal cases.
+ * @note
+ *   This file should be strictly limited to the command/function code (CC)
+ *   macro definitions.  Other definitions such as enums, typedefs, or other
+ *   macros should be placed in the msgdefs.h or msg.h files.
  */
+#ifndef SAMPLE_APP_FCNCODES_H
+#define SAMPLE_APP_FCNCODES_H
 
-#ifndef UT_SAMPLE_APP_H
-#define UT_SAMPLE_APP_H
+/************************************************************************
+ * Macro Definitions
+ ************************************************************************/
 
 /*
- * Necessary to include these here to get the definition of the
- * "SAMPLE_APP_Data_t" typedef.
- */
-#include "sample_app_eventids.h"
-#include "sample_app.h"
+** Sample App command codes
+*/
+#define SAMPLE_APP_NOOP_CC           0
+#define SAMPLE_APP_RESET_COUNTERS_CC 1
+#define SAMPLE_APP_PROCESS_CC        2
 
-/*
- * Allow UT access to the global "SAMPLE_APP_Data" object.
- */
-extern SAMPLE_APP_Data_t SAMPLE_APP_Data;
-
-#endif /* UT_SAMPLE_APP_H */
+#endif

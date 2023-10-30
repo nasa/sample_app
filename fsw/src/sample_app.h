@@ -30,21 +30,13 @@
 */
 #include "cfe.h"
 
+#include "sample_app_mission_cfg.h"
+#include "sample_app_platform_cfg.h"
+
 #include "sample_app_perfids.h"
 #include "sample_app_msgids.h"
 #include "sample_app_msg.h"
 
-/***********************************************************************/
-#define SAMPLE_APP_PIPE_DEPTH 32 /* Depth of the Command Pipe for Application */
-
-#define SAMPLE_APP_NUMBER_OF_TABLES 1 /* Number of Table(s) */
-
-/* Define filenames of default data images for tables */
-#define SAMPLE_APP_TABLE_FILE "/cf/sample_app_tbl.tbl"
-
-#define SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE -1
-
-#define SAMPLE_APP_TBL_ELEMENT_1_MAX 10
 /************************************************************************
 ** Type Definitions
 *************************************************************************/

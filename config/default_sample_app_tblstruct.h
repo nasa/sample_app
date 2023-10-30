@@ -18,13 +18,28 @@
 
 /**
  * @file
+ *   Specification for the SAMPLE_APP table structures
  *
- * Define Sample App Performance IDs
+ * Provides default definitions for SAMPLE_APP table structures
+ *
+ * @note This file may be overridden/superceded by mission-provided defintions
+ * either by overriding this header or by generating definitions from a command/data
+ * dictionary tool.
  */
+#ifndef SAMPLE_APP_TBLSTRUCT_H
+#define SAMPLE_APP_TBLSTRUCT_H
 
-#ifndef SAMPLE_APP_PERFIDS_H
-#define SAMPLE_APP_PERFIDS_H
+/*************************************************************************
+ * Includes
+ *************************************************************************/
+#include "sample_app_tbldefs.h"
 
-#define SAMPLE_APP_PERF_ID 91
+/************************************************************************
+ * Macro Definitions
+ ************************************************************************/
 
-#endif /* SAMPLE_APP_PERFIDS_H */
+/*************************************************************************
+ * Type Definitions
+ *************************************************************************/
+
+#endif

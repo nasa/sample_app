@@ -18,19 +18,21 @@
 
 /**
  * @file
+ *   Specification for the SAMPLE_APP command and telemetry
+ *   message data types.
  *
- * Define Sample App Message IDs
+ * This is a compatibility header for the "sample_app_msg.h" file that has
+ * traditionally provided the message definitions for cFS apps.
  *
- * \note The Sample App assumes default configuration which uses V1 of message id implementation
+ * @note This file may be overridden/superceded by mission-provided defintions
+ * either by overriding this header or by generating definitions from a command/data
+ * dictionary tool.
  */
+#ifndef SAMPLE_APP_MSG_H
+#define SAMPLE_APP_MSG_H
 
-#ifndef SAMPLE_APP_MSGIDS_H
-#define SAMPLE_APP_MSGIDS_H
+#include "sample_app_mission_cfg.h"
+#include "sample_app_msgdefs.h"
+#include "sample_app_msgstruct.h"
 
-/* V1 Command Message IDs must be 0x18xx */
-#define SAMPLE_APP_CMD_MID     0x1882
-#define SAMPLE_APP_SEND_HK_MID 0x1883
-/* V1 Telemetry Message IDs must be 0x08xx */
-#define SAMPLE_APP_HK_TLM_MID 0x0883
-
-#endif /* SAMPLE_APP_MSGIDS_H */
+#endif
