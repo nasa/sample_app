@@ -494,6 +494,13 @@ void Test_SAMPLE_APP_ProcessCC(void)
     UtAssert_INT32_EQ(SAMPLE_APP_Process(&TestMsg), CFE_SUCCESS);
 
     /*
+     * Successful operation results in two calls to CFE_ES_WriteToSysLog() - one
+     * in this function reporting the table values, and one through
+     * SAMPLE_APP_GetCrc().
+     */
+    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 2);
+
+    /*
      * Confirm that the CFE_TBL_GetAddress() call was done
      */
     UtAssert_STUB_COUNT(CFE_TBL_GetAddress, 1);
@@ -505,11 +512,26 @@ void Test_SAMPLE_APP_ProcessCC(void)
     UtAssert_STUB_COUNT(SAMPLE_LIB_Function, 1);
 
     /*
-     * Configure the CFE_TBL_GetAddress function to return an error
-     * Exercise the error return path
+     * Configure the CFE_TBL_GetAddress function to return an error.
+     * Exercise the error return path.
+     * Error at this point should add only one additional call to
+     * CFE_ES_WriteToSysLog() through the CFE_TBL_GetAddress() error path.
      */
     UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_GetAddress), CFE_TBL_ERR_UNREGISTERED);
     UtAssert_INT32_EQ(SAMPLE_APP_Process(&TestMsg), CFE_TBL_ERR_UNREGISTERED);
+    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 3);
+
+    /*
+     * Configure CFE_TBL_ReleaseAddress() to return an error, exercising the
+     * error return path.
+     * Confirm three additional calls to CFE_ES_WriteToSysLog() - one
+     * reporting the table values, one through SAMPLE_APP_GetCrc() and one
+     * through the CFE_TBL_ReleaseAddress() error path.
+     */
+    UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_GetAddress), CFE_SUCCESS);
+    UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_ReleaseAddress), CFE_TBL_ERR_NO_ACCESS);
+    UtAssert_INT32_EQ(SAMPLE_APP_Process(&TestMsg), CFE_TBL_ERR_NO_ACCESS);
+    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 6);
 }
 
 void Test_SAMPLE_APP_VerifyCmdLength(void)
