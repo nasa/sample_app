@@ -1,9 +1,14 @@
 project(CFE_SAMPLE_APP C)
 
+set(APP_SRC_FILES
+  fsw/src/sample_app.c
+  fsw/src/sample_app_cmds.c
+  fsw/src/sample_app_dispatch.c
+  fsw/src/sample_app_utils.c
+)
+
 # Create the app module
-add_cfe_app(sample_app fsw/src/sample_app.c
-                       fsw/src/sample_app_cmds.c
-                       fsw/src/sample_app_utils.c)
+add_cfe_app(sample_app ${APP_SRC_FILES})
 
 target_include_directories(sample_app PUBLIC fsw/inc)
 # Include the public API from sample_lib to demonstrate how

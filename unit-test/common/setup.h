@@ -16,29 +16,30 @@
  * limitations under the License.
  ************************************************************************/
 
-/**
- * @file
- *   SAMPLE_APP Application Private Config Definitions
- *
- * This provides default values for configurable items that are internal
- * to this module and do NOT affect the interface(s) of this module.  Changes
- * to items in this file only affect the local module and will be transparent
- * to external entities that are using the public interface(s).
- *
- * @note This file may be overridden/superceded by mission-provided defintions
- * either by overriding this header or by generating definitions from a command/data
- * dictionary tool.
- */
-#ifndef SAMPLE_APP_INTERNAL_CFG_H
-#define SAMPLE_APP_INTERNAL_CFG_H
+/*
+** Purpose:
+** Coverage Unit Test cases for the SAMPLE Application
+**
+** Notes:
+** This implements various test cases to exercise all code
+** paths through all functions defined in the SAMPLE application.
+**
+** It is primarily focused at providing examples of the various
+** stub configurations, hook functions, and wrapper calls that
+** are often needed when coercing certain code paths through
+** complex functions.
+*/
 
-/***********************************************************************/
-#define SAMPLE_APP_PIPE_DEPTH 32 /* Depth of the Command Pipe for Application */
+#ifndef SETUP_H
+#define SETUP_H
 
-#define SAMPLE_APP_NUMBER_OF_TABLES 1 /* Number of Example Table(s) */
+#include "common_types.h"
 
-#define SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE -1
+#include "utassert.h"
+#include "uttest.h"
+#include "utstubs.h"
 
-#define SAMPLE_APP_TBL_ELEMENT_1_MAX 10
+void Sample_UT_Setup(void);
+void Sample_UT_TearDown(void);
 
 #endif

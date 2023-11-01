@@ -1,7 +1,8 @@
 /************************************************************************
- * NASA Docket No. GSC-18,719-1, and identified as “core Flight System: Bootes”
+ * NASA Docket No. GSC-18,920-1, and identified as “Core Flight
+ * System (cFS) Health & Safety (HS) Application version 2.4.1”
  *
- * Copyright (c) 2020 United States Government as represented by the
+ * Copyright (c) 2021 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -16,23 +17,11 @@
  * limitations under the License.
  ************************************************************************/
 
-/**
- * @file
- *   This file contains the prototypes for the Sample App Ground Command-handling functions
- */
+#include "sample_app.h"
 
-#ifndef SAMPLE_APP_CMDS_H
-#define SAMPLE_APP_CMDS_H
+/* UT includes */
+#include "uttest.h"
+#include "utassert.h"
+#include "utstubs.h"
 
-/*
-** Required header files.
-*/
-#include "cfe_error.h"
-#include "sample_app_msg.h"
-
-CFE_Status_t SAMPLE_APP_SendHkCmd(const SAMPLE_APP_SendHkCmd_t *Msg);
-CFE_Status_t SAMPLE_APP_ResetCountersCmd(const SAMPLE_APP_ResetCountersCmd_t *Msg);
-CFE_Status_t SAMPLE_APP_ProcessCmd(const SAMPLE_APP_ProcessCmd_t *Msg);
-CFE_Status_t SAMPLE_APP_NoopCmd(const SAMPLE_APP_NoopCmd_t *Msg);
-
-#endif /* SAMPLE_APP_CMDS_H */
+SAMPLE_APP_Data_t SAMPLE_APP_Data;

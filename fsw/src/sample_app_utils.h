@@ -29,7 +29,6 @@
 */
 #include "sample_app.h"
 
-bool  SAMPLE_APP_VerifyCmdLength(CFE_MSG_Message_t *MsgPtr, size_t ExpectedLength);
 int32 SAMPLE_APP_TblValidationFunc(void *TblData);
 void  SAMPLE_APP_GetCrc(const char *TableName);
 

@@ -18,27 +18,21 @@
 
 /**
  * @file
- *   SAMPLE_APP Application Private Config Definitions
  *
- * This provides default values for configurable items that are internal
- * to this module and do NOT affect the interface(s) of this module.  Changes
- * to items in this file only affect the local module and will be transparent
- * to external entities that are using the public interface(s).
- *
- * @note This file may be overridden/superceded by mission-provided defintions
- * either by overriding this header or by generating definitions from a command/data
- * dictionary tool.
+ * Main header file for the SAMPLE application
  */
-#ifndef SAMPLE_APP_INTERNAL_CFG_H
-#define SAMPLE_APP_INTERNAL_CFG_H
 
-/***********************************************************************/
-#define SAMPLE_APP_PIPE_DEPTH 32 /* Depth of the Command Pipe for Application */
+#ifndef SAMPLE_APP_DISPATCH_H
+#define SAMPLE_APP_DISPATCH_H
 
-#define SAMPLE_APP_NUMBER_OF_TABLES 1 /* Number of Example Table(s) */
+/*
+** Required header files.
+*/
+#include "cfe.h"
+#include "sample_app_msg.h"
 
-#define SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE -1
+void SAMPLE_APP_TaskPipe(const CFE_SB_Buffer_t *SBBufPtr);
+void SAMPLE_APP_ProcessGroundCommand(const CFE_SB_Buffer_t *SBBufPtr);
+bool SAMPLE_APP_VerifyCmdLength(const CFE_MSG_Message_t *MsgPtr, size_t ExpectedLength);
 
-#define SAMPLE_APP_TBL_ELEMENT_1_MAX 10
-
-#endif
+#endif /* SAMPLE_APP_DISPATCH_H */

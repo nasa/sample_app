@@ -8,37 +8,62 @@
 ##################################################################
 
 #
-#
 # NOTE on the subdirectory structures here:
 #
 # - "inc" provides local header files shared between the coveragetest,
 #    wrappers, and overrides source code units
 # - "coveragetest" contains source code for the actual unit test cases
-#    The primary objective is to get line/path coverage on the FSW 
+#    The primary objective is to get line/path coverage on the FSW
 #    code units.
 #
- 
+
 # Use the UT assert public API, and allow direct
 # inclusion of source files that are normally private
-include_directories(${PROJECT_SOURCE_DIR}/fsw/src)
+include_directories(../fsw/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
 
-# Add a coverage test executable called "sample_app-ALL" that 
-# covers all of the functions in sample_app.  
-#
-# Also note in a more complex app/lib the coverage test can also
-# be broken down into smaller units (in which case one should use
-# a unique suffix other than "ALL" for each unit).  For example,
-# OSAL implements a separate coverage test per source unit.
-add_cfe_coverage_test(sample_app ALL 
-    "coveragetest/coveragetest_sample_app.c"
-    "${CFE_SAMPLE_APP_SOURCE_DIR}/fsw/src/sample_app.c"
-    "${CFE_SAMPLE_APP_SOURCE_DIR}/fsw/src/sample_app_cmds.c"
-    "${CFE_SAMPLE_APP_SOURCE_DIR}/fsw/src/sample_app_utils.c"
+add_cfe_coverage_stubs(sample_app
+  stubs/sample_app_global_stubs.c
+  stubs/sample_app_stubs.c
+  stubs/sample_app_cmds_stubs.c
+  stubs/sample_app_dispatch_stubs.c
+  stubs/sample_app_utils_stubs.c
 )
 
-# The sample_app uses library functions provided by sample_lib so must be linked
-# with the sample_lib stub library (this is mainly just an example of how this 
-# can be done).
-add_cfe_coverage_dependency(sample_app ALL sample_lib)
+add_library(sample_app_ut_common STATIC
+    common/eventcheck.c
+    common/setup.c
+)
 
+target_include_directories(sample_app_ut_common PUBLIC common)
+target_link_libraries(sample_app_ut_common core_api ut_assert)
+
+
+# Generate a dedicated "testrunner" executable for each test file
+# Accomplish this by cycling through all the app's source files, there must be
+# a *_tests file for each
+foreach(SRCFILE ${APP_SRC_FILES})
+
+    # Get the base sourcefile name as a module name without path or the
+    # extension, this will be used as the base name of the unit test file.
+    get_filename_component(UNIT_NAME "${SRCFILE}" NAME_WE)
+
+    # Use the module name to make the test name by adding _tests to the end
+    set(TESTS_NAME "coveragetest_${UNIT_NAME}")
+
+    # Make the test sourcefile name with unit test path and extension
+    set(TESTS_SOURCE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/coveragetest/${TESTS_NAME}.c")
+
+    # Create the coverage test executable
+    add_cfe_coverage_test(sample_app "${UNIT_NAME}" "${TESTS_SOURCE_FILE}" "../${SRCFILE}")
+    add_cfe_coverage_dependency(sample_app "${UNIT_NAME}" sample_app)
+    target_link_libraries(coverage-sample_app-${UNIT_NAME}-testrunner coverage-sample_app-stubs sample_app_ut_common)
+
+endforeach()
+
+
+
+# The sample_app uses library functions provided by sample_lib so must be linked
+# with the sample_lib stub library (this is mainly just an example of how this
+# can be done).
+add_cfe_coverage_dependency(sample_app sample_app_cmds sample_lib)
