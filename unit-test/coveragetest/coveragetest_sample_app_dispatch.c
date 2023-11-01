@@ -109,6 +109,7 @@ void Test_SAMPLE_APP_ProcessGroundCommand(void)
         SAMPLE_APP_NoopCmd_t          Noop;
         SAMPLE_APP_ResetCountersCmd_t Reset;
         SAMPLE_APP_ProcessCmd_t       Process;
+        SAMPLE_APP_DisplayParamCmd_t  DisplayParam;
     } TestMsg;
     UT_CheckEvent_t EventTest;
 
@@ -194,6 +195,28 @@ void Test_SAMPLE_APP_ProcessGroundCommand(void)
 
     UtAssert_STUB_COUNT(SAMPLE_APP_ProcessCmd, 1);
     UtAssert_UINT32_EQ(EventTest.MatchCount, 3);
+
+    /* test dispatch of DISPLAY_PARAM */
+    FcnCode = SAMPLE_APP_DISPLAY_PARAM_CC;
+    Size    = sizeof(TestMsg.DisplayParam);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &Size, sizeof(Size), false);
+
+    SAMPLE_APP_ProcessGroundCommand(&TestMsg.SBBuf);
+
+    UtAssert_STUB_COUNT(SAMPLE_APP_DisplayParamCmd, 1);
+
+    FcnCode = SAMPLE_APP_DISPLAY_PARAM_CC;
+    Size    = sizeof(TestMsg.DisplayParam) - 1;
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &Size, sizeof(Size), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &FcnCode, sizeof(FcnCode), false);
+    UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &MsgId, sizeof(MsgId), false);
+
+    SAMPLE_APP_ProcessGroundCommand(&TestMsg.SBBuf);
+
+    UtAssert_STUB_COUNT(SAMPLE_APP_DisplayParamCmd, 1);
+    UtAssert_UINT32_EQ(EventTest.MatchCount, 4);
 
     /* test an invalid CC */
     FcnCode = 1000;

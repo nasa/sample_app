@@ -143,11 +143,11 @@ void Test_SAMPLE_APP_ProcessCmd(void)
     UtAssert_INT32_EQ(SAMPLE_APP_ProcessCmd(&TestMsg), CFE_SUCCESS);
 
     /*
-     * Successful operation results in two calls to CFE_ES_WriteToSysLog() - one
-     * in this function reporting the table values, and one through
-     * SAMPLE_APP_GetCrc().
+     * This only needs to account for the call to CFE_ES_WriteToSysLog() directly
+     * invoked by the unit under test.   Note that in this build environment, the
+     * SAMPLE_APP_GetCrc() function is a stub.
      */
-    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 2);
+    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 1);
 
     /*
      * Confirm that the CFE_TBL_GetAddress() call was done
@@ -168,19 +168,42 @@ void Test_SAMPLE_APP_ProcessCmd(void)
      */
     UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_GetAddress), CFE_TBL_ERR_UNREGISTERED);
     UtAssert_INT32_EQ(SAMPLE_APP_ProcessCmd(&TestMsg), CFE_TBL_ERR_UNREGISTERED);
-    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 3);
+    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 2);
 
     /*
      * Configure CFE_TBL_ReleaseAddress() to return an error, exercising the
      * error return path.
-     * Confirm three additional calls to CFE_ES_WriteToSysLog() - one
-     * reporting the table values, one through SAMPLE_APP_GetCrc() and one
-     * through the CFE_TBL_ReleaseAddress() error path.
+     * Confirm two additional calls to CFE_ES_WriteToSysLog() - one
+     * reporting the table values, and one through the CFE_TBL_ReleaseAddress()
+     * error path.
      */
     UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_GetAddress), CFE_SUCCESS);
     UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_ReleaseAddress), CFE_TBL_ERR_NO_ACCESS);
     UtAssert_INT32_EQ(SAMPLE_APP_ProcessCmd(&TestMsg), CFE_TBL_ERR_NO_ACCESS);
-    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 6);
+    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 4);
+}
+
+void Test_SAMPLE_APP_DisplayParamCmd(void)
+{
+    /*
+     * Test Case For:
+     * void  SAMPLE_APP_DisplayParamCmd( const SAMPLE_APP_DisplayParamCmd_t *Msg )
+     */
+    SAMPLE_APP_DisplayParamCmd_t TestMsg;
+    UT_CheckEvent_t              EventTest;
+
+    memset(&TestMsg, 0, sizeof(TestMsg));
+
+    UT_CHECKEVENT_SETUP(&EventTest, SAMPLE_APP_VALUE_INF_EID, "SAMPLE_APP: ValU32=%lu, ValI16=%d, ValStr=%s");
+    TestMsg.Payload.ValU32 = 10;
+    TestMsg.Payload.ValI16 = -4;
+    snprintf(TestMsg.Payload.ValStr, sizeof(TestMsg.Payload.ValStr), "Hello");
+
+    UtAssert_INT32_EQ(SAMPLE_APP_DisplayParamCmd(&TestMsg), CFE_SUCCESS);
+    /*
+     * Confirm that the event was generated
+     */
+    UtAssert_UINT32_EQ(EventTest.MatchCount, 1);
 }
 
 /*
@@ -192,4 +215,5 @@ void UtTest_Setup(void)
     ADD_TEST(SAMPLE_APP_NoopCmd);
     ADD_TEST(SAMPLE_APP_ResetCountersCmd);
     ADD_TEST(SAMPLE_APP_ProcessCmd);
+    ADD_TEST(SAMPLE_APP_DisplayParamCmd);
 }

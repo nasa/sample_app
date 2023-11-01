@@ -78,7 +78,7 @@ void SAMPLE_APP_ProcessGroundCommand(const CFE_SB_Buffer_t *SBBufPtr)
     CFE_MSG_GetFcnCode(&SBBufPtr->Msg, &CommandCode);
 
     /*
-    ** Process "known" SAMPLE app ground commands
+    ** Process SAMPLE app ground commands
     */
     switch (CommandCode)
     {
@@ -87,7 +87,6 @@ void SAMPLE_APP_ProcessGroundCommand(const CFE_SB_Buffer_t *SBBufPtr)
             {
                 SAMPLE_APP_NoopCmd((const SAMPLE_APP_NoopCmd_t *)SBBufPtr);
             }
-
             break;
 
         case SAMPLE_APP_RESET_COUNTERS_CC:
@@ -95,7 +94,6 @@ void SAMPLE_APP_ProcessGroundCommand(const CFE_SB_Buffer_t *SBBufPtr)
             {
                 SAMPLE_APP_ResetCountersCmd((const SAMPLE_APP_ResetCountersCmd_t *)SBBufPtr);
             }
-
             break;
 
         case SAMPLE_APP_PROCESS_CC:
@@ -103,7 +101,13 @@ void SAMPLE_APP_ProcessGroundCommand(const CFE_SB_Buffer_t *SBBufPtr)
             {
                 SAMPLE_APP_ProcessCmd((const SAMPLE_APP_ProcessCmd_t *)SBBufPtr);
             }
+            break;
 
+        case SAMPLE_APP_DISPLAY_PARAM_CC:
+            if (SAMPLE_APP_VerifyCmdLength(&SBBufPtr->Msg, sizeof(SAMPLE_APP_DisplayParamCmd_t)))
+            {
+                SAMPLE_APP_DisplayParamCmd((const SAMPLE_APP_DisplayParamCmd_t *)SBBufPtr);
+            }
             break;
 
         /* default case already found during FC vs length test */

@@ -60,6 +60,12 @@ typedef struct
     CFE_MSG_CommandHeader_t CommandHeader; /**< \brief Command header */
 } SAMPLE_APP_ProcessCmd_t;
 
+typedef struct
+{
+    CFE_MSG_CommandHeader_t           CommandHeader; /**< \brief Command header */
+    SAMPLE_APP_DisplayParam_Payload_t Payload;
+} SAMPLE_APP_DisplayParamCmd_t;
+
 /*************************************************************************/
 /*
 ** Type definition (Sample App housekeeping)
