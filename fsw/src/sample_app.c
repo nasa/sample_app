@@ -172,6 +172,7 @@ int32 SAMPLE_APP_Init(void)
         {
             CFE_ES_WriteToSysLog("Sample App: Error Subscribing to Command, RC = 0x%08lX\n", (unsigned long)status);
         }
+
     }
 
     if (status == CFE_SUCCESS)
