@@ -19,32 +19,33 @@
 /**
  * @file
  *
- *
- * Purpose:
- * Extra scaffolding functions for the sample_app unit test
- *
- * Notes:
- * This is an extra UT-specific extern declaration
- * to obtain access to an internal data structure
- *
- * UT often needs to modify internal data structures in ways that
- * actual applications never would (bypassing the normal API) in
- * order to exercise or set up for off-nominal cases.
+ * Auto-Generated stub implementations for functions defined in sample_app header
  */
 
-#ifndef UT_SAMPLE_APP_H
-#define UT_SAMPLE_APP_H
-
-/*
- * Necessary to include these here to get the definition of the
- * "SAMPLE_APP_Data_t" typedef.
- */
-#include "sample_app_eventids.h"
 #include "sample_app.h"
+#include "utgenstub.h"
 
 /*
- * Allow UT access to the global "SAMPLE_APP_Data" object.
+ * ----------------------------------------------------
+ * Generated stub function for SAMPLE_APP_Init()
+ * ----------------------------------------------------
  */
-extern SAMPLE_APP_Data_t SAMPLE_APP_Data;
+int32 SAMPLE_APP_Init(void)
+{
+    UT_GenStub_SetupReturnBuffer(SAMPLE_APP_Init, int32);
 
-#endif /* UT_SAMPLE_APP_H */
+    UT_GenStub_Execute(SAMPLE_APP_Init, Basic, NULL);
+
+    return UT_GenStub_GetReturnValue(SAMPLE_APP_Init, int32);
+}
+
+/*
+ * ----------------------------------------------------
+ * Generated stub function for SAMPLE_APP_Main()
+ * ----------------------------------------------------
+ */
+void SAMPLE_APP_Main(void)
+{
+
+    UT_GenStub_Execute(SAMPLE_APP_Main, Basic, NULL);
+}

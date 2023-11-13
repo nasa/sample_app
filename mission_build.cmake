@@ -11,6 +11,7 @@
 # The list of header files that control the SAMPLE_APP configuration
 set(SAMPLE_APP_MISSION_CONFIG_FILE_LIST
   sample_app_fcncodes.h
+  sample_app_interface_cfg.h
   sample_app_mission_cfg.h
   sample_app_perfids.h
   sample_app_msg.h
@@ -24,6 +25,7 @@ set(SAMPLE_APP_MISSION_CONFIG_FILE_LIST
 if (CFE_EDS_ENABLED_BUILD)
 
   # In an EDS-based build, these files come generated from the EDS tool
+  set(SAMPLE_APP_CFGFILE_SRC_sample_app_interface_cfg "sample_app_eds_designparameters.h")
   set(SAMPLE_APP_CFGFILE_SRC_sample_app_tbldefs       "sample_app_eds_typedefs.h")
   set(SAMPLE_APP_CFGFILE_SRC_sample_app_tblstruct     "sample_app_eds_typedefs.h")
   set(SAMPLE_APP_CFGFILE_SRC_sample_app_msgdefs       "sample_app_eds_typedefs.h")

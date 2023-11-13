@@ -26,6 +26,7 @@
 */
 #include "sample_app.h"
 #include "sample_app_cmds.h"
+#include "sample_app_msgids.h"
 #include "sample_app_eventids.h"
 #include "sample_app_version.h"
 #include "sample_app_tbl.h"
@@ -37,10 +38,45 @@
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 /*                                                                            */
+/*  Purpose:                                                                  */
+/*         This function is triggered in response to a task telemetry request */
+/*         from the housekeeping task. This function will gather the Apps     */
+/*         telemetry, packetize it and send it to the housekeeping task via   */
+/*         the software bus                                                   */
+/* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
+CFE_Status_t SAMPLE_APP_SendHkCmd(const SAMPLE_APP_SendHkCmd_t *Msg)
+{
+    int i;
+
+    /*
+    ** Get command execution counters...
+    */
+    SAMPLE_APP_Data.HkTlm.Payload.CommandErrorCounter = SAMPLE_APP_Data.ErrCounter;
+    SAMPLE_APP_Data.HkTlm.Payload.CommandCounter      = SAMPLE_APP_Data.CmdCounter;
+
+    /*
+    ** Send housekeeping telemetry packet...
+    */
+    CFE_SB_TimeStampMsg(CFE_MSG_PTR(SAMPLE_APP_Data.HkTlm.TelemetryHeader));
+    CFE_SB_TransmitMsg(CFE_MSG_PTR(SAMPLE_APP_Data.HkTlm.TelemetryHeader), true);
+
+    /*
+    ** Manage any pending table loads, validations, etc.
+    */
+    for (i = 0; i < SAMPLE_APP_NUMBER_OF_TABLES; i++)
+    {
+        CFE_TBL_Manage(SAMPLE_APP_Data.TblHandles[i]);
+    }
+
+    return CFE_SUCCESS;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
+/*                                                                            */
 /* SAMPLE NOOP commands                                                       */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-int32 SAMPLE_APP_Noop(const SAMPLE_APP_NoopCmd_t *Msg)
+CFE_Status_t SAMPLE_APP_NoopCmd(const SAMPLE_APP_NoopCmd_t *Msg)
 {
     SAMPLE_APP_Data.CmdCounter++;
 
@@ -57,7 +93,7 @@ int32 SAMPLE_APP_Noop(const SAMPLE_APP_NoopCmd_t *Msg)
 /*         part of the task telemetry.                                        */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
-int32 SAMPLE_APP_ResetCounters(const SAMPLE_APP_ResetCountersCmd_t *Msg)
+CFE_Status_t SAMPLE_APP_ResetCountersCmd(const SAMPLE_APP_ResetCountersCmd_t *Msg)
 {
     SAMPLE_APP_Data.CmdCounter = 0;
     SAMPLE_APP_Data.ErrCounter = 0;
@@ -73,15 +109,16 @@ int32 SAMPLE_APP_ResetCounters(const SAMPLE_APP_ResetCountersCmd_t *Msg)
 /*         This function Process Ground Station Command                       */
 /*                                                                            */
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
-int32 SAMPLE_APP_Process(const SAMPLE_APP_ProcessCmd_t *Msg)
+CFE_Status_t SAMPLE_APP_ProcessCmd(const SAMPLE_APP_ProcessCmd_t *Msg)
 {
-    int32               status;
-    SAMPLE_APP_Table_t *TblPtr;
-    const char *        TableName = "SAMPLE_APP.SampleAppTable";
+    int32                      status;
+    void *                     TblAddr;
+    SAMPLE_APP_ExampleTable_t *TblPtr;
+    const char *               TableName = "SAMPLE_APP.ExampleTable";
 
-    /* Sample Use of Table */
+    /* Sample Use of Example Table */
 
-    status = CFE_TBL_GetAddress((void *)&TblPtr, SAMPLE_APP_Data.TblHandles[0]);
+    status = CFE_TBL_GetAddress(&TblAddr, SAMPLE_APP_Data.TblHandles[0]);
 
     if (status < CFE_SUCCESS)
     {
@@ -89,7 +126,8 @@ int32 SAMPLE_APP_Process(const SAMPLE_APP_ProcessCmd_t *Msg)
         return status;
     }
 
-    CFE_ES_WriteToSysLog("Sample App: Table Value 1: %d  Value 2: %d", TblPtr->Int1, TblPtr->Int2);
+    TblPtr = TblAddr;
+    CFE_ES_WriteToSysLog("Sample App: Example Table Value 1: %d  Value 2: %d", TblPtr->Int1, TblPtr->Int2);
 
     SAMPLE_APP_GetCrc(TableName);
 
@@ -102,6 +140,20 @@ int32 SAMPLE_APP_Process(const SAMPLE_APP_ProcessCmd_t *Msg)
 
     /* Invoke a function provided by SAMPLE_APP_LIB */
     SAMPLE_LIB_Function();
+
+    return CFE_SUCCESS;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
+/*                                                                            */
+/* A simple example command that displays a passed-in value                   */
+/*                                                                            */
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
+CFE_Status_t SAMPLE_APP_DisplayParamCmd(const SAMPLE_APP_DisplayParamCmd_t *Msg)
+{
+    CFE_EVS_SendEvent(SAMPLE_APP_VALUE_INF_EID, CFE_EVS_EventType_INFORMATION,
+                      "SAMPLE_APP: ValU32=%lu, ValI16=%d, ValStr=%s", (unsigned long)Msg->Payload.ValU32,
+                      (int)Msg->Payload.ValI16, Msg->Payload.ValStr);
 
     return CFE_SUCCESS;
 }

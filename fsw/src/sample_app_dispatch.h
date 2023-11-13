@@ -19,20 +19,20 @@
 /**
  * @file
  *
- * Define Sample App Events IDs
+ * Main header file for the SAMPLE application
  */
 
-#ifndef SAMPLE_APP_EVENTS_H
-#define SAMPLE_APP_EVENTS_H
+#ifndef SAMPLE_APP_DISPATCH_H
+#define SAMPLE_APP_DISPATCH_H
 
-#define SAMPLE_APP_RESERVED_EID    0
-#define SAMPLE_APP_INIT_INF_EID    1
-#define SAMPLE_APP_CC_ERR_EID      2
-#define SAMPLE_APP_NOOP_INF_EID    3
-#define SAMPLE_APP_RESET_INF_EID   4
-#define SAMPLE_APP_MID_ERR_EID     5
-#define SAMPLE_APP_CMD_LEN_ERR_EID 6
-#define SAMPLE_APP_PIPE_ERR_EID    7
-#define SAMPLE_APP_VALUE_INF_EID   8
+/*
+** Required header files.
+*/
+#include "cfe.h"
+#include "sample_app_msg.h"
 
-#endif /* SAMPLE_APP_EVENTS_H */
+void SAMPLE_APP_TaskPipe(const CFE_SB_Buffer_t *SBBufPtr);
+void SAMPLE_APP_ProcessGroundCommand(const CFE_SB_Buffer_t *SBBufPtr);
+bool SAMPLE_APP_VerifyCmdLength(const CFE_MSG_Message_t *MsgPtr, size_t ExpectedLength);
+
+#endif /* SAMPLE_APP_DISPATCH_H */

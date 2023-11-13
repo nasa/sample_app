@@ -90,8 +90,5 @@ extern SAMPLE_APP_Data_t SAMPLE_APP_Data;
 */
 void  SAMPLE_APP_Main(void);
 int32 SAMPLE_APP_Init(void);
-void  SAMPLE_APP_ProcessCommandPacket(CFE_SB_Buffer_t *SBBufPtr);
-void  SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr);
-int32 SAMPLE_APP_ReportHousekeeping(const CFE_MSG_CommandHeader_t *Msg);
 
 #endif /* SAMPLE_APP_H */
