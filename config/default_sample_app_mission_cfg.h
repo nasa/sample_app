@@ -31,6 +31,6 @@
 #ifndef SAMPLE_APP_MISSION_CFG_H
 #define SAMPLE_APP_MISSION_CFG_H
 
-/* Placeholder - SAMPLE_APP currently has no mission-scope config options */
+#include "sample_app_interface_cfg.h"
 
 #endif

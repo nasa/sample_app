@@ -16,23 +16,40 @@
  * limitations under the License.
  ************************************************************************/
 
-/**
- * @file
- *
- * Define Sample App Events IDs
+/*
+** Purpose:
+** Coverage Unit Test cases for the SAMPLE Application
+**
+** Notes:
+** This implements various test cases to exercise all code
+** paths through all functions defined in the SAMPLE application.
+**
+** It is primarily focused at providing examples of the various
+** stub configurations, hook functions, and wrapper calls that
+** are often needed when coercing certain code paths through
+** complex functions.
+*/
+
+/*
+ * Includes
  */
+#include "common_types.h"
 
-#ifndef SAMPLE_APP_EVENTS_H
-#define SAMPLE_APP_EVENTS_H
+#include "setup.h"
 
-#define SAMPLE_APP_RESERVED_EID    0
-#define SAMPLE_APP_INIT_INF_EID    1
-#define SAMPLE_APP_CC_ERR_EID      2
-#define SAMPLE_APP_NOOP_INF_EID    3
-#define SAMPLE_APP_RESET_INF_EID   4
-#define SAMPLE_APP_MID_ERR_EID     5
-#define SAMPLE_APP_CMD_LEN_ERR_EID 6
-#define SAMPLE_APP_PIPE_ERR_EID    7
-#define SAMPLE_APP_VALUE_INF_EID   8
+#include "utassert.h"
+#include "uttest.h"
+#include "utstubs.h"
 
-#endif /* SAMPLE_APP_EVENTS_H */
+/*
+ * Setup function prior to every test
+ */
+void Sample_UT_Setup(void)
+{
+    UT_ResetState(0);
+}
+
+/*
+ * Teardown function after every test
+ */
+void Sample_UT_TearDown(void) {}

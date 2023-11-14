@@ -24,14 +24,13 @@
 /*
 ** Include Files:
 */
-#include <string.h>
-
 #include "sample_app.h"
 #include "sample_app_cmds.h"
 #include "sample_app_utils.h"
 #include "sample_app_eventids.h"
-#include "sample_app_version.h"
+#include "sample_app_dispatch.h"
 #include "sample_app_tbl.h"
+#include "sample_app_version.h"
 
 /*
 ** global data
@@ -84,7 +83,7 @@ void SAMPLE_APP_Main(void)
 
         if (status == CFE_SUCCESS)
         {
-            SAMPLE_APP_ProcessCommandPacket(SBBufPtr);
+            SAMPLE_APP_TaskPipe(SBBufPtr);
         }
         else
         {
@@ -173,18 +172,19 @@ int32 SAMPLE_APP_Init(void)
         {
             CFE_ES_WriteToSysLog("Sample App: Error Subscribing to Command, RC = 0x%08lX\n", (unsigned long)status);
         }
+
     }
 
     if (status == CFE_SUCCESS)
     {
         /*
-        ** Register Table(s)
+        ** Register Example Table(s)
         */
-        status = CFE_TBL_Register(&SAMPLE_APP_Data.TblHandles[0], "SampleAppTable", sizeof(SAMPLE_APP_Table_t),
+        status = CFE_TBL_Register(&SAMPLE_APP_Data.TblHandles[0], "ExampleTable", sizeof(SAMPLE_APP_ExampleTable_t),
                                   CFE_TBL_OPT_DEFAULT, SAMPLE_APP_TblValidationFunc);
         if (status != CFE_SUCCESS)
         {
-            CFE_ES_WriteToSysLog("Sample App: Error Registering Table, RC = 0x%08lX\n", (unsigned long)status);
+            CFE_ES_WriteToSysLog("Sample App: Error Registering Example Table, RC = 0x%08lX\n", (unsigned long)status);
         }
         else
         {
@@ -196,115 +196,4 @@ int32 SAMPLE_APP_Init(void)
     }
 
     return status;
-}
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*                                                                            */
-/*  Purpose:                                                                  */
-/*     This routine will process any packet that is received on the Sample    */
-/*     App command pipe.                                                      */
-/*                                                                            */
-/* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
-void SAMPLE_APP_ProcessCommandPacket(CFE_SB_Buffer_t *SBBufPtr)
-{
-    CFE_SB_MsgId_t MsgId = CFE_SB_INVALID_MSG_ID;
-
-    CFE_MSG_GetMsgId(&SBBufPtr->Msg, &MsgId);
-
-    switch (CFE_SB_MsgIdToValue(MsgId))
-    {
-        case SAMPLE_APP_CMD_MID:
-            SAMPLE_APP_ProcessGroundCommand(SBBufPtr);
-            break;
-
-        case SAMPLE_APP_SEND_HK_MID:
-            SAMPLE_APP_ReportHousekeeping((CFE_MSG_CommandHeader_t *)SBBufPtr);
-            break;
-
-        default:
-            CFE_EVS_SendEvent(SAMPLE_APP_MID_ERR_EID, CFE_EVS_EventType_ERROR,
-                              "SAMPLE: invalid command packet,MID = 0x%x", (unsigned int)CFE_SB_MsgIdToValue(MsgId));
-            break;
-    }
-}
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*                                                                            */
-/* Process Ground Commands                                                    */
-/*                                                                            */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-void SAMPLE_APP_ProcessGroundCommand(CFE_SB_Buffer_t *SBBufPtr)
-{
-    CFE_MSG_FcnCode_t CommandCode = 0;
-
-    CFE_MSG_GetFcnCode(&SBBufPtr->Msg, &CommandCode);
-
-    /*
-    ** Process "known" Sample App ground commands
-    */
-    switch (CommandCode)
-    {
-        case SAMPLE_APP_NOOP_CC:
-            if (SAMPLE_APP_VerifyCmdLength(&SBBufPtr->Msg, sizeof(SAMPLE_APP_NoopCmd_t)))
-            {
-                SAMPLE_APP_Noop((SAMPLE_APP_NoopCmd_t *)SBBufPtr);
-            }
-            break;
-
-        case SAMPLE_APP_RESET_COUNTERS_CC:
-            if (SAMPLE_APP_VerifyCmdLength(&SBBufPtr->Msg, sizeof(SAMPLE_APP_ResetCountersCmd_t)))
-            {
-                SAMPLE_APP_ResetCounters((SAMPLE_APP_ResetCountersCmd_t *)SBBufPtr);
-            }
-            break;
-
-        case SAMPLE_APP_PROCESS_CC:
-            if (SAMPLE_APP_VerifyCmdLength(&SBBufPtr->Msg, sizeof(SAMPLE_APP_ProcessCmd_t)))
-            {
-                SAMPLE_APP_Process((SAMPLE_APP_ProcessCmd_t *)SBBufPtr);
-            }
-            break;
-
-        /* default case already found during FC vs length test */
-        default:
-            CFE_EVS_SendEvent(SAMPLE_APP_CC_ERR_EID, CFE_EVS_EventType_ERROR, "Invalid ground command code: CC = %d",
-                              CommandCode);
-            break;
-    }
-}
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
-/*                                                                            */
-/*  Purpose:                                                                  */
-/*         This function is triggered in response to a task telemetry request */
-/*         from the housekeeping task. This function will gather the App's    */
-/*         telemetry, packetize it and send it to the housekeeping task via   */
-/*         the software bus.                                                  */
-/*                                                                            */
-/* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
-int32 SAMPLE_APP_ReportHousekeeping(const CFE_MSG_CommandHeader_t *Msg)
-{
-    int i;
-
-    /*
-    ** Get command execution counters...
-    */
-    SAMPLE_APP_Data.HkTlm.Payload.CommandErrorCounter = SAMPLE_APP_Data.ErrCounter;
-    SAMPLE_APP_Data.HkTlm.Payload.CommandCounter      = SAMPLE_APP_Data.CmdCounter;
-
-    /*
-    ** Send housekeeping telemetry packet...
-    */
-    CFE_SB_TimeStampMsg(CFE_MSG_PTR(SAMPLE_APP_Data.HkTlm.TelemetryHeader));
-    CFE_SB_TransmitMsg(CFE_MSG_PTR(SAMPLE_APP_Data.HkTlm.TelemetryHeader), true);
-
-    /*
-    ** Manage any pending table loads, validations, etc.
-    */
-    for (i = 0; i < SAMPLE_APP_NUMBER_OF_TABLES; i++)
-    {
-        CFE_TBL_Manage(SAMPLE_APP_Data.TblHandles[i]);
-    }
-
-    return CFE_SUCCESS;
 }

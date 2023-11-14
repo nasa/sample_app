@@ -35,7 +35,7 @@
 /***********************************************************************/
 #define SAMPLE_APP_PIPE_DEPTH 32 /* Depth of the Command Pipe for Application */
 
-#define SAMPLE_APP_NUMBER_OF_TABLES 1 /* Number of Table(s) */
+#define SAMPLE_APP_NUMBER_OF_TABLES 1 /* Number of Example Table(s) */
 
 #define SAMPLE_APP_TABLE_OUT_OF_RANGE_ERR_CODE -1
 

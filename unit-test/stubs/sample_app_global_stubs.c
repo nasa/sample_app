@@ -1,7 +1,8 @@
 /************************************************************************
- * NASA Docket No. GSC-18,719-1, and identified as “core Flight System: Bootes”
+ * NASA Docket No. GSC-18,920-1, and identified as “Core Flight
+ * System (cFS) Health & Safety (HS) Application version 2.4.1”
  *
- * Copyright (c) 2020 United States Government as represented by the
+ * Copyright (c) 2021 United States Government as represented by the
  * Administrator of the National Aeronautics and Space Administration.
  * All Rights Reserved.
  *
@@ -16,23 +17,11 @@
  * limitations under the License.
  ************************************************************************/
 
-/**
- * @file
- *
- * Define Sample App Events IDs
- */
+#include "sample_app.h"
 
-#ifndef SAMPLE_APP_EVENTS_H
-#define SAMPLE_APP_EVENTS_H
+/* UT includes */
+#include "uttest.h"
+#include "utassert.h"
+#include "utstubs.h"
 
-#define SAMPLE_APP_RESERVED_EID    0
-#define SAMPLE_APP_INIT_INF_EID    1
-#define SAMPLE_APP_CC_ERR_EID      2
-#define SAMPLE_APP_NOOP_INF_EID    3
-#define SAMPLE_APP_RESET_INF_EID   4
-#define SAMPLE_APP_MID_ERR_EID     5
-#define SAMPLE_APP_CMD_LEN_ERR_EID 6
-#define SAMPLE_APP_PIPE_ERR_EID    7
-#define SAMPLE_APP_VALUE_INF_EID   8
-
-#endif /* SAMPLE_APP_EVENTS_H */
+SAMPLE_APP_Data_t SAMPLE_APP_Data;
