@@ -149,29 +149,30 @@ void Test_SAMPLE_APP_Init(void)
     /* nominal case should return CFE_SUCCESS */
     UtAssert_INT32_EQ(SAMPLE_APP_Init(), CFE_SUCCESS);
 
-    /* trigger a failure for each of the sub-calls,
-     * and confirm a write to syslog for each.
-     * Note that this count accumulates, because the status
-     * is _not_ reset between these test cases. */
+    /*
+     * Trigger a failure for each of the sub-calls, and confirm a write to syslog for
+     * failure to register with EVS, and that an event is generated for subsequent error paths.
+     * Note that the stub counts accumulate, because the status is _not_ reset between test cases.
+     */
     UT_SetDeferredRetcode(UT_KEY(CFE_EVS_Register), 1, CFE_EVS_INVALID_PARAMETER);
     UtAssert_INT32_EQ(SAMPLE_APP_Init(), CFE_EVS_INVALID_PARAMETER);
     UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 1);
 
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_CreatePipe), 1, CFE_SB_BAD_ARGUMENT);
     UtAssert_INT32_EQ(SAMPLE_APP_Init(), CFE_SB_BAD_ARGUMENT);
-    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 2);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 2); /* 1 from previous nominal case, 1 from this error path */
 
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_Subscribe), 1, CFE_SB_BAD_ARGUMENT);
     UtAssert_INT32_EQ(SAMPLE_APP_Init(), CFE_SB_BAD_ARGUMENT);
-    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 3);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 3); /* 1 additional event sent from this error path */
 
     UT_SetDeferredRetcode(UT_KEY(CFE_SB_Subscribe), 2, CFE_SB_BAD_ARGUMENT);
     UtAssert_INT32_EQ(SAMPLE_APP_Init(), CFE_SB_BAD_ARGUMENT);
-    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 4);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 4); /* 1 additional event sent from this error path */
 
     UT_SetDeferredRetcode(UT_KEY(CFE_TBL_Register), 1, CFE_TBL_ERR_INVALID_OPTIONS);
     UtAssert_INT32_EQ(SAMPLE_APP_Init(), CFE_TBL_ERR_INVALID_OPTIONS);
-    UtAssert_STUB_COUNT(CFE_ES_WriteToSysLog, 5);
+    UtAssert_STUB_COUNT(CFE_EVS_SendEvent, 6); /* 1 from table registration error, 1 from successful init event */
 }
 
 /*
