@@ -48,7 +48,7 @@ void Test_SAMPLE_APP_TblValidationFunc(void)
 {
     /*
      * Test Case For:
-     * int32 SAMPLE_APP_TblValidationFunc( void *TblData )
+     * CFE_Status_t SAMPLE_APP_TblValidationFunc( void *TblData )
      */
     SAMPLE_APP_ExampleTable_t TestTblData;
 

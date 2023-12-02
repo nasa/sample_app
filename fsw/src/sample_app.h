@@ -89,7 +89,7 @@ extern SAMPLE_APP_Data_t SAMPLE_APP_Data;
 ** Note: Except for the entry point (SAMPLE_APP_Main), these
 **       functions are not called from any other source module.
 */
-void  SAMPLE_APP_Main(void);
-int32 SAMPLE_APP_Init(void);
+void         SAMPLE_APP_Main(void);
+CFE_Status_t SAMPLE_APP_Init(void);
 
 #endif /* SAMPLE_APP_H */

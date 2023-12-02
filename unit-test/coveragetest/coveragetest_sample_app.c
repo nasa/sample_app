@@ -143,7 +143,7 @@ void Test_SAMPLE_APP_Init(void)
 {
     /*
      * Test Case For:
-     * int32 SAMPLE_APP_Init( void )
+     * CFE_Status_t SAMPLE_APP_Init( void )
      */
 
     /* nominal case should return CFE_SUCCESS */

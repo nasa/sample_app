@@ -42,13 +42,13 @@ void SAMPLE_APP_GetCrc(const char *TableName)
  * Generated stub function for SAMPLE_APP_TblValidationFunc()
  * ----------------------------------------------------
  */
-int32 SAMPLE_APP_TblValidationFunc(void *TblData)
+CFE_Status_t SAMPLE_APP_TblValidationFunc(void *TblData)
 {
-    UT_GenStub_SetupReturnBuffer(SAMPLE_APP_TblValidationFunc, int32);
+    UT_GenStub_SetupReturnBuffer(SAMPLE_APP_TblValidationFunc, CFE_Status_t);
 
     UT_GenStub_AddParam(SAMPLE_APP_TblValidationFunc, void *, TblData);
 
     UT_GenStub_Execute(SAMPLE_APP_TblValidationFunc, Basic, NULL);
 
-    return UT_GenStub_GetReturnValue(SAMPLE_APP_TblValidationFunc, int32);
+    return UT_GenStub_GetReturnValue(SAMPLE_APP_TblValidationFunc, CFE_Status_t);
 }
