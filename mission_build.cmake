@@ -20,6 +20,7 @@ set(SAMPLE_APP_MISSION_CONFIG_FILE_LIST
   sample_app_tbl.h
   sample_app_tbldefs.h
   sample_app_tblstruct.h
+  sample_app_topicids.h
 )
 
 if (CFE_EDS_ENABLED_BUILD)
