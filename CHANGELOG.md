@@ -1,6 +1,10 @@
 # Changelog
 
-## Development Build: 1.3.0-rc4+dev65
+## Development Build: v1.3.0-rc4+dev69
+- define msgids via topicids
+- See <https://github.com/nasa/sample_app/pull/220>
+
+## Development Build: v1.3.0-rc4+dev65
 - bring sample_app fully into compliance
 - Rename CommandCode variable to FcnCode
 - Add check for success of CFE_TBL_Load() during Initialization
