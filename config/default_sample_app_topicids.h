@@ -18,16 +18,13 @@
 
 /**
  * @file
- *   SAMPLE_APP Application Message IDs
+ *   SAMPLE_APP Application Topic IDs
  */
-#ifndef SAMPLE_APP_MSGIDS_H
-#define SAMPLE_APP_MSGIDS_H
+#ifndef SAMPLE_APP_TOPICIDS_H
+#define SAMPLE_APP_TOPICIDS_H
 
-#include "cfe_core_api_base_msgids.h"
-#include "sample_app_topicids.h"
-
-#define SAMPLE_APP_CMD_MID     CFE_PLATFORM_CMD_TOPICID_TO_MIDV(SAMPLE_APP_CMD_TOPICID)
-#define SAMPLE_APP_SEND_HK_MID CFE_PLATFORM_CMD_TOPICID_TO_MIDV(SAMPLE_APP_SEND_HK_TOPICID)
-#define SAMPLE_APP_HK_TLM_MID  CFE_PLATFORM_TLM_TOPICID_TO_MIDV(SAMPLE_APP_HK_TLM_TOPICID)
+#define SAMPLE_APP_CMD_TOPICID       0x82
+#define SAMPLE_APP_SEND_HK_TOPICID   0x83
+#define SAMPLE_APP_HK_TLM_TOPICID    0x83
 
 #endif
