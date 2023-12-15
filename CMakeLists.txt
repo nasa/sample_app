@@ -3,9 +3,18 @@ project(CFE_SAMPLE_APP C)
 set(APP_SRC_FILES
   fsw/src/sample_app.c
   fsw/src/sample_app_cmds.c
-  fsw/src/sample_app_dispatch.c
   fsw/src/sample_app_utils.c
 )
+
+if (CFE_EDS_ENABLED_BUILD)
+  list(APPEND APP_SRC_FILES
+    fsw/src/sample_app_eds_dispatch.c
+  )
+else()
+  list(APPEND APP_SRC_FILES
+    fsw/src/sample_app_dispatch.c
+  )
+endif()
 
 # Create the app module
 add_cfe_app(sample_app ${APP_SRC_FILES})
