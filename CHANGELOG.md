@@ -1,5 +1,9 @@
 # Changelog
 
+## Development Build: equuleus-rc1+dev36
+- updating sample_app to use new versioning system
+- See <https://github.com/nasa/sample_app/pull/226>
+
 ## Development Build: v1.3.0-rc4+dev69
 - define msgids via topicids
 - See <https://github.com/nasa/sample_app/pull/220>
