@@ -29,6 +29,7 @@
 ** Required header files.
 */
 #include "cfe.h"
+#include "cfe_config.h"
 
 #include "sample_app_mission_cfg.h"
 #include "sample_app_platform_cfg.h"

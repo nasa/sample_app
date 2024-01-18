@@ -27,16 +27,22 @@
 
 /* Development Build Macro Definitions */
 
-#define SAMPLE_APP_BUILD_NUMBER 69 /*!< Development Build: Number of commits since baseline */
-#define SAMPLE_APP_BUILD_BASELINE \
-    "v1.3.0-rc4" /*!< Development Build: git tag that is the base for the current development */
+#define SAMPLE_APP_BUILD_NUMBER    36 /*!< Development Build: Number of commits since baseline */
+#define SAMPLE_APP_BUILD_BASELINE  "equuleus-rc1" /*!< Development Build: git tag that is the base for the current development */
+#define SAMPLE_APP_BUILD_DEV_CYCLE "equuleus-rc2" /**< @brief Development: Release name for current development cycle */
+#define SAMPLE_APP_BUILD_CODENAME  "Equuleus" /**< @brief: Development: Code name for the current build */
 
 /*
  * Version Macros, see \ref cfsversions for definitions.
  */
 #define SAMPLE_APP_MAJOR_VERSION 1  /*!< @brief Major version number. */
 #define SAMPLE_APP_MINOR_VERSION 1  /*!< @brief Minor version number. */
-#define SAMPLE_APP_REVISION      99 /*!< @brief Revision version number. Value of 99 indicates a development version.*/
+#define SAMPLE_APP_REVISION      0  /*!< @brief Revision version number. Value of 0 indicates a development version.*/
+
+/**
+ * @brief Last official release.
+ */
+#define SAMPLE_APP_LAST_OFFICIAL "v1.1.0"
 
 /*!
  * @brief Mission revision.
@@ -57,12 +63,12 @@
  */
 #define SAMPLE_APP_VERSION SAMPLE_APP_BUILD_BASELINE "+dev" SAMPLE_APP_STR(SAMPLE_APP_BUILD_NUMBER)
 
-/*! @brief Development Build Version String.
- * @details Reports the current development build's baseline, number, and name. Also includes a note about the latest
- * official version. @n See @ref cfsversions for format differences between development and release versions.
+/**
+ * @brief Max Version String length.
+ * 
+ * Maximum length that an OSAL version string can be.
+ * 
  */
-#define SAMPLE_APP_VERSION_STRING                       \
-    " Sample App DEVELOPMENT BUILD " SAMPLE_APP_VERSION \
-    ", Last Official Release: v1.1.0" /* For full support please use this version */
+#define SAMPLE_APP_CFG_MAX_VERSION_STR_LEN 256
 
 #endif /* SAMPLE_APP_VERSION_H */
