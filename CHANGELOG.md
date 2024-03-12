@@ -1,5 +1,9 @@
 # Changelog
 
+## Development Build: equuleus-rc4+dev40
+- apply name changes to EDS dispatcher
+- See <https://github.com/nasa/sample_app/pull/229>
+
 ## Development Build: equuleus-rc1+dev36
 - updating sample_app to use new versioning system
 - See <https://github.com/nasa/sample_app/pull/226>
