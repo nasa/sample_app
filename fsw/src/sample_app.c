@@ -147,7 +147,8 @@ CFE_Status_t SAMPLE_APP_Init(void)
         status = CFE_SB_CreatePipe(&SAMPLE_APP_Data.CommandPipe, SAMPLE_APP_Data.PipeDepth, SAMPLE_APP_Data.PipeName);
         if (status != CFE_SUCCESS)
         {
-            CFE_ES_WriteToSysLog("Sample App: Error creating pipe, RC = 0x%08lX\n", (unsigned long)status);
+            CFE_EVS_SendEvent(SAMPLE_APP_CR_PIPE_ERR_EID, CFE_EVS_EventType_ERROR,
+                              "Sample App: Error creating SB Command Pipe, RC = 0x%08lX", (unsigned long)status);
         }
     }
 
@@ -159,7 +160,8 @@ CFE_Status_t SAMPLE_APP_Init(void)
         status = CFE_SB_Subscribe(CFE_SB_ValueToMsgId(SAMPLE_APP_SEND_HK_MID), SAMPLE_APP_Data.CommandPipe);
         if (status != CFE_SUCCESS)
         {
-            CFE_ES_WriteToSysLog("Sample App: Error Subscribing to HK request, RC = 0x%08lX\n", (unsigned long)status);
+            CFE_EVS_SendEvent(SAMPLE_APP_SUB_HK_ERR_EID, CFE_EVS_EventType_ERROR,
+                              "Sample App: Error Subscribing to HK request, RC = 0x%08lX", (unsigned long)status);
         }
     }
 
@@ -171,7 +173,8 @@ CFE_Status_t SAMPLE_APP_Init(void)
         status = CFE_SB_Subscribe(CFE_SB_ValueToMsgId(SAMPLE_APP_CMD_MID), SAMPLE_APP_Data.CommandPipe);
         if (status != CFE_SUCCESS)
         {
-            CFE_ES_WriteToSysLog("Sample App: Error Subscribing to Command, RC = 0x%08lX\n", (unsigned long)status);
+            CFE_EVS_SendEvent(SAMPLE_APP_SUB_CMD_ERR_EID, CFE_EVS_EventType_ERROR,
+                              "Sample App: Error Subscribing to Commands, RC = 0x%08lX", (unsigned long)status);
         }
     }
 
@@ -184,7 +187,8 @@ CFE_Status_t SAMPLE_APP_Init(void)
                                   CFE_TBL_OPT_DEFAULT, SAMPLE_APP_TblValidationFunc);
         if (status != CFE_SUCCESS)
         {
-            CFE_ES_WriteToSysLog("Sample App: Error Registering Example Table, RC = 0x%08lX\n", (unsigned long)status);
+            CFE_EVS_SendEvent(SAMPLE_APP_TABLE_REG_ERR_EID, CFE_EVS_EventType_ERROR,
+                              "Sample App: Error Registering Example Table, RC = 0x%08lX", (unsigned long)status);
         }
         else
         {
