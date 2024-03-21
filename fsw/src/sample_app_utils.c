@@ -34,9 +34,9 @@
 /* Verify contents of First Example Table buffer contents                  */
 /*                                                                 */
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-int32 SAMPLE_APP_TblValidationFunc(void *TblData)
+CFE_Status_t SAMPLE_APP_TblValidationFunc(void *TblData)
 {
-    int32                      ReturnCode = CFE_SUCCESS;
+    CFE_Status_t               ReturnCode = CFE_SUCCESS;
     SAMPLE_APP_ExampleTable_t *TblDataPtr = (SAMPLE_APP_ExampleTable_t *)TblData;
 
     /*
@@ -58,7 +58,7 @@ int32 SAMPLE_APP_TblValidationFunc(void *TblData)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 void SAMPLE_APP_GetCrc(const char *TableName)
 {
-    int32          status;
+    CFE_Status_t   status;
     uint32         Crc;
     CFE_TBL_Info_t TblInfoPtr;
 

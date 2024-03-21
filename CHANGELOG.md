@@ -1,5 +1,10 @@
 # Changelog
 
+## Development Build: equuleus-rc1+dev46
+- Convert remaining int32 CFE status variables to CFE_Status_t
+- Convert syslog writes during initialization to events
+- See <https://github.com/nasa/sample_app/pull/218> and <https://github.com/nasa/sample_app/pull/216>
+
 ## Development Build: equuleus-rc4+dev40
 - apply name changes to EDS dispatcher
 - See <https://github.com/nasa/sample_app/pull/229>
