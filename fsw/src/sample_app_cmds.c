@@ -111,7 +111,7 @@ CFE_Status_t SAMPLE_APP_ResetCountersCmd(const SAMPLE_APP_ResetCountersCmd_t *Ms
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
 CFE_Status_t SAMPLE_APP_ProcessCmd(const SAMPLE_APP_ProcessCmd_t *Msg)
 {
-    int32                      status;
+    CFE_Status_t               status;
     void *                     TblAddr;
     SAMPLE_APP_ExampleTable_t *TblPtr;
     const char *               TableName = "SAMPLE_APP.ExampleTable";

@@ -30,13 +30,13 @@
  * Generated stub function for SAMPLE_APP_Init()
  * ----------------------------------------------------
  */
-int32 SAMPLE_APP_Init(void)
+CFE_Status_t SAMPLE_APP_Init(void)
 {
-    UT_GenStub_SetupReturnBuffer(SAMPLE_APP_Init, int32);
+    UT_GenStub_SetupReturnBuffer(SAMPLE_APP_Init, CFE_Status_t);
 
     UT_GenStub_Execute(SAMPLE_APP_Init, Basic, NULL);
 
-    return UT_GenStub_GetReturnValue(SAMPLE_APP_Init, int32);
+    return UT_GenStub_GetReturnValue(SAMPLE_APP_Init, CFE_Status_t);
 }
 
 /*
