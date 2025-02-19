@@ -177,6 +177,7 @@ void Test_SAMPLE_APP_ProcessCmd(void)
      * reporting the table values, and one through the CFE_TBL_ReleaseAddress()
      * error path.
      */
+    UT_SetDataBuffer(UT_KEY(CFE_TBL_GetAddress), &TblPtr, sizeof(TblPtr), false);
     UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_GetAddress), CFE_SUCCESS);
     UT_SetDefaultReturnValue(UT_KEY(CFE_TBL_ReleaseAddress), CFE_TBL_ERR_NO_ACCESS);
     UtAssert_INT32_EQ(SAMPLE_APP_ProcessCmd(&TestMsg), CFE_TBL_ERR_NO_ACCESS);
