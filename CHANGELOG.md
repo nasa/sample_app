@@ -1,5 +1,9 @@
 # Changelog
 
+## Development Build: equuleus-rc1+dev50
+- Address sanitizer issue
+- See <https://github.com/nasa/sample_app/pull/235>
+
 ## Development Build: equuleus-rc1+dev46
 - Convert remaining int32 CFE status variables to CFE_Status_t
 - Convert syslog writes during initialization to events
