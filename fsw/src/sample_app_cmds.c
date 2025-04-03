@@ -111,37 +111,38 @@ CFE_Status_t SAMPLE_APP_ResetCountersCmd(const SAMPLE_APP_ResetCountersCmd_t *Ms
 /* * * * * * * * * * * * * * * * * * * * * * * *  * * * * * * *  * *  * * * * */
 CFE_Status_t SAMPLE_APP_ProcessCmd(const SAMPLE_APP_ProcessCmd_t *Msg)
 {
-    CFE_Status_t               status;
+    CFE_Status_t               Status;
     void *                     TblAddr;
     SAMPLE_APP_ExampleTable_t *TblPtr;
     const char *               TableName = "SAMPLE_APP.ExampleTable";
 
     /* Sample Use of Example Table */
-
-    status = CFE_TBL_GetAddress(&TblAddr, SAMPLE_APP_Data.TblHandles[0]);
-
-    if (status < CFE_SUCCESS)
+    SAMPLE_APP_Data.CmdCounter++;
+    Status = CFE_TBL_GetAddress(&TblAddr, SAMPLE_APP_Data.TblHandles[0]);
+    if (Status < CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Fail to get table address: 0x%08lx", (unsigned long)status);
-        return status;
+        CFE_ES_WriteToSysLog("Sample App: Fail to get table address: 0x%08lx", (unsigned long)Status);
+    }
+    else
+    {
+        TblPtr = TblAddr;
+        CFE_ES_WriteToSysLog("Sample App: Example Table Value 1: %d  Value 2: %d", TblPtr->Int1, TblPtr->Int2);
+
+        SAMPLE_APP_GetCrc(TableName);
+
+        Status = CFE_TBL_ReleaseAddress(SAMPLE_APP_Data.TblHandles[0]);
+        if (Status != CFE_SUCCESS)
+        {
+            CFE_ES_WriteToSysLog("Sample App: Fail to release table address: 0x%08lx", (unsigned long)Status);
+        }
+        else
+        {
+            /* Invoke a function provided by SAMPLE_APP_LIB */
+            SAMPLE_LIB_Function();
+        }
     }
 
-    TblPtr = TblAddr;
-    CFE_ES_WriteToSysLog("Sample App: Example Table Value 1: %d  Value 2: %d", TblPtr->Int1, TblPtr->Int2);
-
-    SAMPLE_APP_GetCrc(TableName);
-
-    status = CFE_TBL_ReleaseAddress(SAMPLE_APP_Data.TblHandles[0]);
-    if (status != CFE_SUCCESS)
-    {
-        CFE_ES_WriteToSysLog("Sample App: Fail to release table address: 0x%08lx", (unsigned long)status);
-        return status;
-    }
-
-    /* Invoke a function provided by SAMPLE_APP_LIB */
-    SAMPLE_LIB_Function();
-
-    return CFE_SUCCESS;
+    return Status;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
@@ -151,6 +152,7 @@ CFE_Status_t SAMPLE_APP_ProcessCmd(const SAMPLE_APP_ProcessCmd_t *Msg)
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 CFE_Status_t SAMPLE_APP_DisplayParamCmd(const SAMPLE_APP_DisplayParamCmd_t *Msg)
 {
+    SAMPLE_APP_Data.CmdCounter++;
     CFE_EVS_SendEvent(SAMPLE_APP_VALUE_INF_EID, CFE_EVS_EventType_INFORMATION,
                       "SAMPLE_APP: ValU32=%lu, ValI16=%d, ValStr=%s", (unsigned long)Msg->Payload.ValU32,
                       (int)Msg->Payload.ValI16, Msg->Payload.ValStr);

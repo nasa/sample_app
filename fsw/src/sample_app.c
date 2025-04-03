@@ -118,14 +118,6 @@ CFE_Status_t SAMPLE_APP_Init(void)
     SAMPLE_APP_Data.RunStatus = CFE_ES_RunStatus_APP_RUN;
 
     /*
-    ** Initialize app configuration data
-    */
-    SAMPLE_APP_Data.PipeDepth = SAMPLE_APP_PIPE_DEPTH;
-
-    strncpy(SAMPLE_APP_Data.PipeName, "SAMPLE_APP_CMD_PIPE", sizeof(SAMPLE_APP_Data.PipeName));
-    SAMPLE_APP_Data.PipeName[sizeof(SAMPLE_APP_Data.PipeName) - 1] = 0;
-
-    /*
     ** Register the events
     */
     status = CFE_EVS_Register(NULL, 0, CFE_EVS_EventFilter_BINARY);
@@ -144,7 +136,7 @@ CFE_Status_t SAMPLE_APP_Init(void)
         /*
          ** Create Software Bus message pipe.
          */
-        status = CFE_SB_CreatePipe(&SAMPLE_APP_Data.CommandPipe, SAMPLE_APP_Data.PipeDepth, SAMPLE_APP_Data.PipeName);
+        status = CFE_SB_CreatePipe(&SAMPLE_APP_Data.CommandPipe, SAMPLE_APP_PIPE_DEPTH, SAMPLE_APP_PIPE_NAME);
         if (status != CFE_SUCCESS)
         {
             CFE_EVS_SendEvent(SAMPLE_APP_CR_PIPE_ERR_EID, CFE_EVS_EventType_ERROR,

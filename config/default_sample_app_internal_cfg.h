@@ -34,6 +34,7 @@
 
 /***********************************************************************/
 #define SAMPLE_APP_PIPE_DEPTH 32 /* Depth of the Command Pipe for Application */
+#define SAMPLE_APP_PIPE_NAME  "SAMPLE_APP_CMD_PIPE"
 
 #define SAMPLE_APP_NUMBER_OF_TABLES 1 /* Number of Example Table(s) */
 

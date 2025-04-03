@@ -68,12 +68,6 @@ typedef struct
     */
     CFE_SB_PipeId_t CommandPipe;
 
-    /*
-    ** Initialization data (not reported in housekeeping)...
-    */
-    char   PipeName[CFE_MISSION_MAX_API_LEN];
-    uint16 PipeDepth;
-
     CFE_TBL_Handle_t TblHandles[SAMPLE_APP_NUMBER_OF_TABLES];
 } SAMPLE_APP_Data_t;
 
