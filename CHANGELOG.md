@@ -1,5 +1,10 @@
 # Changelog
 
+## Development Build: equuleus-rc1+dev54
+- 'Fix #237, update sample app to reflect 582 standard'
+- See: <https://github.com/nasa/sample_app/pull/238>
+
+
 ## Development Build: equuleus-rc1+dev50
 - Address sanitizer issue
 - See <https://github.com/nasa/sample_app/pull/235>
