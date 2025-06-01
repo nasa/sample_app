@@ -59,7 +59,6 @@ CFE_Status_t SAMPLE_APP_TblValidationFunc(void *TblData)
 void SAMPLE_APP_GetCrc(const char *TableName)
 {
     CFE_Status_t   status;
-    uint32         Crc;
     CFE_TBL_Info_t TblInfoPtr;
 
     status = CFE_TBL_GetInfo(&TblInfoPtr, TableName);
@@ -69,7 +68,6 @@ void SAMPLE_APP_GetCrc(const char *TableName)
     }
     else
     {
-        Crc = TblInfoPtr.Crc;
-        CFE_ES_WriteToSysLog("Sample App: CRC: 0x%08lX\n\n", (unsigned long)Crc);
+        CFE_ES_WriteToSysLog("Sample App: CRC: 0x%08lX\n\n", (unsigned long)TblInfoPtr.Crc);
     }
 }

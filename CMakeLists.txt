@@ -1,4 +1,5 @@
-project(CFE_SAMPLE_APP C)
+cmake_minimum_required(VERSION 3.5)
+project(CFS_SAMPLE_APP C)
 
 set(APP_SRC_FILES
   fsw/src/sample_app.c
