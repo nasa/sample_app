@@ -112,9 +112,9 @@ CFE_Status_t SAMPLE_APP_ResetCountersCmd(const SAMPLE_APP_ResetCountersCmd_t *Ms
 CFE_Status_t SAMPLE_APP_ProcessCmd(const SAMPLE_APP_ProcessCmd_t *Msg)
 {
     CFE_Status_t               Status;
-    void *                     TblAddr;
+    void                      *TblAddr;
     SAMPLE_APP_ExampleTable_t *TblPtr;
-    const char *               TableName = "SAMPLE_APP.ExampleTable";
+    const char                *TableName = "SAMPLE_APP.ExampleTable";
 
     /* Sample Use of Example Table */
     SAMPLE_APP_Data.CmdCounter++;

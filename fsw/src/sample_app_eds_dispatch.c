@@ -39,9 +39,9 @@
  */
 static const EdsDispatchTable_SAMPLE_APP_Application_CFE_SB_Telecommand_t SAMPLE_TC_DISPATCH_TABLE = {
     .CMD     = {.NoopCmd_indication          = SAMPLE_APP_NoopCmd,
-            .ResetCountersCmd_indication = SAMPLE_APP_ResetCountersCmd,
-            .ProcessCmd_indication       = SAMPLE_APP_ProcessCmd,
-            .DisplayParamCmd_indication  = SAMPLE_APP_DisplayParamCmd},
+                .ResetCountersCmd_indication = SAMPLE_APP_ResetCountersCmd,
+                .ProcessCmd_indication       = SAMPLE_APP_ProcessCmd,
+                .DisplayParamCmd_indication  = SAMPLE_APP_DisplayParamCmd},
     .SEND_HK = {.indication = SAMPLE_APP_SendHkCmd}};
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/

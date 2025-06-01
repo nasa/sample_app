@@ -17,7 +17,7 @@
  ************************************************************************/
 
 /*
-** File: coveragetest_sample_app.c
+** File: coveragetest_sample_app_cmds.c
 **
 ** Purpose:
 ** Coverage Unit Test cases for the SAMPLE Application
@@ -131,7 +131,7 @@ void Test_SAMPLE_APP_ProcessCmd(void)
      */
     SAMPLE_APP_ProcessCmd_t   TestMsg;
     SAMPLE_APP_ExampleTable_t TestTblData;
-    void *                    TblPtr = &TestTblData;
+    void                     *TblPtr = &TestTblData;
 
     memset(&TestTblData, 0, sizeof(TestTblData));
     memset(&TestMsg, 0, sizeof(TestMsg));

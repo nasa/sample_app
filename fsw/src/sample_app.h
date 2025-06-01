@@ -52,6 +52,7 @@ typedef struct
     */
     uint8 CmdCounter;
     uint8 ErrCounter;
+    uint8 spare[2];
 
     /*
     ** Housekeeping telemetry packet...

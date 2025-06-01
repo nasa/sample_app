@@ -17,7 +17,7 @@
  ************************************************************************/
 
 /*
-** File: coveragetest_sample_app.c
+** File: coveragetest_sample_app_utils.c
 **
 ** Purpose:
 ** Coverage Unit Test cases for the Sample Application
