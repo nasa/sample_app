@@ -42,4 +42,14 @@
 
 #define SAMPLE_APP_TBL_ELEMENT_1_MAX 10
 
+/**
+ * \brief Amount of time to wait in CFE_SB_RecieveBuffer
+ *
+ * Applications need to wait for messages to arrive on the Software Bus,
+ * but this wait should be time limited to ensure that the app also
+ * periodically checks the status of CFE_ES_RunLoop(), in case an
+ * administrative command comes in.
+ */
+#define SAMPLE_APP_SB_WAIT_PERIOD 1000
+
 #endif
