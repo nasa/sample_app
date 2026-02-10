@@ -113,7 +113,7 @@ CFE_Status_t SAMPLE_APP_ProcessCmd(const SAMPLE_APP_ProcessCmd_t *Msg)
 {
     CFE_Status_t               Status;
     void *                     TblAddr = NULL;
-    SAMPLE_APP_ExampleTable_t *TblPtr;
+    SAMPLE_APP_ExampleTable_t *TblPtr  = NULL;
     const char *               TableName = "SAMPLE_APP.ExampleTable";
 
     /* Count command execution */
@@ -151,7 +151,7 @@ CFE_Status_t SAMPLE_APP_ProcessCmd(const SAMPLE_APP_ProcessCmd_t *Msg)
 
         CFE_EVS_SendEvent(SAMPLE_APP_CMD_ERR_EID,
                           CFE_EVS_EventType_ERROR,
-                          "SAMPLE_APP_ProcessCmd: Failed to get table address, RC=0x%08lx", 
+                          "SAMPLE_APP_ProcessCmd: Failed to release table address, RC=0x%08lx", 
                           (unsigned long)Status);
 
         CFE_ES_WriteToSysLog("Sample App: Fail to release table address: 0x%08lx",
