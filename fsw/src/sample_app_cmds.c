@@ -112,38 +112,60 @@ CFE_Status_t SAMPLE_APP_ResetCountersCmd(const SAMPLE_APP_ResetCountersCmd_t *Ms
 CFE_Status_t SAMPLE_APP_ProcessCmd(const SAMPLE_APP_ProcessCmd_t *Msg)
 {
     CFE_Status_t               Status;
-    void *                     TblAddr;
-    SAMPLE_APP_ExampleTable_t *TblPtr;
+    void *                     TblAddr = NULL;
+    SAMPLE_APP_ExampleTable_t *TblPtr  = NULL;
     const char *               TableName = "SAMPLE_APP.ExampleTable";
 
-    /* Sample Use of Example Table */
+    /* Count command execution */
     SAMPLE_APP_Data.CmdCounter++;
+
+    /* Get table address */
     Status = CFE_TBL_GetAddress(&TblAddr, SAMPLE_APP_Data.TblHandles[0]);
     if (Status < CFE_SUCCESS)
     {
-        CFE_ES_WriteToSysLog("Sample App: Fail to get table address: 0x%08lx", (unsigned long)Status);
+        SAMPLE_APP_Data.ErrCounter++;
+
+        CFE_EVS_SendEvent(SAMPLE_APP_CMD_ERR_EID,
+                          CFE_EVS_EventType_ERROR,
+                          "SAMPLE_APP_ProcessCmd: Failed to get table address, RC=0x%08lx",
+                          (unsigned long)Status);
+
+        CFE_ES_WriteToSysLog("Sample App: Fail to get table address: 0x%08lx",
+                             (unsigned long)Status);
+
+        return Status;
     }
-    else
+
+    /* Use the table */
+    TblPtr = (SAMPLE_APP_ExampleTable_t *)TblAddr;
+    CFE_ES_WriteToSysLog("Sample App: Example Table Value 1: %d  Value 2: %d",
+                         TblPtr->Int1, TblPtr->Int2);
+
+    SAMPLE_APP_GetCrc(TableName);
+
+    /* Release table address */
+    Status = CFE_TBL_ReleaseAddress(SAMPLE_APP_Data.TblHandles[0]);
+    if (Status != CFE_SUCCESS)
     {
-        TblPtr = TblAddr;
-        CFE_ES_WriteToSysLog("Sample App: Example Table Value 1: %d  Value 2: %d", TblPtr->Int1, TblPtr->Int2);
+        SAMPLE_APP_Data.ErrCounter++;
 
-        SAMPLE_APP_GetCrc(TableName);
+        CFE_EVS_SendEvent(SAMPLE_APP_CMD_ERR_EID,
+                          CFE_EVS_EventType_ERROR,
+                          "SAMPLE_APP_ProcessCmd: Failed to release table address, RC=0x%08lx", 
+                          (unsigned long)Status);
 
-        Status = CFE_TBL_ReleaseAddress(SAMPLE_APP_Data.TblHandles[0]);
-        if (Status != CFE_SUCCESS)
-        {
-            CFE_ES_WriteToSysLog("Sample App: Fail to release table address: 0x%08lx", (unsigned long)Status);
-        }
-        else
-        {
-            /* Invoke a function provided by SAMPLE_APP_LIB */
-            SAMPLE_LIB_Function();
-        }
+        CFE_ES_WriteToSysLog("Sample App: Fail to release table address: 0x%08lx",
+                             (unsigned long)Status);
+
+        return Status;
     }
 
-    return Status;
+    /* Invoke a function provided by SAMPLE_APP_LIB */
+    SAMPLE_LIB_Function();
+
+    return CFE_SUCCESS;
 }
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **/
 /*                                                                            */
