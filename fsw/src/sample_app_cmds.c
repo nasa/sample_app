@@ -65,6 +65,7 @@ CFE_Status_t SAMPLE_APP_SendHkCmd(const SAMPLE_APP_SendHkCmd_t *Msg)
     */
     for (i = 0; i < SAMPLE_APP_PLATFORM_NUMBER_OF_TABLES; i++)
     {
+        CFE_TBL_ReleaseAddress(SAMPLE_APP_Data.TblHandles[i]);
         CFE_TBL_Manage(SAMPLE_APP_Data.TblHandles[i]);
     }
 
