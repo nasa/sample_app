@@ -27,18 +27,16 @@
 
 /* Development Build Macro Definitions */
 
-#define SAMPLE_APP_BUILD_NUMBER 1
-#define SAMPLE_APP_BUILD_BASELINE \
-    "v7.0.0" /*!< Development Build: git tag that is the base for the current development */
-#define SAMPLE_APP_BUILD_DEV_CYCLE "v7.0.1" /**< @brief Development: Release name for current development cycle */
-#define SAMPLE_APP_BUILD_CODENAME  "Draco"  /**< @brief: Development: Code name for the current build */
+#define SAMPLE_APP_BUILD_NUMBER   1
+#define SAMPLE_APP_BUILD_BASELINE "v7.0.2"
+#define SAMPLE_APP_BUILD_CODENAME "Draco" /**< @brief: Development: Code name for the current build */
 
 /*
  * Version Macros, see \ref cfsversions for definitions.
  */
-#define SAMPLE_APP_MAJOR_VERSION 7 /*!< @brief Major version number. */
-#define SAMPLE_APP_MINOR_VERSION 0 /*!< @brief Minor version number. */
-#define SAMPLE_APP_REVISION      1 /*!< @brief Revision version number. Value of 0 indicates a development version.*/
+#define SAMPLE_APP_MAJOR_VERSION 7
+#define SAMPLE_APP_MINOR_VERSION 0
+#define SAMPLE_APP_REVISION      2
 
 /**
  * @brief Last official release.
@@ -62,7 +60,7 @@
  * @details Baseline git tag + Number of commits since baseline. @n
  * See @ref cfsversions for format differences between development and release versions.
  */
-#define SAMPLE_APP_VERSION SAMPLE_APP_BUILD_BASELINE "+dev" SAMPLE_APP_STR(SAMPLE_APP_BUILD_NUMBER)
+#define SAMPLE_APP_VERSION SAMPLE_APP_BUILD_BASELINE "-rc" SAMPLE_APP_STR(SAMPLE_APP_BUILD_NUMBER) "-oss"
 
 /**
  * @brief Max Version String length.
